@@ -2,319 +2,499 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#160b30">
 <title>Smart Wallet</title>
 
 <style>
+:root {
+  --bg:#10091f;
+  --panel:#211437;
+  --purple:#925cff;
+  --gold:#f9cc68;
+  --muted:#b7a8ce;
+  --green:#46d7a0;
+}
 *{box-sizing:border-box}
 body{
-  margin:0;
+  margin:0;background:var(--bg);color:white;
   font-family:Tahoma,Arial,sans-serif;
-  background:#f5f2ff;
-  color:#241442;
+  min-height:100vh;padding-bottom:85px;
 }
+button,input,select{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.6;cursor:wait}
+.hidden{display:none!important}
 header{
-  background:linear-gradient(135deg,#34105f,#8247e5);
-  color:white;
-  padding:25px 20px 45px;
-  border-radius:0 0 30px 30px;
-  position:relative;
-  overflow:hidden;
+  padding:23px 18px 30px;
+  background:linear-gradient(135deg,#29114d,#6134b0,#160b30);
+  border-bottom:1px solid #ffffff12;
+  position:relative;overflow:hidden;
 }
-.brand{font-size:23px;font-weight:bold}
-.brand span{color:#facc15}
-.subtitle{font-size:13px;margin-top:8px;opacity:.85}
-.dollar{
-  position:absolute;
-  color:#ffffff20;
-  font-weight:bold;
-  pointer-events:none;
+header:before,header:after{
+  content:"$";position:absolute;color:#ffffff0d;
+  font-size:150px;font-weight:bold;pointer-events:none;
 }
-.dollar.one{font-size:130px;left:15px;top:10px}
-.dollar.two{font-size:80px;left:125px;top:100px}
-.dollar.three{font-size:100px;right:55%;top:-15px}
-.container{
-  max-width:500px;
-  width:calc(100% - 26px);
-  margin:-22px auto 25px;
-  position:relative;
+header:before{left:12px;top:-35px;transform:rotate(-15deg)}
+header:after{left:130px;top:45px;transform:rotate(15deg)}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  position:relative;z-index:1;
+}
+.logo{font-size:22px;font-weight:bold}
+.logo span{color:var(--gold)}
+.tagline{font-size:12px;color:#d8c7f8;margin-top:7px}
+.avatar{
+  width:45px;height:45px;border-radius:16px;
+  display:grid;place-items:center;
+  background:#ffffff17;border:1px solid #ffffff25;font-size:23px;
+}
+main{max-width:520px;margin:auto;padding:17px 14px}
+.page{animation:appear .25s ease}
+@keyframes appear{
+  from{opacity:0;transform:translateY(7px)}
+  to{opacity:1;transform:translateY(0)}
 }
 .card{
-  background:white;
-  border-radius:20px;
-  padding:20px;
-  margin-bottom:15px;
-  box-shadow:0 5px 22px #34105f0d;
-}
-h3{margin:0 0 16px;font-size:17px}
-.label{font-size:13px;font-weight:bold}
-input,select{
-  display:block;
-  width:100%;
-  padding:14px;
-  margin:8px 0 16px;
-  border:1px solid #e1d7f3;
-  border-radius:12px;
-  background:#fff;
-  font-family:inherit;
-  font-size:15px;
-}
-button{
-  font-family:inherit;
-  cursor:pointer;
-}
-.primary{
-  width:100%;
-  border:0;
-  padding:14px;
-  border-radius:12px;
-  color:white;
-  font-size:15px;
-  font-weight:bold;
-  background:linear-gradient(135deg,#8247e5,#5b21b6);
+  background:var(--panel);border:1px solid #ffffff10;
+  border-radius:21px;padding:19px;margin-bottom:15px;
+  box-shadow:0 12px 30px #00000014;
 }
 .balance-card{
-  background:linear-gradient(135deg,#fff,#eee6ff);
-  border:1px solid #e8dcff;
+  background:linear-gradient(135deg,#56309a,#291744 75%);
+  border:1px solid #d2aaff35;position:relative;overflow:hidden;
 }
-.muted{font-size:13px;color:#827393;line-height:1.8}
-.balance{
-  color:#7138d4;
-  font-size:30px;
-  font-weight:bold;
-  margin:12px 0;
+.balance-card:after{
+  content:"$";position:absolute;left:15px;top:0;
+  font-size:125px;font-weight:bold;color:#ffffff0c;
 }
-.actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
+.balance-label,.balance,.balance-foot{position:relative;z-index:1}
+.balance-label{font-size:13px;color:#e0d0fa}
+.balance{font-size:34px;font-weight:bold;margin:17px 0}
+.balance small{font-size:13px;font-weight:normal}
+.balance-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:12px;color:#ddcff6;gap:10px
 }
-.action{
-  border:0;
-  border-radius:14px;
-  padding:17px 5px;
-  font-size:14px;
-  font-weight:bold;
+.eye{
+  border:1px solid #ffffff30;background:#ffffff12;color:white;
+  border-radius:10px;padding:8px 12px
 }
-.deposit{background:#eee7ff;color:#6d28d9}
-.withdraw{background:#dcfce7;color:#15803d}
-.hidden{display:none!important}
-.message{font-size:13px;line-height:1.8;margin-top:12px;overflow-wrap:anywhere}
+h2{font-size:20px;margin:5px 0 17px}
+h3{font-size:16px;margin:0 0 15px}
+.muted{font-size:12px;line-height:1.9;color:var(--muted)}
+.grid{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px
+}
+.tile{
+  border:1px solid #ffffff12;border-radius:18px;padding:18px 12px;
+  text-align:right;background:#211437;color:white;min-height:120px
+}
+.tile-icon{
+  width:43px;height:43px;border-radius:14px;display:grid;
+  place-items:center;font-size:22px;margin-bottom:14px
+}
+.tile strong{display:block;font-size:14px}
+.tile span{display:block;font-size:11px;color:var(--muted);margin-top:7px}
+.tile.deposit .tile-icon{background:#174b3e}
+.tile.withdraw .tile-icon{background:#50341c}
+.tile.tasks .tile-icon{background:#33245c}
+.tile.history .tile-icon{background:#183d59}
+.section-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;margin:22px 2px 13px
+}
+.section-head h3{margin:0}
+.pill{
+  color:var(--gold);background:#f9cc6812;border-radius:20px;
+  padding:7px 10px;font-size:11px
+}
+label{display:block;font-size:13px;margin:14px 0 7px}
+input,select{
+  width:100%;padding:14px;border-radius:12px;
+  background:#160d26;color:white;border:1px solid #49365f;outline:none
+}
+input:focus,select:focus{border-color:var(--purple)}
+select option{background:#211437}
+.primary{
+  border:0;border-radius:13px;padding:14px;
+  background:linear-gradient(135deg,#a77aff,#713de0);
+  color:white;font-weight:bold;width:100%;margin-top:15px
+}
+.back{
+  background:#ffffff0c;color:#e8dcfa;border:1px solid #ffffff14;
+  border-radius:11px;padding:9px 13px;margin-bottom:15px
+}
 .notice{
-  margin-top:12px;
-  background:#fff7ed;
-  color:#9a3412;
-  padding:12px;
-  border-radius:12px;
-  font-size:12px;
-  line-height:1.8;
+  padding:12px;border-radius:12px;background:#ffffff08;
+  color:#d1c1e7;font-size:11px;line-height:1.9;margin-top:13px
 }
-footer{text-align:center;color:#9588a8;font-size:12px;padding:15px}
+.message{font-size:12px;line-height:1.9;margin-top:12px;overflow-wrap:anywhere}
+.list-row{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:10px;padding:14px 0;border-bottom:1px solid #ffffff10;
+  font-size:13px
+}
+.list-row:last-child{border-bottom:0}
+.status{font-size:11px;color:var(--gold)}
+.task{
+  background:#1a102b;border:1px solid #ffffff12;
+  border-radius:15px;padding:15px;margin-bottom:12px
+}
+.task-top{display:flex;align-items:center;gap:12px}
+.task-icon{
+  width:43px;height:43px;display:grid;place-items:center;
+  border-radius:13px;background:#372252;font-size:21px
+}
+.task-title{font-weight:bold;font-size:13px}
+.task-reward{font-size:12px;color:var(--gold);margin-top:6px}
+.task button{
+  border:0;border-radius:10px;padding:9px 13px;
+  background:#51318a;color:white;margin-top:13px;width:100%
+}
+.profile-icon{
+  width:65px;height:65px;display:grid;place-items:center;
+  border-radius:22px;background:#3b245b;font-size:30px;margin-bottom:15px
+}
+nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:10;
+  display:grid;grid-template-columns:repeat(5,1fr);
+  background:#180e29;border-top:1px solid #ffffff17;
+  padding:9px 3px calc(9px + env(safe-area-inset-bottom));
+}
+nav button{
+  border:0;background:transparent;color:#a99abb;
+  display:flex;flex-direction:column;align-items:center;
+  gap:5px;font-size:10px;padding:5px 0
+}
+nav button b{font-size:21px;font-weight:normal}
+nav button.active{color:var(--gold)}
+.login-wrap{max-width:430px;margin:20px auto;padding:14px}
+.login-logo{text-align:center;font-size:28px;margin:15px 0 22px}
+.login-logo span{color:var(--gold)}
+footer{text-align:center;color:#77668d;font-size:10px;padding:16px}
 </style>
 </head>
 
 <body>
 
 <header>
-  <div class="dollar one">$</div>
-  <div class="dollar two">$</div>
-  <div class="dollar three">$</div>
-  <div class="brand">💜 Smart <span>Wallet</span></div>
-  <div class="subtitle">محفظتك الرقمية في مكان واحد</div>
+  <div class="topbar">
+    <div>
+      <div class="logo">SMART <span>WALLET</span> 💎</div>
+      <div class="tagline">محفظتك، أموالك، اختياراتك</div>
+    </div>
+    <div class="avatar">💰</div>
+  </div>
 </header>
 
-<main class="container">
-
-  <section class="card" id="loginCard">
-    <h3>👋 أهلاً بيك في Smart Wallet</h3>
-    <p class="muted">اكتب رقم موبايلك للدخول إلى محفظتك.</p>
-
-    <label class="label" for="phone">رقم الموبايل</label>
+<div id="loginScreen" class="login-wrap">
+  <div class="login-logo">💜 SMART <span>WALLET</span></div>
+  <section class="card">
+    <h2>أهلاً بيك 👋</h2>
+    <p class="muted">اكتب رقم الموبايل للمتابعة.</p>
+    <label for="phone">رقم الموبايل</label>
     <input id="phone" type="tel" inputmode="tel"
-      maxlength="15" placeholder="01012345678">
-
-    <button class="primary" id="loginButton" onclick="login()">
-      دخول إلى المحفظة
-    </button>
-
+           placeholder="01012345678" maxlength="15">
+    <button class="primary" onclick="login()">دخول للمحفظة</button>
     <div id="loginMessage" class="message"></div>
+  </section>
+</div>
 
-    <div class="notice">
-      هذه نسخة تجريبية. الدخول برقم الهاتف وحده لا يثبت ملكية الحساب،
-      فلا تستخدمها لحفظ أموال حقيقية أو بيانات مالية حساسة.
+<main id="app" class="hidden">
+
+  <section id="homePage" class="page">
+    <div class="balance-card card">
+      <div class="balance-label">إجمالي رصيد المحفظة</div>
+      <div class="balance">
+        <span id="balanceValue">—</span>
+        <small>جنيه مصري</small>
+      </div>
+      <div class="balance-foot">
+        <span>💵 رصيدك في لمحة</span>
+        <button class="eye" onclick="toggleBalance()">إظهار / إخفاء</button>
+      </div>
     </div>
+
+    <div class="section-head">
+      <h3>الخدمات المالية</h3><span class="pill">SMART SERVICES</span>
+    </div>
+
+    <div class="grid">
+      <button class="tile deposit" onclick="openPage('depositPage','deposit')">
+        <div class="tile-icon">📥</div>
+        <strong>إيداع الأموال</strong>
+        <span>إرسال طلب إيداع</span>
+      </button>
+      <button class="tile withdraw" onclick="openPage('withdrawPage','withdraw')">
+        <div class="tile-icon">📤</div>
+        <strong>سحب الأموال</strong>
+        <span>طلب سحب من رصيدك</span>
+      </button>
+      <button class="tile tasks" onclick="openPage('tasksPage','tasks')">
+        <div class="tile-icon">🎯</div>
+        <strong>المهام</strong>
+        <span>المهام والمكافآت</span>
+      </button>
+      <button class="tile history" onclick="openPage('historyPage','history')">
+        <div class="tile-icon">📊</div>
+        <strong>سجل العمليات</strong>
+        <span>متابعة الطلبات</span>
+      </button>
+    </div>
+
+    <div class="section-head"><h3>آخر التحديثات</h3></div>
+    <section class="card">
+      <div id="homeStatus" class="muted">أهلًا بيك في Smart Wallet.</div>
+    </section>
   </section>
 
-  <div id="wallet" class="hidden">
-
-    <section class="card balance-card">
-      <div class="muted">رصيد المحفظة</div>
-      <div class="balance">
-        <span id="balance">0.00</span>
-        <span style="font-size:13px">جنيه مصري</span>
-      </div>
-      <div class="muted">💵 تابع طلبات محفظتك من هنا.</div>
-    </section>
-
-    <section class="card">
-      <h3>⚡ خدمات المحفظة</h3>
-      <div class="actions">
-        <button class="action deposit" onclick="showRequest('deposit')">
-          📥 طلب إيداع
-        </button>
-        <button class="action withdraw" onclick="showRequest('withdraw')">
-          📤 طلب سحب
-        </button>
-      </div>
-    </section>
-
-    <section class="card hidden" id="requestCard">
-      <h3 id="requestTitle">طلب إيداع</h3>
-
-      <form id="requestForm">
-        <label class="label" for="amount">المبلغ بالجنيه المصري</label>
-        <input id="amount" type="number" min="1" step="0.01"
-          placeholder="اكتب المبلغ" required>
-
-        <label class="label" for="method">طريقة الدفع</label>
-        <select id="method" required>
-          <option value="">اختر طريقة الدفع</option>
-          <option value="Vodafone Cash">فودافون كاش</option>
-          <option value="Orange Cash">أورنج كاش</option>
-          <option value="Etisalat Cash">اتصالات كاش</option>
-          <option value="InstaPay">إنستا باي</option>
-          <option value="Visa">فيزا</option>
+  <section id="depositPage" class="page hidden">
+    <button class="back" onclick="goHome()">← الرئيسية</button>
+    <section class="card" style="border-top:3px solid #46d7a0">
+      <h2>📥 إيداع الأموال</h2>
+      <p class="muted">اختار الطريقة واكتب تفاصيل طلب الإيداع.</p>
+      <form onsubmit="sendRequest(event,'deposit')">
+        <label for="depAmount">المبلغ بالجنيه المصري</label>
+        <input id="depAmount" type="number" min="1" step="0.01" required>
+        <label for="depMethod">طريقة الإيداع</label>
+        <select id="depMethod" required>
+          <option value="">اختار طريقة</option>
+          <option>Vodafone Cash</option><option>Orange Cash</option>
+          <option>Etisalat Cash</option><option>InstaPay</option>
+          <option>Visa</option>
         </select>
-
-        <label class="label" for="paymentPhone">رقم الموبايل</label>
-        <input id="paymentPhone" type="tel" inputmode="tel"
-          maxlength="15" placeholder="رقم الموبايل المرتبط بالطلب" required>
-
-        <button class="primary" id="submitButton" type="submit">
-          إرسال الطلب
-        </button>
-
-        <div id="requestMessage" class="message"></div>
+        <label for="depPhone">رقم الموبايل المرتبط بالدفع</label>
+        <input id="depPhone" type="tel" inputmode="tel" required>
+        <button class="primary" id="depButton">إرسال طلب الإيداع</button>
+        <div id="depMessage" class="message"></div>
       </form>
-
-      <div class="notice">
-        إرسال الطلب لا يعني تحويل الأموال. يجب ربط الخادم بقاعدة البيانات
-        ومراجعة الإدارة قبل اعتماد أي طلب.
-      </div>
+      <div class="notice">سيتم عرض الطلب كقيد المراجعة بعد تأكيد حفظه في الخادم.</div>
     </section>
+  </section>
 
+  <section id="withdrawPage" class="page hidden">
+    <button class="back" onclick="goHome()">← الرئيسية</button>
+    <section class="card" style="border-top:3px solid #f9cc68">
+      <h2>📤 سحب الأموال</h2>
+      <p class="muted">أدخل بيانات طلب السحب وكلمة سر السحب.</p>
+      <form onsubmit="sendRequest(event,'withdraw')">
+        <label for="withAmount">المبلغ بالجنيه المصري</label>
+        <input id="withAmount" type="number" min="1" step="0.01" required>
+        <label for="withMethod">طريقة استلام الأموال</label>
+        <select id="withMethod" required>
+          <option value="">اختار طريقة</option>
+          <option>Vodafone Cash</option><option>Orange Cash</option>
+          <option>Etisalat Cash</option><option>InstaPay</option>
+          <option>Visa</option>
+        </select>
+        <label for="withPhone">رقم استلام الأموال</label>
+        <input id="withPhone" type="tel" inputmode="tel" required>
+        <label for="withdrawPin">كلمة سر السحب</label>
+        <input id="withdrawPin" type="password" minlength="6"
+               autocomplete="current-password" required>
+        <button class="primary" id="withButton">إرسال طلب السحب</button>
+        <div id="withMessage" class="message"></div>
+      </form>
+      <div class="notice">لا تُرسل كلمة سر السحب إلا إلى خادم آمن مخصص للتحقق منها. لا تحفظها في المتصفح.</div>
+    </section>
+  </section>
+
+  <section id="tasksPage" class="page hidden">
+    <button class="back" onclick="goHome()">← الرئيسية</button>
+    <h2>🎯 المهام والمكافآت</h2>
+    <p class="muted">تابع المهام المتاحة وحالة إنجازها.</p>
+    <div class="task">
+      <div class="task-top">
+        <div class="task-icon">👤</div>
+        <div><div class="task-title">إكمال الملف الشخصي</div>
+        <div class="task-reward">مكافأة: لم تُحدد</div></div>
+      </div>
+      <button onclick="taskInfo()">عرض التفاصيل</button>
+    </div>
+    <div class="task">
+      <div class="task-top">
+        <div class="task-icon">📱</div>
+        <div><div class="task-title">متابعة حالة الطلبات</div>
+        <div class="task-reward">مهمة معلوماتية</div></div>
+      </div>
+      <button onclick="openPage('historyPage','history')">عرض الطلبات</button>
+    </div>
+    <div id="taskMessage" class="message"></div>
+    <div class="notice">لن تُضاف مكافأة مالية إلى الرصيد إلا بعد تنفيذ نظام مهام حقيقي واعتماد المكافأة من الخادم.</div>
+  </section>
+
+  <section id="historyPage" class="page hidden">
+    <button class="back" onclick="goHome()">← الرئيسية</button>
+    <h2>📊 سجل العمليات</h2>
     <section class="card">
-      <h3>💜 حسابي</h3>
-      <div class="muted">رقم الموبايل: <span id="accountPhone"></span></div>
-      <br>
+      <div id="historyList" class="muted">لم يتم تحميل الطلبات.</div>
+      <button class="primary" onclick="loadHistory()">تحديث السجل</button>
+    </section>
+  </section>
+
+  <section id="accountPage" class="page hidden">
+    <button class="back" onclick="goHome()">← الرئيسية</button>
+    <section class="card">
+      <div class="profile-icon">👤</div>
+      <h2>حسابي</h2>
+      <div class="list-row"><span>رقم الموبايل</span><b id="accountPhone">—</b></div>
+      <div class="list-row"><span>العملة</span><b>EGP</b></div>
+      <div class="list-row"><span>حالة الحساب</span><b>واجهة الحساب</b></div>
+      <p class="muted">تسجيل الدخول برقم الموبايل فقط لا يثبت ملكية الحساب. يلزم نظام تحقق آمن قبل استخدام أموال حقيقية.</p>
       <button class="primary" onclick="logout()">تسجيل الخروج</button>
     </section>
+  </section>
 
-  </div>
 </main>
 
-<footer>Smart Wallet © 2026</footer>
+<nav id="nav" class="hidden">
+  <button class="active" data-page="homePage" onclick="openPage('homePage','home')"><b>⌂</b>الرئيسية</button>
+  <button data-page="depositPage" onclick="openPage('depositPage','deposit')"><b>↓</b>إيداع</button>
+  <button data-page="withdrawPage" onclick="openPage('withdrawPage','withdraw')"><b>↑</b>سحب</button>
+  <button data-page="tasksPage" onclick="openPage('tasksPage','tasks')"><b>✧</b>المهام</button>
+  <button data-page="accountPage" onclick="openPage('accountPage','account')"><b>♙</b>حسابي</button>
+</nav>
+
+<footer>SMART WALLET</footer>
 
 <script>
 const API_URL =
   "https://sjhjxbnhhwftwlkshpql.supabase.co/functions/v1/smart-service";
 
 let currentPhone = "";
-let requestType = "deposit";
+let balanceVisible = true;
+let balanceValue = null;
 
-function login(){
+function login() {
   const phone = document.getElementById("phone").value.trim();
-  const message = document.getElementById("loginMessage");
+  const msg = document.getElementById("loginMessage");
 
-  if(!/^[0-9+\-\s]{8,15}$/.test(phone)){
-    message.textContent = "من فضلك اكتب رقم موبايل صحيح.";
+  if (!/^[0-9+\-\s]{8,15}$/.test(phone)) {
+    msg.textContent = "اكتب رقم موبايل صحيح.";
     return;
   }
 
   currentPhone = phone;
   document.getElementById("accountPhone").textContent = phone;
-  document.getElementById("loginCard").classList.add("hidden");
-  document.getElementById("wallet").classList.remove("hidden");
+  document.getElementById("loginScreen").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+  document.getElementById("nav").classList.remove("hidden");
+  openPage("homePage","home");
 }
 
-function logout(){
+function logout() {
   currentPhone = "";
-  document.getElementById("wallet").classList.add("hidden");
-  document.getElementById("requestCard").classList.add("hidden");
-  document.getElementById("loginCard").classList.remove("hidden");
+  balanceValue = null;
+  document.getElementById("app").classList.add("hidden");
+  document.getElementById("nav").classList.add("hidden");
+  document.getElementById("loginScreen").classList.remove("hidden");
   document.getElementById("phone").value = "";
+  document.getElementById("balanceValue").textContent = "—";
 }
 
-function showRequest(type){
-  requestType = type;
-  document.getElementById("requestTitle").textContent =
-    type === "deposit" ? "📥 طلب إيداع" : "📤 طلب سحب";
-  document.getElementById("requestMessage").textContent = "";
-  document.getElementById("requestCard").classList.remove("hidden");
-  document.getElementById("requestCard").scrollIntoView({
-    behavior:"smooth",
-    block:"start"
+function openPage(id, name) {
+  document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+  document.querySelectorAll("nav button").forEach(b => {
+    b.classList.toggle("active", b.dataset.page === id);
   });
+  if (name === "history") loadHistory();
 }
 
-document.getElementById("requestForm").addEventListener("submit",
-async function(event){
+function goHome() {
+  openPage("homePage","home");
+}
+
+function toggleBalance() {
+  balanceVisible = !balanceVisible;
+  document.getElementById("balanceValue").textContent =
+    balanceVisible
+      ? (balanceValue === null ? "—" : Number(balanceValue).toFixed(2))
+      : "••••••";
+}
+
+/*
+  لا نعرض رصيدًا افتراضيًا.
+  سيظهر الرصيد بعد إضافة إجراء آمن لاسترجاعه من الخادم.
+*/
+async function sendRequest(event, type) {
   event.preventDefault();
 
-  const amount = Number(document.getElementById("amount").value);
-  const method = document.getElementById("method").value;
-  const paymentPhone = document.getElementById("paymentPhone").value.trim();
-  const message = document.getElementById("requestMessage");
-  const button = document.getElementById("submitButton");
+  const isDeposit = type === "deposit";
+  const prefix = isDeposit ? "dep" : "with";
+  const message = document.getElementById(prefix + "Message");
+  const button = document.getElementById(prefix + "Button");
 
-  if(!currentPhone){
+  const amount = Number(document.getElementById(prefix + "Amount").value);
+  const method = document.getElementById(prefix + "Method").value;
+  const phone = document.getElementById(prefix + "Phone").value.trim();
+
+  if (!currentPhone) {
     message.textContent = "سجّل الدخول أولًا.";
     return;
   }
 
-  if(!Number.isFinite(amount) || amount <= 0){
-    message.textContent = "اكتب مبلغًا صحيحًا.";
+  if (!Number.isFinite(amount) || amount <= 0 || !method || !phone) {
+    message.textContent = "راجع البيانات وحاول مرة أخرى.";
     return;
   }
 
-  button.disabled = true;
-  button.textContent = "جارٍ إرسال الطلب...";
-  message.textContent = "";
+  const body = {
+    action: "create_request",
+    user_id: currentPhone,
+    amount,
+    request_type: type,
+    payment_method: method,
+    phone_number: phone
+  };
 
-  try{
-    const response = await fetch(API_URL,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        action:"create_request",
-        user_id:currentPhone,
-        amount:amount,
-        request_type:requestType,
-        payment_method:method,
-        phone_number:paymentPhone
-      })
+  if (!isDeposit) {
+    const pin = document.getElementById("withdrawPin").value;
+    if (pin.length < 6) {
+      message.textContent = "كلمة سر السحب يجب ألا تقل عن 6 أحرف أو أرقام.";
+      return;
+    }
+    body.withdrawal_password = pin;
+  }
+
+  button.disabled = true;
+  message.textContent = "جارٍ إرسال الطلب...";
+
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify(body)
     });
 
-    const result = await response.json().catch(()=>({}));
+    const result = await response.json().catch(() => ({}));
 
-    if(!response.ok || result.error){
+    if (!response.ok || result.error) {
       throw new Error(result.error || "الخادم لم يؤكد حفظ الطلب.");
     }
 
-    message.textContent = "تم إرسال الطلب إلى الخادم.";
-    document.getElementById("amount").value = "";
-    document.getElementById("method").value = "";
-    document.getElementById("paymentPhone").value = "";
+    message.textContent = "أكد الخادم استلام الطلب.";
+    event.target.reset();
+    loadHistory();
 
-  }catch(error){
+  } catch (error) {
     message.textContent =
-      "لم يتم تأكيد حفظ الطلب. يجب تجهيز خدمة تسجيل الطلبات في الخادم أولًا.";
-  }finally{
+      "لم يتم تأكيد حفظ الطلب. يجب تجهيز إجراء create_request والتحقق من كلمة سر السحب في الخادم.";
+  } finally {
     button.disabled = false;
-    button.textContent = "إرسال الطلب";
   }
-});
-</script>
+}
 
+async function loadHistory() {
+  const target = document.getElementById("historyList");
+  target.textContent = "تحميل السجل يحتاج إلى إجراء آمن في الخادم.";
+}
+
+function taskInfo() {
+  document.getElementById("taskMessage").textContent =
+    "المهمة معروضة، لكن تسجيل الإنجاز والمكافآت يحتاج إلى ربطه بالخادم.";
+}
+</script>
 </body>
 </html>
