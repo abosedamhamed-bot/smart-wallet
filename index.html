@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Wallet - محفظتك الذكية</title>
+  <title>Smart Wallet | محفظتك الذكية</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -15,40 +15,40 @@
 
     body {
       margin: 0;
-      background: #f4f2ff;
+      background: #f5f3ff;
       color: #222;
     }
 
     header {
-      background: linear-gradient(135deg, #5b21b6, #7c3aed);
+      background: linear-gradient(135deg, #4c1d95, #7c3aed);
       color: white;
       text-align: center;
-      padding: 24px 15px;
+      padding: 25px 15px;
       border-radius: 0 0 25px 25px;
     }
 
     header h1 {
       margin: 0 0 8px;
-      font-size: 27px;
+      font-size: 28px;
     }
 
     header p {
       margin: 0;
-      opacity: .9;
+      font-size: 14px;
     }
 
     .container {
       width: 92%;
       max-width: 520px;
-      margin: 20px auto;
+      margin: 22px auto;
     }
 
     .card {
       background: white;
       padding: 20px;
-      margin-bottom: 16px;
+      margin-bottom: 17px;
       border-radius: 18px;
-      box-shadow: 0 5px 18px #32106b12;
+      box-shadow: 0 5px 18px rgba(40, 20, 90, .08);
     }
 
     h2 {
@@ -60,27 +60,27 @@
     label {
       display: block;
       margin: 13px 0 7px;
-      font-size: 14px;
       font-weight: bold;
+      font-size: 14px;
     }
 
     input, select {
+      display: block;
       width: 100%;
       padding: 13px;
       border: 1px solid #ddd6fe;
       border-radius: 10px;
       font-size: 15px;
-      background: #fff;
+      background: white;
     }
 
     input:focus, select:focus {
       outline: 2px solid #c4b5fd;
-      border-color: #7c3aed;
     }
 
     button {
       width: 100%;
-      border: none;
+      border: 0;
       border-radius: 11px;
       padding: 13px;
       margin-top: 12px;
@@ -91,8 +91,9 @@
       cursor: pointer;
     }
 
-    button:hover {
-      background: #5b21b6;
+    button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
     }
 
     button.secondary {
@@ -112,18 +113,24 @@
       color: white;
       background: linear-gradient(135deg, #5b21b6, #8b5cf6);
       border-radius: 18px;
-      padding: 22px;
+      padding: 23px;
       text-align: center;
-    }
-
-    .balance p {
-      margin: 0 0 8px;
+      margin-bottom: 17px;
     }
 
     .balance h2 {
       color: white;
-      font-size: 32px;
-      margin: 8px 0;
+      font-size: 30px;
+      margin: 10px 0;
+    }
+
+    .message {
+      background: #f3f0ff;
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 12px;
+      line-height: 1.8;
+      overflow-wrap: anywhere;
     }
 
     .small {
@@ -132,18 +139,9 @@
       line-height: 1.8;
     }
 
-    .message {
-      margin-top: 12px;
-      padding: 12px;
-      border-radius: 10px;
-      background: #f3f0ff;
-      line-height: 1.8;
-      overflow-wrap: anywhere;
-    }
-
     .item {
-      padding: 12px 0;
       border-bottom: 1px solid #eee;
+      padding: 13px 0;
       line-height: 1.8;
       overflow-wrap: anywhere;
     }
@@ -154,9 +152,9 @@
 
     .status {
       display: inline-block;
+      padding: 3px 9px;
       background: #fef3c7;
       color: #92400e;
-      padding: 3px 9px;
       border-radius: 7px;
       font-size: 12px;
     }
@@ -164,8 +162,8 @@
     footer {
       text-align: center;
       color: #777;
-      padding: 20px;
       font-size: 12px;
+      padding: 22px;
     }
   </style>
 </head>
@@ -177,9 +175,9 @@
   <p>محفظتك الذكية لإدارة طلباتك المالية</p>
 </header>
 
-<div class="container">
+<main class="container">
 
-  <!-- تسجيل الدخول وإنشاء الحساب -->
+  <!-- تسجيل الدخول -->
   <section id="authSection" class="card">
     <h2 id="authTitle">تسجيل الدخول</h2>
 
@@ -199,11 +197,13 @@
       autocomplete="current-password"
     >
 
-    <button id="authButton" onclick="authenticate()">دخول</button>
+    <button id="authButton" onclick="authenticate()">
+      دخول
+    </button>
 
     <button
-      class="secondary"
       id="switchAuth"
+      class="secondary"
       onclick="switchAuthMode()"
     >
       إنشاء حساب جديد
@@ -212,12 +212,12 @@
     <div id="authMessage" class="message hidden"></div>
 
     <p class="small">
-      قد تتطلب حسابات الموبايل إعدادات تحقق إضافية في Supabase.
-      لا تستخدم كلمة مرور تستعملها في حساباتك الأخرى.
+      قد يتطلب تسجيل الحساب تأكيد رقم الموبايل حسب إعدادات
+      المصادقة في Supabase.
     </p>
   </section>
 
-  <!-- واجهة المستخدم -->
+  <!-- الصفحة الرئيسية -->
   <section id="appSection" class="hidden">
 
     <div class="balance">
@@ -226,7 +226,8 @@
       <p id="userPhone"></p>
     </div>
 
-    <div class="card">
+    <!-- الإيداع -->
+    <section class="card">
       <h2>➕ طلب إيداع</h2>
 
       <label for="depositAmount">المبلغ بالجنيه المصري</label>
@@ -247,19 +248,20 @@
         <option value="Visa">فيزا</option>
       </select>
 
-      <label for="depositPhone">رقم التحويل أو وسيلة التواصل</label>
+      <label for="depositPhone">رقم التحويل</label>
       <input
         id="depositPhone"
         type="tel"
-        placeholder="اكتب الرقم"
+        placeholder="اكتب رقم وسيلة الدفع"
       >
 
-      <button onclick="submitRequest('deposit')">
+      <button id="depositButton" onclick="submitDeposit()">
         إرسال طلب الإيداع
       </button>
-    </div>
+    </section>
 
-    <div class="card">
+    <!-- السحب -->
+    <section class="card">
       <h2>➖ طلب سحب</h2>
 
       <label for="withdrawAmount">المبلغ بالجنيه المصري</label>
@@ -280,67 +282,71 @@
         <option value="Visa">فيزا</option>
       </select>
 
-      <label for="withdrawPhone">رقم المحفظة أو وسيلة الاستلام</label>
+      <label for="withdrawPhone">رقم الاستلام</label>
       <input
         id="withdrawPhone"
         type="tel"
-        placeholder="اكتب الرقم"
+        placeholder="اكتب رقم المحفظة"
       >
 
       <label for="withdrawPassword">كلمة مرور السحب</label>
       <input
         id="withdrawPassword"
         type="password"
-        placeholder="كلمة مرور السحب"
         autocomplete="new-password"
+        placeholder="كلمة مرور السحب"
       >
 
       <p class="small">
-        يلزم إعداد تحقق آمن لكلمة مرور السحب على الخادم قبل اعتماد
-        عمليات السحب الحقيقية. لا ترسل كلمة المرور داخل طلب الإيداع
-        أو السحب ولا تحفظها كنص عادي.
+        لن يتم إرسال كلمة مرور السحب أو حفظها في قاعدة البيانات
+        بواسطة هذه الواجهة. يجب إعداد تحقق آمن على الخادم
+        قبل تفعيل طلبات السحب الحقيقية.
       </p>
 
-      <button onclick="submitRequest('withdraw')">
-        إرسال طلب السحب
+      <button onclick="submitWithdraw()">
+        طلب السحب
       </button>
-    </div>
 
-    <div class="card">
-      <h2>📋 طلباتي</h2>
+      <div id="withdrawMessage" class="message hidden"></div>
+    </section>
+
+    <!-- سجل الطلبات -->
+    <section class="card">
+      <h2>📋 سجل الطلبات</h2>
       <button class="secondary" onclick="loadHistory()">
-        تحديث الطلبات
+        تحديث السجل
       </button>
-      <div id="historyList">
-        لم يتم تحميل الطلبات بعد.
-      </div>
-    </div>
+      <div id="historyList">لم يتم تحميل السجل بعد.</div>
+    </section>
 
-    <div class="card">
+    <!-- الحساب -->
+    <section class="card">
       <h2>👤 حسابي</h2>
       <p id="accountInfo"></p>
-      <button class="danger" onclick="logout()">تسجيل الخروج</button>
-    </div>
+      <button class="danger" onclick="logout()">
+        تسجيل الخروج
+      </button>
+    </section>
 
   </section>
 
-  <footer>
-    Smart Wallet © 2026
-    <br>
-    إرسال الطلب لا يعني إتمام التحويل المالي.
-  </footer>
+</main>
 
-</div>
+<footer>
+  Smart Wallet © 2026
+  <br>
+  طلب الإيداع أو السحب لا يعني إتمام التحويل المالي.
+</footer>
 
 <script>
   /*
-    إعدادات مشروع Supabase.
-    المفتاح التالي مفتاح عام للنشر في المتصفح.
-    لا تضع Service Role Key في هذا الملف مطلقًا.
+    عنوان Supabase الصحيح الذي أرسلته.
+    استخدم المفتاح العام فقط في الواجهة.
+    ممنوع وضع Secret Key أو Service Role Key هنا.
   */
 
   const SUPABASE_URL =
-    "https://tdmtqvabbqpnquhedqne.supabase.co";
+    "https://sjhjxbnhhwftwlkshpql.supabase.co";
 
   const SUPABASE_KEY =
     "sb_publishable_6880OlVMXwIDPJfqwFS5TA_m7FCMQZK";
@@ -355,13 +361,13 @@
 
   const $ = id => document.getElementById(id);
 
-  function showMessage(id, message) {
-    const el = $(id);
-    el.textContent = message;
-    el.classList.remove("hidden");
+  function message(id, text) {
+    $(id).textContent = text;
+    $(id).classList.remove("hidden");
   }
 
-  function hideMessage(id) {
+  function clearMessage(id) {
+    $(id).textContent = "";
     $(id).classList.add("hidden");
   }
 
@@ -385,7 +391,7 @@
       ? "new-password"
       : "current-password";
 
-    hideMessage("authMessage");
+    clearMessage("authMessage");
   }
 
   function normalizePhone(value) {
@@ -396,20 +402,20 @@
     const phone = normalizePhone($("phone").value);
     const password = $("password").value;
 
-    hideMessage("authMessage");
+    clearMessage("authMessage");
 
     if (!phone || !password) {
-      showMessage(
+      message(
         "authMessage",
-        "اكتب رقم الموبايل وكلمة المرور أولًا."
+        "اكتب رقم الموبايل وكلمة المرور."
       );
       return;
     }
 
     if (password.length < 8) {
-      showMessage(
+      message(
         "authMessage",
-        "استخدم كلمة مرور من 8 أحرف أو أرقام على الأقل."
+        "كلمة المرور يجب أن تكون 8 أحرف أو أرقام على الأقل."
       );
       return;
     }
@@ -437,9 +443,9 @@
       }
 
       if (signupMode && !result.data.session) {
-        showMessage(
+        message(
           "authMessage",
-          "تم إرسال طلب إنشاء الحساب. قد يحتاج الحساب إلى تأكيد رقم الموبايل حسب إعدادات Supabase."
+          "تم إرسال طلب التسجيل. قد تحتاج إلى تأكيد رقم الموبايل حسب إعدادات Supabase."
         );
         return;
       }
@@ -447,9 +453,9 @@
       currentUser = result.data.user;
 
       if (!currentUser) {
-        showMessage(
+        message(
           "authMessage",
-          "لم يتم تسجيل الدخول. راجع إعدادات المصادقة في Supabase."
+          "لم يتم تسجيل الدخول. راجع إعدادات المصادقة."
         );
         return;
       }
@@ -457,10 +463,10 @@
       await showApp();
 
     } catch (error) {
-      showMessage(
+      message(
         "authMessage",
         "تعذر إتمام العملية: " +
-        (error.message || "حدث خطأ غير معروف.")
+        (error.message || "خطأ في الاتصال.")
       );
     } finally {
       $("authButton").disabled = false;
@@ -487,7 +493,7 @@
   async function loadBalance() {
     const { data, error } = await db
       .from("profiles")
-      .select("balance, phone")
+      .select("balance")
       .eq("id", currentUser.id)
       .maybeSingle();
 
@@ -502,92 +508,59 @@
       return;
     }
 
-    const amount = Number(data.balance || 0);
-
     $("balanceValue").textContent =
-      "ج.م " + amount.toLocaleString("ar-EG", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
+      "ج.م " + Number(data.balance || 0).toLocaleString(
+        "ar-EG",
+        {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      );
   }
 
-  async function submitRequest(type) {
+  async function submitDeposit() {
     if (!currentUser) {
       alert("سجّل الدخول أولًا.");
       return;
     }
 
-    const isDeposit = type === "deposit";
-
-    const amount = Number(
-      $(isDeposit ? "depositAmount" : "withdrawAmount").value
-    );
-
-    const method = $(
-      isDeposit ? "depositMethod" : "withdrawMethod"
-    ).value;
-
-    const paymentPhone = normalizePhone(
-      $(isDeposit ? "depositPhone" : "withdrawPhone").value
-    );
-
-    const withdrawalPassword = $("withdrawPassword").value;
+    const amount = Number($("depositAmount").value);
+    const method = $("depositMethod").value;
+    const phone = normalizePhone($("depositPhone").value);
 
     if (!Number.isFinite(amount) || amount <= 0) {
-      alert("اكتب مبلغًا صحيحًا أكبر من صفر.");
+      alert("اكتب مبلغًا صحيحًا.");
       return;
     }
 
     if (amount > 1000000) {
-      alert("المبلغ أكبر من الحد المسموح به للطلب.");
+      alert("المبلغ أكبر من الحد المسموح به.");
       return;
     }
 
-    if (!paymentPhone) {
-      alert("اكتب رقم وسيلة الدفع أو الاستلام.");
+    if (!phone) {
+      alert("اكتب رقم التحويل.");
       return;
     }
 
-    if (!isDeposit && !withdrawalPassword) {
-      alert("اكتب كلمة مرور السحب.");
-      return;
-    }
-
-    /*
-      لا نرسل كلمة مرور السحب إلى قاعدة البيانات.
-      لا تعتمد على هذا الحقل وحده للتحقق من هوية المستخدم.
-      يجب إنشاء تحقق آمن على الخادم قبل تشغيل السحب الحقيقي.
-    */
-
-    if (!isDeposit) {
-      alert(
-        "ميزة السحب تحتاج إلى تفعيل التحقق الآمن من كلمة مرور السحب على الخادم. لم يتم إرسال الطلب."
-      );
-      return;
-    }
-
-    const button = event && event.target
-      ? event.target
-      : null;
-
-    if (button) button.disabled = true;
+    $("depositButton").disabled = true;
 
     try {
       const { error } = await db
         .from("wallet_requests")
         .insert({
           user_id: currentUser.id,
-          request_type: type,
+          request_type: "deposit",
           amount: amount,
           payment_method: method,
-          phone_number: paymentPhone,
+          phone_number: phone,
           status: "pending"
         });
 
       if (error) throw error;
 
       alert(
-        "تم إرسال طلب الإيداع بنجاح. سيظل الطلب معلّقًا حتى تراجعه الإدارة."
+        "تم إرسال طلب الإيداع. انتظر مراجعة الإدارة."
       );
 
       $("depositAmount").value = "";
@@ -597,12 +570,49 @@
 
     } catch (error) {
       alert(
-        "تعذر إرسال الطلب. تأكد من إعداد جدول wallet_requests وسياسات الأمان في Supabase.\n" +
+        "تعذر إرسال الطلب. راجع إعدادات قاعدة البيانات.\n" +
         (error.message || "")
       );
     } finally {
-      if (button) button.disabled = false;
+      $("depositButton").disabled = false;
     }
+  }
+
+  async function submitWithdraw() {
+    clearMessage("withdrawMessage");
+
+    if (!currentUser) {
+      message("withdrawMessage", "سجّل الدخول أولًا.");
+      return;
+    }
+
+    const amount = Number($("withdrawAmount").value);
+    const phone = normalizePhone($("withdrawPhone").value);
+    const password = $("withdrawPassword").value;
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      message("withdrawMessage", "اكتب مبلغًا صحيحًا.");
+      return;
+    }
+
+    if (!phone || !password) {
+      message(
+        "withdrawMessage",
+        "اكتب رقم الاستلام وكلمة مرور السحب."
+      );
+      return;
+    }
+
+    /*
+      لا نفعّل السحب الحقيقي من المتصفح فقط.
+      يجب إنشاء تحقق آمن لكلمة مرور السحب والتحقق من الرصيد
+      وتسجيل الطلب على الخادم قبل السماح بالسحب.
+    */
+
+    message(
+      "withdrawMessage",
+      "السحب غير مفعّل بعد. لازم نجهّز التحقق الآمن على الخادم حتى يصل طلبك للإدارة بأمان."
+    );
   }
 
   async function loadHistory() {
@@ -645,7 +655,7 @@
 
         const method = document.createElement("div");
         method.textContent =
-          "الطريقة: " + (item.payment_method || "-");
+          "طريقة الدفع: " + (item.payment_method || "-");
 
         const status = document.createElement("span");
         status.className = "status";
@@ -663,7 +673,7 @@
 
     } catch (error) {
       list.textContent =
-        "تعذر تحميل الطلبات. تأكد من إعداد الجدول وسياسات الأمان.";
+        "تعذر تحميل الطلبات. تأكد من وجود الجدول وسياسات الأمان.";
       console.error("History error:", error);
     }
   }
@@ -687,11 +697,15 @@
     }
 
     currentUser = null;
+
     $("appSection").classList.add("hidden");
     $("authSection").classList.remove("hidden");
+
     $("password").value = "";
     $("withdrawPassword").value = "";
-    hideMessage("authMessage");
+
+    clearMessage("authMessage");
+    clearMessage("withdrawMessage");
   }
 
   async function restoreSession() {
