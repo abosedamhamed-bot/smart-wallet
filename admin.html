@@ -6,15 +6,12 @@
   <title>إدارة Smart Wallet</title>
   <style>
     *{box-sizing:border-box}
-    body{margin:0;background:#f4f0ff;font-family:Arial,sans-serif;color:#241641;padding:20px}
-    .box{max-width:700px;margin:25px auto;background:white;padding:22px;border-radius:18px;box-shadow:0 5px 25px #0001}
-    h1{color:#7138d8;text-align:center}
+    body{margin:0;background:#f4f0ff;font-family:Arial,sans-serif;color:#241641;padding:16px}
+    .box{max-width:650px;margin:30px auto;background:#fff;padding:22px;border-radius:18px;box-shadow:0 5px 25px #0001}
+    h1{text-align:center;color:#7138d8}
     input,button{width:100%;padding:13px;margin:7px 0;border-radius:9px;border:1px solid #ddd;font-size:16px}
-    button{background:#7138d8;color:white;border:0;cursor:pointer}
-    .secondary{background:#eee;color:#241641}
-    .item{padding:14px;margin:12px 0;border:1px solid #e5dcf8;border-radius:12px;overflow-wrap:anywhere}
-    .row{display:flex;gap:8px}
-    .row button{flex:1}
+    button{background:#7138d8;color:#fff;border:0;cursor:pointer}
+    .item{padding:12px;margin:12px 0;border:1px solid #e5dcf8;border-radius:12px;overflow-wrap:anywhere}
     #panel{display:none}
     #message{white-space:pre-wrap}
   </style>
@@ -24,82 +21,85 @@
     <h1>Smart Wallet</h1>
     <h3>لوحة الإدارة</h3>
 
-    <div id="login">
-      <p>أدخل كلمة سر الإدارة التي خزنتها في Supabase.</p>
+    <section id="login">
       <input id="password" type="password" placeholder="كلمة سر الإدارة">
-      <button onclick="login()">دخول</button>
-    </div>
+      <button id="loginBtn">دخول</button>
+    </section>
 
-    <div id="panel">
-      <button onclick="loadRequests()">عرض طلبات الإيداع والسحب</button>
-
+    <section id="panel">
+      <button id="refreshBtn">عرض الطلبات</button>
       <h3>تعديل رصيد مستخدم</h3>
-      <input id="phone" type="tel" placeholder="رقم موبايل المستخدم">
+      <input id="phone" type="tel" placeholder="رقم الموبايل">
       <input id="balance" type="number" min="0" step="0.01" placeholder="الرصيد الجديد بالجنيه">
-      <button onclick="setBalance()">حفظ الرصيد</button>
-
+      <button id="saveBtn">حفظ الرصيد</button>
       <div id="requests"></div>
-      <button class="secondary" onclick="logout()">تسجيل الخروج</button>
-    </div>
-
+      <button id="logoutBtn">تسجيل الخروج</button>
+    </section>
     <p id="message"></p>
   </div>
 
 <script>
-const API_URL =
-  "https://sjhjxbnhhwftwlkshpql.supabase.co/functions/v1/smart-service";
-
+const API_URL = "https://sjhjxbnhhwftwlkshpql.supabase.co/functions/v1/smart-service";
+const PUBLIC_KEY = "sb_publishable_6880OlVMxWIDPJfqwFS5TA_m7FCMQZK";
 let adminPassword = "";
 
-async function callApi(data) {
+function message(text) {
+  document.getElementById("message").textContent = text;
+}
+
+async function api(data) {
   const response = await fetch(API_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "apikey": "sb_publishable_6880OlVMxWIDPJfqwFS5TA_m7FCMQZK",
+      "apikey": PUBLIC_KEY,
       "x-admin-password": adminPassword
     },
     body: JSON.stringify(data)
   });
 
   const result = await response.json();
-
   if (!response.ok) {
-    throw new Error(result.error || result.message || "فشل الطلب");
+    throw new Error(result.error || result.message || "خطأ في الاتصال");
   }
-
   return result;
 }
 
-async function login() {
-  adminPassword = document.getElementById("password").value;
+document.getElementById("loginBtn").onclick = async () => {
+  adminPassword = document.getElementById("password").value.trim();
 
   if (!adminPassword) {
-    showMessage("اكتب كلمة سر الإدارة أولاً.");
+    message("اكتب كلمة سر الإدارة.");
     return;
   }
 
   try {
-    await callApi({action: "list_requests"});
+    await api({action: "list_requests"});
     document.getElementById("login").style.display = "none";
     document.getElementById("panel").style.display = "block";
     document.getElementById("password").value = "";
-    showMessage("تم تسجيل الدخول بنجاح.");
-    loadRequests();
+    message("تم الاتصال بنجاح.");
+    await loadRequests();
   } catch (error) {
     adminPassword = "";
-    showMessage("تعذر الدخول: " + error.message);
+    message("تعذر الدخول: " + error.message);
   }
-}
+};
 
 async function loadRequests() {
   try {
-    const result = await callApi({action: "list_requests"});
+    const result = await api({action: "list_requests"});
     const container = document.getElementById("requests");
-    container.innerHTML = "<h3>الطلبات</h3>";
+    container.replaceChildren();
+
+    const title = document.createElement("h3");
+    title.textContent = "طلبات الإيداع والسحب";
+    container.appendChild(title);
 
     if (!result.requests || result.requests.length === 0) {
-      container.textContent = "لا توجد طلبات حالياً.";
+      const empty = document.createElement("p");
+      empty.textContent = "لا توجد طلبات حالياً.";
+      container.appendChild(empty);
       return;
     }
 
@@ -113,77 +113,68 @@ async function loadRequests() {
         "\nالموبايل: " + (request.phone_number || "غير محدد") +
         "\nالنوع: " + (request.request_type || "غير محدد") +
         "\nالمبلغ: " + (request.amount ?? 0) + " جنيه" +
-        "\nالطريقة: " + (request.payment_method || "غير محددة") +
+        "\nطريقة الدفع: " + (request.payment_method || "غير محددة") +
         "\nالحالة: " + (request.status || "غير محددة");
 
       item.appendChild(details);
 
       if (request.status === "pending") {
-        ["approved", "rejected"].forEach(status => {
+        for (const status of ["approved", "rejected"]) {
           const button = document.createElement("button");
-          button.textContent =
-            status === "approved" ? "قبول الطلب" : "رفض الطلب";
-          button.onclick = () => updateRequest(request.id, status);
+          button.textContent = status === "approved" ? "قبول الطلب" : "رفض الطلب";
+          button.onclick = async () => {
+            if (!confirm("هل تريد تغيير حالة الطلب؟")) return;
+            try {
+              await api({action: "update_request", id: request.id, status});
+              message("تم تحديث حالة الطلب.");
+              await loadRequests();
+            } catch (error) {
+              message("تعذر تحديث الطلب: " + error.message);
+            }
+          };
           item.appendChild(button);
-        });
+        }
       }
 
       container.appendChild(item);
     });
-
-    showMessage("تم تحميل الطلبات.");
   } catch (error) {
-    showMessage("تعذر تحميل الطلبات: " + error.message);
+    message("تعذر تحميل الطلبات: " + error.message);
   }
 }
 
-async function updateRequest(id, status) {
-  if (!confirm("هل أنت متأكد من تغيير حالة الطلب؟")) return;
+document.getElementById("refreshBtn").onclick = loadRequests;
 
-  try {
-    await callApi({action: "update_request", id, status});
-    showMessage("تم تحديث حالة الطلب.");
-    await loadRequests();
-  } catch (error) {
-    showMessage("تعذر تحديث الطلب: " + error.message);
-  }
-}
-
-async function setBalance() {
+document.getElementById("saveBtn").onclick = async () => {
   const phone = document.getElementById("phone").value.trim();
   const balance = document.getElementById("balance").value;
 
   if (!phone || balance === "") {
-    showMessage("اكتب رقم الموبايل والرصيد.");
+    message("اكتب رقم الموبايل والرصيد.");
     return;
   }
 
-  if (!confirm("هل تريد حفظ الرصيد الجديد لهذا المستخدم؟")) return;
+  if (!confirm("هل تريد حفظ الرصيد الجديد؟")) return;
 
   try {
-    await callApi({
+    await api({
       action: "set_balance",
       phone_number: phone,
       balance: Number(balance)
     });
-
-    showMessage("تم حفظ الرصيد بنجاح.");
+    message("تم حفظ الرصيد.");
   } catch (error) {
-    showMessage("تعذر حفظ الرصيد: " + error.message);
+    message("تعذر حفظ الرصيد: " + error.message);
   }
-}
+};
 
-function logout() {
+document.getElementById("logoutBtn").onclick = () => {
   adminPassword = "";
   document.getElementById("panel").style.display = "none";
   document.getElementById("login").style.display = "block";
-  document.getElementById("requests").innerHTML = "";
-  showMessage("تم تسجيل الخروج.");
-}
-
-function showMessage(message) {
-  document.getElementById("message").textContent = message;
-}
+  document.getElementById("requests").replaceChildren();
+  message("تم تسجيل الخروج.");
+};
 </script>
 </body>
 </html>
