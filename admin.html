@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>إدارة Smart Wallet</title>
+  <style>
+    *{box-sizing:border-box}
+    body{margin:0;background:#f4f0ff;font-family:Arial,sans-serif;color:#241641;padding:20px}
+    .box{max-width:700px;margin:25px auto;background:white;padding:22px;border-radius:18px;box-shadow:0 5px 25px #0001}
+    h1{color:#7138d8;text-align:center}
+    input,button{width:100%;padding:13px;margin:7px 0;border-radius:9px;border:1px solid #ddd;font-size:16px}
+    button{background:#7138d8;color:white;border:0;cursor:pointer}
+    .secondary{background:#eee;color:#241641}
+    .item{padding:14px;margin:12px 0;border:1px solid #e5dcf8;border-radius:12px;overflow-wrap:anywhere}
+    .row{display:flex;gap:8px}
+    .row button{flex:1}
+    #panel{display:none}
+    #message{white-space:pre-wrap}
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>Smart Wallet</h1>
+    <h3>لوحة الإدارة</h3>
+
+    <div id="login">
+      <p>أدخل كلمة سر الإدارة التي خزنتها في Supabase.</p>
+      <input id="password" type="password" placeholder="كلمة سر الإدارة">
+      <button onclick="login()">دخول</button>
+    </div>
+
+    <div id="panel">
+      <button onclick="loadRequests()">عرض طلبات الإيداع والسحب</button>
+
+      <h3>تعديل رصيد مستخدم</h3>
+      <input id="phone" type="tel" placeholder="رقم موبايل المستخدم">
+      <input id="balance" type="number" min="0" step="0.01" placeholder="الرصيد الجديد بالجنيه">
+      <button onclick="setBalance()">حفظ الرصيد</button>
+
+      <div id="requests"></div>
+      <button class="secondary" onclick="logout()">تسجيل الخروج</button>
+    </div>
+
+    <p id="message"></p>
+  </div>
+
+<script>
+const API_URL =
+  "https://sjhjxbnhhwftwlkshpql.supabase.co/functions/v1/smart-service";
+
+let adminPassword = "";
+
+async function callApi(data) {
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": "sb_publishable_6880OlVMxWIDPJfqwFS5TA_m7FCMQZK",
+      "x-admin-password": adminPassword
+    },
+    body: JSON.stringify(data)
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    throw new Error(result.error || result.message || "فشل الطلب");
+  }
+
+  return result;
+}
+
+async function login() {
+  adminPassword = document.getElementById("password").value;
+
+  if (!adminPassword) {
+    showMessage("اكتب كلمة سر الإدارة أولاً.");
+    return;
+  }
+
+  try {
+    await callApi({action: "list_requests"});
+    document.getElementById("login").style.display = "none";
+    document.getElementById("panel").style.display = "block";
+    document.getElementById("password").value = "";
+    showMessage("تم تسجيل الدخول بنجاح.");
+    loadRequests();
+  } catch (error) {
+    adminPassword = "";
+    showMessage("تعذر الدخول: " + error.message);
+  }
+}
+
+async function loadRequests() {
+  try {
+    const result = await callApi({action: "list_requests"});
+    const container = document.getElementById("requests");
+    container.innerHTML = "<h3>الطلبات</h3>";
+
+    if (!result.requests || result.requests.length === 0) {
+      container.textContent = "لا توجد طلبات حالياً.";
+      return;
+    }
+
+    result.requests.forEach(request => {
+      const item = document.createElement("div");
+      item.className = "item";
+
+      const details = document.createElement("p");
+      details.textContent =
+        "رقم الطلب: " + request.id +
+        "\nالموبايل: " + (request.phone_number || "غير محدد") +
+        "\nالنوع: " + (request.request_type || "غير محدد") +
+        "\nالمبلغ: " + (request.amount ?? 0) + " جنيه" +
+        "\nالطريقة: " + (request.payment_method || "غير محددة") +
+        "\nالحالة: " + (request.status || "غير محددة");
+
+      item.appendChild(details);
+
+      if (request.status === "pending") {
+        ["approved", "rejected"].forEach(status => {
+          const button = document.createElement("button");
+          button.textContent =
+            status === "approved" ? "قبول الطلب" : "رفض الطلب";
+          button.onclick = () => updateRequest(request.id, status);
+          item.appendChild(button);
+        });
+      }
+
+      container.appendChild(item);
+    });
+
+    showMessage("تم تحميل الطلبات.");
+  } catch (error) {
+    showMessage("تعذر تحميل الطلبات: " + error.message);
+  }
+}
+
+async function updateRequest(id, status) {
+  if (!confirm("هل أنت متأكد من تغيير حالة الطلب؟")) return;
+
+  try {
+    await callApi({action: "update_request", id, status});
+    showMessage("تم تحديث حالة الطلب.");
+    await loadRequests();
+  } catch (error) {
+    showMessage("تعذر تحديث الطلب: " + error.message);
+  }
+}
+
+async function setBalance() {
+  const phone = document.getElementById("phone").value.trim();
+  const balance = document.getElementById("balance").value;
+
+  if (!phone || balance === "") {
+    showMessage("اكتب رقم الموبايل والرصيد.");
+    return;
+  }
+
+  if (!confirm("هل تريد حفظ الرصيد الجديد لهذا المستخدم؟")) return;
+
+  try {
+    await callApi({
+      action: "set_balance",
+      phone_number: phone,
+      balance: Number(balance)
+    });
+
+    showMessage("تم حفظ الرصيد بنجاح.");
+  } catch (error) {
+    showMessage("تعذر حفظ الرصيد: " + error.message);
+  }
+}
+
+function logout() {
+  adminPassword = "";
+  document.getElementById("panel").style.display = "none";
+  document.getElementById("login").style.display = "block";
+  document.getElementById("requests").innerHTML = "";
+  showMessage("تم تسجيل الخروج.");
+}
+
+function showMessage(message) {
+  document.getElementById("message").textContent = message;
+}
+</script>
+</body>
+</html>
