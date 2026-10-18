@@ -3,334 +3,182 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Wallet | المحفظة الذكية</title>
+<title>Smart Wallet</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Tahoma,Arial,sans-serif;
+  background:#f5f2ff;
+  color:#241442;
 }
-
-:root {
-  --purple: #7c3aed;
-  --dark: #1e103c;
-  --background: #f7f4ff;
-  --green: #16a34a;
+header{
+  background:linear-gradient(135deg,#34105f,#8247e5);
+  color:white;
+  padding:25px 20px 45px;
+  border-radius:0 0 30px 30px;
+  position:relative;
+  overflow:hidden;
 }
-
-body {
-  margin: 0;
-  font-family: Tahoma, Arial, sans-serif;
-  background: var(--background);
-  color: #24163e;
-  min-height: 100vh;
+.brand{font-size:23px;font-weight:bold}
+.brand span{color:#facc15}
+.subtitle{font-size:13px;margin-top:8px;opacity:.85}
+.dollar{
+  position:absolute;
+  color:#ffffff20;
+  font-weight:bold;
+  pointer-events:none;
 }
-
-header {
-  background: linear-gradient(135deg, #321064, #8b5cf6);
-  color: white;
-  padding: 22px 18px 35px;
-  border-radius: 0 0 28px 28px;
-  position: relative;
-  overflow: hidden;
+.dollar.one{font-size:130px;left:15px;top:10px}
+.dollar.two{font-size:80px;left:125px;top:100px}
+.dollar.three{font-size:100px;right:55%;top:-15px}
+.container{
+  max-width:500px;
+  width:calc(100% - 26px);
+  margin:-22px auto 25px;
+  position:relative;
 }
-
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  position: relative;
-  z-index: 2;
+.card{
+  background:white;
+  border-radius:20px;
+  padding:20px;
+  margin-bottom:15px;
+  box-shadow:0 5px 22px #34105f0d;
 }
-
-.logo {
-  font-size: 21px;
-  font-weight: bold;
+h3{margin:0 0 16px;font-size:17px}
+.label{font-size:13px;font-weight:bold}
+input,select{
+  display:block;
+  width:100%;
+  padding:14px;
+  margin:8px 0 16px;
+  border:1px solid #e1d7f3;
+  border-radius:12px;
+  background:#fff;
+  font-family:inherit;
+  font-size:15px;
 }
-
-.logo span {
-  color: #facc15;
+button{
+  font-family:inherit;
+  cursor:pointer;
 }
-
-.tagline {
-  font-size: 12px;
-  opacity: .85;
-  margin-top: 5px;
+.primary{
+  width:100%;
+  border:0;
+  padding:14px;
+  border-radius:12px;
+  color:white;
+  font-size:15px;
+  font-weight:bold;
+  background:linear-gradient(135deg,#8247e5,#5b21b6);
 }
-
-.dollar {
-  position: absolute;
-  font-weight: bold;
-  color: rgba(255,255,255,.13);
-  pointer-events: none;
-  user-select: none;
+.balance-card{
+  background:linear-gradient(135deg,#fff,#eee6ff);
+  border:1px solid #e8dcff;
 }
-
-.d1 {
-  font-size: 110px;
-  top: 45px;
-  left: 15px;
-  transform: rotate(-18deg);
+.muted{font-size:13px;color:#827393;line-height:1.8}
+.balance{
+  color:#7138d4;
+  font-size:30px;
+  font-weight:bold;
+  margin:12px 0;
 }
-
-.d2 {
-  font-size: 75px;
-  top: 125px;
-  left: 105px;
-  transform: rotate(15deg);
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
 }
-
-.d3 {
-  font-size: 85px;
-  top: -15px;
-  right: 45%;
-  transform: rotate(12deg);
+.action{
+  border:0;
+  border-radius:14px;
+  padding:17px 5px;
+  font-size:14px;
+  font-weight:bold;
 }
-
-.container {
-  width: min(100% - 28px, 520px);
-  margin: -15px auto 30px;
-  position: relative;
-  z-index: 2;
+.deposit{background:#eee7ff;color:#6d28d9}
+.withdraw{background:#dcfce7;color:#15803d}
+.hidden{display:none!important}
+.message{font-size:13px;line-height:1.8;margin-top:12px;overflow-wrap:anywhere}
+.notice{
+  margin-top:12px;
+  background:#fff7ed;
+  color:#9a3412;
+  padding:12px;
+  border-radius:12px;
+  font-size:12px;
+  line-height:1.8;
 }
-
-.card {
-  background: white;
-  border-radius: 20px;
-  padding: 20px;
-  margin-bottom: 16px;
-  box-shadow: 0 6px 24px rgba(54, 24, 100, .07);
-}
-
-.balance-card {
-  background: linear-gradient(135deg, #ffffff, #f0e8ff);
-  border: 1px solid #e7dcff;
-}
-
-.small-title {
-  color: #75658d;
-  font-size: 13px;
-}
-
-.balance {
-  font-size: 34px;
-  font-weight: bold;
-  color: var(--purple);
-  margin: 12px 0;
-  direction: rtl;
-}
-
-.currency {
-  font-size: 14px;
-  color: #76658b;
-}
-
-.balance-note {
-  font-size: 12px;
-  color: #8a7c9d;
-  line-height: 1.8;
-}
-
-h3 {
-  margin: 0 0 16px;
-  font-size: 17px;
-}
-
-.actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.action {
-  border: 0;
-  padding: 17px 8px;
-  border-radius: 15px;
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.deposit {
-  background: #ede9fe;
-  color: #6d28d9;
-}
-
-.withdraw {
-  background: #dcfce7;
-  color: #15803d;
-}
-
-input, select {
-  width: 100%;
-  padding: 13px;
-  margin: 7px 0 14px;
-  border: 1px solid #ded6eb;
-  border-radius: 11px;
-  background: #fff;
-  font-family: inherit;
-  font-size: 14px;
-  outline: none;
-}
-
-input:focus, select:focus {
-  border-color: var(--purple);
-}
-
-label {
-  font-size: 13px;
-  font-weight: bold;
-}
-
-.primary {
-  width: 100%;
-  border: 0;
-  padding: 14px;
-  border-radius: 12px;
-  color: white;
-  background: linear-gradient(135deg, #7c3aed, #5b21b6);
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.primary:disabled {
-  opacity: .6;
-}
-
-.hidden {
-  display: none;
-}
-
-.notice {
-  font-size: 12px;
-  line-height: 1.9;
-  padding: 12px;
-  border-radius: 12px;
-  background: #fff7ed;
-  color: #9a3412;
-  margin-top: 12px;
-}
-
-.message {
-  margin-top: 12px;
-  font-size: 13px;
-  line-height: 1.8;
-  word-break: break-word;
-}
-
-footer {
-  text-align: center;
-  padding: 20px;
-  color: #9285a5;
-  font-size: 12px;
-}
-
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-}
-
-.section-icon {
-  background: #ede9fe;
-  width: 34px;
-  height: 34px;
-  border-radius: 11px;
-  display: grid;
-  place-items: center;
-}
-
-@media (max-width: 360px) {
-  .balance {
-    font-size: 28px;
-  }
-}
+footer{text-align:center;color:#9588a8;font-size:12px;padding:15px}
 </style>
 </head>
 
 <body>
 
 <header>
-  <div class="dollar d1">$</div>
-  <div class="dollar d2">$</div>
-  <div class="dollar d3">$</div>
-
-  <div class="topbar">
-    <div>
-      <div class="logo">💜 Smart <span>Wallet</span></div>
-      <div class="tagline">محفظتك الرقمية في مكان واحد</div>
-    </div>
-    <div style="font-size:30px">💰</div>
-  </div>
+  <div class="dollar one">$</div>
+  <div class="dollar two">$</div>
+  <div class="dollar three">$</div>
+  <div class="brand">💜 Smart <span>Wallet</span></div>
+  <div class="subtitle">محفظتك الرقمية في مكان واحد</div>
 </header>
 
 <main class="container">
 
   <section class="card" id="loginCard">
-    <h3>👋 أهلاً بيك</h3>
-    <p class="small-title">اكتب رقم موبايلك للدخول إلى واجهة المحفظة.</p>
+    <h3>👋 أهلاً بيك في Smart Wallet</h3>
+    <p class="muted">اكتب رقم موبايلك للدخول إلى محفظتك.</p>
 
-    <label for="phone">رقم الموبايل</label>
+    <label class="label" for="phone">رقم الموبايل</label>
     <input id="phone" type="tel" inputmode="tel"
-      placeholder="مثال: 01012345678" maxlength="15">
-
-    <label for="userPassword">كلمة المرور</label>
-    <input id="userPassword" type="password"
-      placeholder="اكتب كلمة المرور">
+      maxlength="15" placeholder="01012345678">
 
     <button class="primary" id="loginButton" onclick="login()">
-      دخول
+      دخول إلى المحفظة
     </button>
 
-    <div class="message" id="loginMessage"></div>
+    <div id="loginMessage" class="message"></div>
 
     <div class="notice">
-      تنبيه: تسجيل الدخول في هذه النسخة واجهة تجريبية فقط،
-      وليس نظام مصادقة آمنًا. لا تستخدم كلمة مرور حقيقية أو
-      معلومات مالية حساسة.
+      هذه نسخة تجريبية. الدخول برقم الهاتف وحده لا يثبت ملكية الحساب،
+      فلا تستخدمها لحفظ أموال حقيقية أو بيانات مالية حساسة.
     </div>
   </section>
 
   <div id="wallet" class="hidden">
 
     <section class="card balance-card">
-      <div class="small-title">إجمالي رصيد المحفظة</div>
+      <div class="muted">رصيد المحفظة</div>
       <div class="balance">
         <span id="balance">0.00</span>
-        <span class="currency">جنيه مصري</span>
+        <span style="font-size:13px">جنيه مصري</span>
       </div>
-      <div class="balance-note">
-        💜 رصيدك المعروض يحتاج إلى ربطه بقاعدة البيانات.
-        لا تعتبره رصيدًا نقديًا متاحًا للسحب.
-      </div>
+      <div class="muted">💵 تابع طلبات محفظتك من هنا.</div>
     </section>
 
     <section class="card">
       <h3>⚡ خدمات المحفظة</h3>
       <div class="actions">
-        <button class="action deposit" onclick="showForm('deposit')">
+        <button class="action deposit" onclick="showRequest('deposit')">
           📥 طلب إيداع
         </button>
-        <button class="action withdraw" onclick="showForm('withdraw')">
+        <button class="action withdraw" onclick="showRequest('withdraw')">
           📤 طلب سحب
         </button>
       </div>
     </section>
 
     <section class="card hidden" id="requestCard">
-      <h3 id="formTitle">طلب إيداع</h3>
+      <h3 id="requestTitle">طلب إيداع</h3>
 
       <form id="requestForm">
-        <label for="amount">المبلغ بالجنيه المصري</label>
+        <label class="label" for="amount">المبلغ بالجنيه المصري</label>
         <input id="amount" type="number" min="1" step="0.01"
           placeholder="اكتب المبلغ" required>
 
-        <label for="method">طريقة الدفع</label>
+        <label class="label" for="method">طريقة الدفع</label>
         <select id="method" required>
-          <option value="">اختر الطريقة</option>
+          <option value="">اختر طريقة الدفع</option>
           <option value="Vodafone Cash">فودافون كاش</option>
           <option value="Orange Cash">أورنج كاش</option>
           <option value="Etisalat Cash">اتصالات كاش</option>
@@ -338,173 +186,134 @@ footer {
           <option value="Visa">فيزا</option>
         </select>
 
-        <label for="paymentPhone">رقم الموبايل المرتبط بالطلب</label>
+        <label class="label" for="paymentPhone">رقم الموبايل</label>
         <input id="paymentPhone" type="tel" inputmode="tel"
-          maxlength="15" placeholder="رقم الموبايل" required>
+          maxlength="15" placeholder="رقم الموبايل المرتبط بالطلب" required>
 
         <button class="primary" id="submitButton" type="submit">
           إرسال الطلب
         </button>
 
-        <div class="message" id="requestMessage"></div>
+        <div id="requestMessage" class="message"></div>
       </form>
 
       <div class="notice">
-        إرسال الطلب لا يعني إتمام تحويل أموال. تنفيذ الإيداع
-        والسحب يحتاج إلى مراجعة الإدارة وربط وسائل الدفع فعليًا.
+        إرسال الطلب لا يعني تحويل الأموال. يجب ربط الخادم بقاعدة البيانات
+        ومراجعة الإدارة قبل اعتماد أي طلب.
       </div>
     </section>
 
     <section class="card">
-      <h3>💵 عن Smart Wallet</h3>
-      <p class="small-title" style="line-height:2">
-        واجهة تجريبية لإدارة طلبات المحفظة بالجنيه المصري.
-        تظهر حالة الطلب بعد ربط قاعدة البيانات والخادم.
-      </p>
+      <h3>💜 حسابي</h3>
+      <div class="muted">رقم الموبايل: <span id="accountPhone"></span></div>
+      <br>
       <button class="primary" onclick="logout()">تسجيل الخروج</button>
     </section>
 
   </div>
 </main>
 
-<footer>
-  Smart Wallet © 2026 — نسخة تجريبية
-</footer>
+<footer>Smart Wallet © 2026</footer>
 
 <script>
-/*
-  عنوان خدمة Supabase الحالية.
-  لا تضع مفتاح service_role أو أي سر إداري داخل هذا الملف.
-*/
 const API_URL =
   "https://sjhjxbnhhwftwlkshpql.supabase.co/functions/v1/smart-service";
 
 let currentPhone = "";
-let currentRequestType = "deposit";
+let requestType = "deposit";
 
-function login() {
+function login(){
   const phone = document.getElementById("phone").value.trim();
-  const password = document.getElementById("userPassword").value;
   const message = document.getElementById("loginMessage");
 
-  if (!phone || !password) {
-    message.textContent = "اكتب رقم الموبايل وكلمة المرور.";
+  if(!/^[0-9+\-\s]{8,15}$/.test(phone)){
+    message.textContent = "من فضلك اكتب رقم موبايل صحيح.";
     return;
   }
 
-  if (!/^[0-9+\-\s]{8,15}$/.test(phone)) {
-    message.textContent = "تأكد من كتابة رقم موبايل صحيح.";
-    return;
-  }
-
-  /*
-    دخول واجهة تجريبية فقط.
-    يجب استبدال ذلك بمصادقة آمنة قبل استخدام الموقع فعليًا.
-  */
   currentPhone = phone;
+  document.getElementById("accountPhone").textContent = phone;
   document.getElementById("loginCard").classList.add("hidden");
   document.getElementById("wallet").classList.remove("hidden");
 }
 
-function logout() {
+function logout(){
   currentPhone = "";
   document.getElementById("wallet").classList.add("hidden");
   document.getElementById("requestCard").classList.add("hidden");
   document.getElementById("loginCard").classList.remove("hidden");
-  document.getElementById("userPassword").value = "";
+  document.getElementById("phone").value = "";
 }
 
-function showForm(type) {
-  currentRequestType = type;
-
-  document.getElementById("formTitle").textContent =
+function showRequest(type){
+  requestType = type;
+  document.getElementById("requestTitle").textContent =
     type === "deposit" ? "📥 طلب إيداع" : "📤 طلب سحب";
-
   document.getElementById("requestMessage").textContent = "";
   document.getElementById("requestCard").classList.remove("hidden");
-
   document.getElementById("requestCard").scrollIntoView({
-    behavior: "smooth",
-    block: "start"
+    behavior:"smooth",
+    block:"start"
   });
 }
 
 document.getElementById("requestForm").addEventListener("submit",
-  async function(event) {
-    event.preventDefault();
+async function(event){
+  event.preventDefault();
 
-    const amount = Number(document.getElementById("amount").value);
-    const method = document.getElementById("method").value;
-    const paymentPhone =
-      document.getElementById("paymentPhone").value.trim();
+  const amount = Number(document.getElementById("amount").value);
+  const method = document.getElementById("method").value;
+  const paymentPhone = document.getElementById("paymentPhone").value.trim();
+  const message = document.getElementById("requestMessage");
+  const button = document.getElementById("submitButton");
 
-    const message = document.getElementById("requestMessage");
-    const button = document.getElementById("submitButton");
-
-    if (!currentPhone) {
-      message.textContent = "سجّل الدخول أولًا.";
-      return;
-    }
-
-    if (!Number.isFinite(amount) || amount <= 0) {
-      message.textContent = "اكتب مبلغًا صحيحًا أكبر من صفر.";
-      return;
-    }
-
-    if (!method || !paymentPhone) {
-      message.textContent = "أكمل بيانات الطلب.";
-      return;
-    }
-
-    /*
-      الخادم الحالي يحتاج إلى إضافة إجراء create_request.
-      لا نعرض نجاحًا وهميًا إذا لم يكن هذا الإجراء موجودًا.
-    */
-    button.disabled = true;
-    button.textContent = "جارٍ إرسال الطلب...";
-    message.textContent = "";
-
-    try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          action: "create_request",
-          user_id: currentPhone,
-          amount: amount,
-          request_type: currentRequestType,
-          payment_method: method,
-          phone_number: paymentPhone
-        })
-      });
-
-      const result = await response.json().catch(() => ({}));
-
-      if (!response.ok || result.error) {
-        throw new Error(
-          result.error ||
-          "خدمة تسجيل الطلبات لم تُجهّز بعد. لم يتم تأكيد حفظ الطلب."
-        );
-      }
-
-      message.textContent =
-        "تم إرسال الطلب إلى الخادم. انتظر مراجعة الإدارة.";
-
-      document.getElementById("amount").value = "";
-      document.getElementById("method").value = "";
-      document.getElementById("paymentPhone").value = "";
-
-    } catch (error) {
-      message.textContent =
-        "لم يتم تأكيد حفظ الطلب: " + error.message;
-    } finally {
-      button.disabled = false;
-      button.textContent = "إرسال الطلب";
-    }
+  if(!currentPhone){
+    message.textContent = "سجّل الدخول أولًا.";
+    return;
   }
-);
+
+  if(!Number.isFinite(amount) || amount <= 0){
+    message.textContent = "اكتب مبلغًا صحيحًا.";
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "جارٍ إرسال الطلب...";
+  message.textContent = "";
+
+  try{
+    const response = await fetch(API_URL,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        action:"create_request",
+        user_id:currentPhone,
+        amount:amount,
+        request_type:requestType,
+        payment_method:method,
+        phone_number:paymentPhone
+      })
+    });
+
+    const result = await response.json().catch(()=>({}));
+
+    if(!response.ok || result.error){
+      throw new Error(result.error || "الخادم لم يؤكد حفظ الطلب.");
+    }
+
+    message.textContent = "تم إرسال الطلب إلى الخادم.";
+    document.getElementById("amount").value = "";
+    document.getElementById("method").value = "";
+    document.getElementById("paymentPhone").value = "";
+
+  }catch(error){
+    message.textContent =
+      "لم يتم تأكيد حفظ الطلب. يجب تجهيز خدمة تسجيل الطلبات في الخادم أولًا.";
+  }finally{
+    button.disabled = false;
+    button.textContent = "إرسال الطلب";
+  }
+});
 </script>
 
 </body>
