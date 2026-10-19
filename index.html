@@ -1,408 +1,290 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart Wallet</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: #100e1d;
-      color: #fff;
-      font-family: Arial, sans-serif;
-    }
-    .container {
-      width: min(100% - 28px, 460px);
-      margin: 35px auto;
-    }
-    .card {
-      background: #1c1930;
-      border: 1px solid #37304f;
-      border-radius: 18px;
-      padding: 22px;
-      margin-bottom: 18px;
-    }
-    h1, h2 { margin-top: 0; }
-    h1 { text-align: center; color: #bba5ff; }
-    .muted { color: #b8b3c9; font-size: 14px; }
-    label { display: block; margin: 14px 0 7px; }
-    input, select {
-      width: 100%;
-      padding: 13px;
-      border-radius: 10px;
-      border: 1px solid #49415f;
-      background: #100e1d;
-      color: white;
-      font-size: 16px;
-    }
-    button {
-      width: 100%;
-      padding: 13px;
-      margin-top: 13px;
-      border: 0;
-      border-radius: 10px;
-      background: #8965f5;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button.secondary { background: #38304f; }
-    button:disabled { opacity: .6; }
-    .balance {
-      font-size: 30px;
-      font-weight: bold;
-      color: #c3adff;
-      margin: 12px 0;
-    }
-    .hidden { display: none !important; }
-    .notice { line-height: 1.7; font-size: 14px; }
-    #message { margin: 12px 0; line-height: 1.6; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smart Wallet</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0c1020;color:#f5f6ff;font-family:Tahoma,Arial,sans-serif}
+.wrap{max-width:900px;margin:auto;padding:18px}
+header{display:flex;align-items:center;gap:12px;margin:10px 0 24px}
+.logo{background:#8057ef;border-radius:15px;padding:13px;font-size:24px;font-weight:bold}
+h1{font-size:23px;margin:0}
+h2{font-size:19px}
+p{line-height:1.8}
+.muted{color:#aab2d0;font-size:13px}
+.card{background:#151b31;border:1px solid #2b3454;border-radius:18px;padding:18px;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.field{margin:12px 0}
+label{display:block;color:#aab2d0;font-size:13px;margin-bottom:7px}
+input,select{width:100%;padding:13px;border-radius:11px;border:1px solid #35405f;background:#0e1428;color:white;font:inherit}
+button{padding:13px 16px;border:0;border-radius:11px;background:#8057ef;color:white;font-weight:bold;font:inherit;cursor:pointer}
+button.secondary{background:#293451}
+button.danger{background:#a8324a}
+.actions{display:flex;gap:8px}
+.actions button{flex:1}
+.hidden{display:none!important}
+.notice{background:#282449;border:1px solid #4d3c8e;padding:12px;border-radius:11px;margin:12px 0;white-space:pre-wrap}
+.error{background:#3a1e2c;border-color:#81344c}
+.success{background:#12352f;border-color:#1b705d}
+.balance{font-size:30px;font-weight:bold;margin:8px 0}
+.row{padding:13px 0;border-bottom:1px solid #2b3454;overflow-wrap:anywhere}
+.pill{display:inline-block;padding:5px 9px;border-radius:20px;background:#303957;font-size:12px}
+.pending{background:#57421a;color:#ffe6a6}
+.approved{background:#124b3d;color:#a4f5d9}
+.rejected{background:#582536;color:#ffb6c4}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.tablewrap{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:600px}
+td,th{text-align:right;padding:10px;border-bottom:1px solid #2b3454;font-size:13px}
+.foot{text-align:center;color:#7f89aa;font-size:12px;padding:20px}
+@media(max-width:650px){.wrap{padding:12px}.grid{grid-template-columns:1fr}.actions{flex-wrap:wrap}.balance{font-size:26px}}
+</style>
 </head>
 <body>
-  <main class="container">
-    <h1>Smart Wallet</h1>
-    <p class="muted" style="text-align:center">
-      محفظتك الإلكترونية بالجنيه المصري
-    </p>
+<div class="wrap">
+<header>
+  <div class="logo">S</div>
+  <div><h1>Smart Wallet</h1><div class="muted">محفظتك الإلكترونية</div></div>
+</header>
 
-    <section class="card" id="auth">
-      <h2>حسابك</h2>
-      <p class="muted">أنشئ حسابًا أو سجّل الدخول.</p>
+<div id="message" class="notice hidden"></div>
 
-      <label for="phone">رقم الموبايل</label>
-      <input id="phone" type="tel" inputmode="tel"
-             autocomplete="tel" placeholder="مثال: 01xxxxxxxxx">
+<section id="auth" class="card">
+  <h2>تسجيل الدخول أو إنشاء حساب</h2>
+  <p class="muted">اكتب رقم هاتفك وكلمة مرور خاصة بحسابك. الموقع لا يرسل رسائل SMS.</p>
+  <div class="field">
+    <label for="phone">رقم الهاتف</label>
+    <input id="phone" inputmode="tel" placeholder="مثال: 01012345678" autocomplete="tel">
+  </div>
+  <div class="field">
+    <label for="password">كلمة المرور — 8 أحرف على الأقل</label>
+    <input id="password" type="password" minlength="8" autocomplete="current-password">
+  </div>
+  <div class="actions">
+    <button id="loginBtn">دخول</button>
+    <button id="signupBtn" class="secondary">إنشاء حساب</button>
+  </div>
+</section>
 
-      <label for="password">كلمة المرور</label>
-      <input id="password" type="password"
-             autocomplete="current-password"
-             placeholder="8 أحرف أو أرقام على الأقل">
-
-      <button id="register">إنشاء حساب</button>
-      <button id="login" class="secondary">تسجيل الدخول</button>
-      <div id="message" role="status"></div>
-    </section>
-
-    <section id="wallet" class="hidden">
-      <div class="card">
-        <p class="muted">رصيدك الحالي</p>
-        <div class="balance" id="balance">— ج.م</div>
-        <p class="muted" id="accountPhone"></p>
-        <button id="logout" class="secondary">تسجيل الخروج</button>
+<main id="app" class="hidden">
+  <section class="card">
+    <div class="top">
+      <div>
+        <div class="muted">رصيد حسابك</div>
+        <div class="balance"><span id="balance">0.00</span> جنيه مصري</div>
+        <div id="accountPhone" class="muted"></div>
       </div>
+      <button id="logoutBtn" class="secondary">تسجيل الخروج</button>
+    </div>
+  </section>
 
-      <div class="card">
-        <h2>طلب إيداع</h2>
-        <p class="muted">سيتم إضافة الرصيد بعد مراجعة التحويل والموافقة عليه.</p>
-        <label for="depositAmount">المبلغ بالجنيه</label>
-        <input id="depositAmount" type="number" min="1"
-               step="0.01" placeholder="المبلغ">
-        <label for="depositMethod">طريقة الإيداع</label>
+  <div class="grid">
+    <section class="card">
+      <h2>طلب إيداع</h2>
+      <p class="muted">لن يتغير الرصيد عند إرسال الطلب. الإدارة تراجع وصول المبلغ أولًا.</p>
+      <div class="field"><label>المبلغ بالجنيه</label><input id="depositAmount" type="number" min="1" max="100000" step="0.01"></div>
+      <div class="field"><label>طريقة الإيداع</label>
         <select id="depositMethod">
-          <option value="vodafone_cash">فودافون كاش</option>
-          <option value="orange_cash">أورنج كاش</option>
-          <option value="etisalat_cash">اتصالات كاش</option>
-          <option value="instapay">إنستا باي</option>
-          <option value="bank_transfer">تحويل بنكي</option>
+          <option>Vodafone Cash</option><option>Orange Cash</option>
+          <option>Etisalat Cash</option><option>InstaPay</option><option>تحويل بنكي</option>
         </select>
-        <label for="depositReference">رقم العملية</label>
-        <input id="depositReference" maxlength="100"
-               placeholder="رقم مرجع التحويل">
-        <button id="deposit">إرسال طلب الإيداع</button>
       </div>
-
-      <div class="card">
-        <h2>طلب سحب</h2>
-        <p class="muted">سيتم مراجعة طلبك قبل تنفيذ التحويل.</p>
-        <label for="withdrawAmount">المبلغ بالجنيه</label>
-        <input id="withdrawAmount" type="number" min="1"
-               step="0.01" placeholder="المبلغ">
-        <label for="withdrawMethod">طريقة الاستلام</label>
-        <select id="withdrawMethod">
-          <option value="vodafone_cash">فودافون كاش</option>
-          <option value="orange_cash">أورنج كاش</option>
-          <option value="etisalat_cash">اتصالات كاش</option>
-          <option value="instapay">إنستا باي</option>
-          <option value="bank_transfer">تحويل بنكي</option>
-        </select>
-        <label for="withdrawDestination">رقم المحفظة أو الحساب</label>
-        <input id="withdrawDestination" maxlength="100"
-               placeholder="بيانات استلام التحويل">
-        <button id="withdraw">إرسال طلب السحب</button>
-      </div>
-
-      <div class="card">
-        <h2>طلباتي</h2>
-        <div id="requests" class="notice">لا توجد طلبات معروضة.</div>
-        <button id="refresh" class="secondary">تحديث البيانات</button>
-      </div>
+      <div class="field"><label>رقم العملية أو ملاحظة</label><input id="depositRef" maxlength="120"></div>
+      <button id="depositBtn">إرسال طلب الإيداع</button>
     </section>
 
-    <p class="muted notice">
-      لا تشارك كلمة مرورك مع أي شخص. لا ترسل بيانات بطاقتك البنكية
-      أو الرقم السري الخاص بها داخل طلبات الإيداع أو السحب.
-    </p>
-  </main>
+    <section class="card">
+      <h2>طلب سحب</h2>
+      <p class="muted">السحب يخضع لمراجعة الإدارة، ويجب أن يكون الرصيد كافيًا.</p>
+      <div class="field"><label>المبلغ بالجنيه</label><input id="withdrawAmount" type="number" min="1" max="100000" step="0.01"></div>
+      <div class="field"><label>طريقة الاستلام</label>
+        <select id="withdrawMethod">
+          <option>Vodafone Cash</option><option>Orange Cash</option>
+          <option>Etisalat Cash</option><option>InstaPay</option><option>تحويل بنكي</option>
+        </select>
+      </div>
+      <div class="field"><label>رقم المحفظة أو معرّف الاستلام</label><input id="withdrawRef" maxlength="120"></div>
+      <button id="withdrawBtn">إرسال طلب السحب</button>
+    </section>
+  </div>
 
-  <script type="module">
-    import { createClient } from
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+  <section class="card">
+    <h2>طلباتي</h2>
+    <div id="myRequests" class="muted">جارٍ التحميل...</div>
+  </section>
 
-    // ضع بيانات مشروع Supabase العامة هنا.
-    // لا تضع service_role أو أي مفتاح سري في هذا الملف.
-    const SUPABASE_URL = "ضع_رابط_مشروعك_هنا";
-    const SUPABASE_ANON_KEY = "ضع_المفتاح_العام_هنا";
+  <section id="adminPanel" class="card hidden">
+    <div class="top">
+      <h2>لوحة الإدارة</h2>
+      <button id="refreshAdmin" class="secondary">تحديث الطلبات</button>
+    </div>
+    <div class="actions">
+      <button class="secondary" id="pendingFilter">الطلبات المعلّقة</button>
+      <button class="secondary" id="allFilter">كل الطلبات</button>
+    </div>
+    <div id="adminRequests">جارٍ التحميل...</div>
+  </section>
+</main>
 
-    const $ = (id) => document.getElementById(id);
-    const authBox = $("auth");
-    const walletBox = $("wallet");
-    let supabase = null;
-    let currentUser = null;
+<div class="foot">Smart Wallet — تحقق من التحويلات قبل الموافقة على أي إيداع.</div>
+</div>
 
-    function message(text, error = false) {
-      $("message").textContent = text;
-      $("message").style.color = error ? "#ff9292" : "#a8efc0";
-    }
+<script>
+const SUPABASE_URL = "https://sjhjxbnhhwftwlkshpql.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_6880OlVMXwIDPJfqwFS5TA_m7FCMQZK";
 
-    function showWallet(show) {
-      authBox.classList.toggle("hidden", show);
-      walletBox.classList.toggle("hidden", !show);
-    }
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const $ = id => document.getElementById(id);
+let user = null, profile = null, adminFilter = "pending";
 
-    function validConfig() {
-      return SUPABASE_URL.startsWith("https://") &&
-        !SUPABASE_URL.includes("ضع_") &&
-        SUPABASE_ANON_KEY.length > 20 &&
-        !SUPABASE_ANON_KEY.includes("ضع_");
-    }
+function message(text, type=""){
+  $("message").textContent = text;
+  $("message").className = "notice " + type;
+}
+function clearMessage(){
+  $("message").textContent = "";
+  $("message").className = "notice hidden";
+}
+function phoneClean(v){return v.trim().replace(/[^\d+]/g,"");}
+function phoneEmail(v){return v.replace(/\D/g,"")+"@phone.smartwallet.invalid";}
+function validPhone(v){return /^\+?\d{8,15}$/.test(v);}
+function money(v){return Number(v||0).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
+function safe(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function statusText(s){return s==="approved"?"مقبول":s==="rejected"?"مرفوض":"قيد المراجعة";}
+function statusClass(s){return s==="approved"?"approved":s==="rejected"?"rejected":"pending";}
 
-    function normalizePhone(value) {
-      return value.trim().replace(/[\s()-]/g, "");
-    }
-
-    async function ensureConfig() {
-      if (supabase) return true;
-      if (!validConfig()) {
-        message("أضف رابط Supabase والمفتاح العام في الكود أولًا.", true);
-        return false;
-      }
-      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      return true;
-    }
-
-    function phoneToEmail(phone) {
-      // عنوان داخلي للحساب فقط، وليس بريدًا حقيقيًا.
-      // يجب إنشاء الحسابات واستعادتها بالطريقة نفسها.
-      const digits = phone.replace(/\D/g, "");
-      return digits + "@accounts.smartwallet.invalid";
-    }
-
-    async function loadWallet() {
-      if (!currentUser) return;
-
-      const { data: profile, error } = await supabase
-        .from("profiles")
-        .select("phone, balance")
-        .eq("id", currentUser.id)
-        .single();
-
-      if (error) throw error;
-
-      $("balance").textContent =
-        Number(profile.balance).toLocaleString("ar-EG", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        }) + " ج.م";
-
-      $("accountPhone").textContent = "الحساب: " + profile.phone;
-
-      const { data: requests, error: requestError } = await supabase
-        .from("wallet_requests")
-        .select("id, request_type, amount, status, created_at")
-        .order("created_at", { ascending: false })
-        .limit(20);
-
-      if (requestError) throw requestError;
-
-      $("requests").replaceChildren();
-
-      if (!requests || requests.length === 0) {
-        $("requests").textContent = "لا توجد طلبات حتى الآن.";
-        return;
-      }
-
-      for (const request of requests) {
-        const item = document.createElement("p");
-        const type = request.request_type === "deposit"
-          ? "إيداع" : "سحب";
-        const status = {
-          pending: "قيد المراجعة",
-          approved: "مقبول",
-          rejected: "مرفوض"
-        }[request.status] || request.status;
-
-        item.textContent =
-          `${type} — ${Number(request.amount).toFixed(2)} ج.م — ${status}`;
-        $("requests").append(item);
-      }
-    }
-
-    async function withButton(buttonId, task) {
-      const button = $(buttonId);
-      button.disabled = true;
-      try {
-        await task();
-      } catch (error) {
-        console.error(error);
-        message(error.message || "حدث خطأ. حاول مرة أخرى.", true);
-      } finally {
-        button.disabled = false;
-      }
-    }
-
-    $("register").addEventListener("click", () =>
-      withButton("register", async () => {
-        if (!(await ensureConfig())) return;
-
-        const phone = normalizePhone($("phone").value);
-        const password = $("password").value;
-
-        if (!/^\+?[0-9]{10,15}$/.test(phone)) {
-          message("اكتب رقم موبايل صحيحًا مع مفتاح الدولة عند الحاجة.", true);
-          return;
-        }
-        if (password.length < 8) {
-          message("كلمة المرور يجب أن تكون 8 أحرف أو أرقام على الأقل.", true);
-          return;
-        }
-
-        const { data, error } = await supabase.auth.signUp({
-          email: phoneToEmail(phone),
-          password,
-          options: {
-            data: { phone }
-          }
-        });
-
-        if (error) throw error;
-
-        if (!data.session) {
-          message("تم إرسال طلب إنشاء الحساب. راجع إعدادات تأكيد الحساب في Supabase؛ قد يلزم إكمال الإعداد قبل الدخول.");
-          return;
-        }
-
-        currentUser = data.user;
-        message("تم إنشاء الحساب.");
-        await loadWallet();
-        showWallet(true);
-      })
-    );
-
-    $("login").addEventListener("click", () =>
-      withButton("login", async () => {
-        if (!(await ensureConfig())) return;
-
-        const phone = normalizePhone($("phone").value);
-        const password = $("password").value;
-
-        if (!/^\+?[0-9]{10,15}$/.test(phone) || !password) {
-          message("اكتب رقم الموبايل وكلمة المرور.", true);
-          return;
-        }
-
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: phoneToEmail(phone),
-          password
-        });
-
-        if (error) throw error;
-        currentUser = data.user;
-        message("تم تسجيل الدخول.");
-        await loadWallet();
-        showWallet(true);
-      })
-    );
-
-    async function submitRequest(type) {
-      if (!currentUser) throw new Error("سجّل الدخول أولًا.");
-
-      const isDeposit = type === "deposit";
-      const amount = Number($(isDeposit ? "depositAmount" : "withdrawAmount").value);
-      const method = $(isDeposit ? "depositMethod" : "withdrawMethod").value;
-      const reference = isDeposit
-        ? $("depositReference").value.trim()
-        : $("withdrawDestination").value.trim();
-
-      if (!Number.isFinite(amount) || amount <= 0 || amount > 1000000) {
-        throw new Error("اكتب مبلغًا صحيحًا.");
-      }
-      if (!reference) {
-        throw new Error(isDeposit
-          ? "اكتب رقم مرجع التحويل."
-          : "اكتب بيانات استلام التحويل.");
-      }
-
-      const { error } = await supabase
-        .from("wallet_requests")
-        .insert({
-          user_id: currentUser.id,
-          request_type: type,
-          amount,
-          method,
-          reference,
-          status: "pending"
-        });
-
-      if (error) throw error;
-
-      message("تم إرسال الطلب للمراجعة.");
-      $(isDeposit ? "depositAmount" : "withdrawAmount").value = "";
-      if (isDeposit) $("depositReference").value = "";
-      else $("withdrawDestination").value = "";
-
-      await loadWallet();
-    }
-
-    $("deposit").addEventListener("click", () =>
-      withButton("deposit", () => submitRequest("deposit"))
-    );
-
-    $("withdraw").addEventListener("click", () =>
-      withButton("withdraw", () => submitRequest("withdraw"))
-    );
-
-    $("refresh").addEventListener("click", () =>
-      withButton("refresh", async () => {
-        await loadWallet();
-        message("تم تحديث البيانات.");
-      })
-    );
-
-    $("logout").addEventListener("click", async () => {
-      if (supabase) await supabase.auth.signOut();
-      currentUser = null;
-      showWallet(false);
-      message("تم تسجيل الخروج.");
-    });
-
-    async function restoreSession() {
-      if (!(await ensureConfig())) return;
-      const { data } = await supabase.auth.getSession();
-      if (data.session) {
-        currentUser = data.session.user;
-        try {
-          await loadWallet();
-          showWallet(true);
-        } catch (error) {
-          message(error.message || "تعذر تحميل الحساب.", true);
-        }
-      }
-    }
-
-    await restoreSession();
-  </script>
+function showAuth(){
+  $("auth").classList.remove("hidden");
+  $("app").classList.add("hidden");
+}
+async function signUp(){
+  clearMessage();
+  const phone=phoneClean($("phone").value), password=$("password").value;
+  if(!validPhone(phone)) return message("اكتب رقم هاتف صحيحًا.","error");
+  if(password.length<8) return message("كلمة المرور يجب أن تكون 8 أحرف على الأقل.","error");
+  const {data,error}=await db.auth.signUp({
+    email:phoneEmail(phone), password,
+    options:{data:{phone:phone}}
+  });
+  if(error) return message("فشل إنشاء الحساب: "+error.message,"error");
+  if(data.session){user=data.user;await loadApp();}
+  else message("تم إرسال طلب التسجيل، لكن قد يتطلب Supabase تأكيد البريد الإلكتروني. هذا النموذج لا يرسل SMS. راجع إعدادات Authentication قبل الاختبار.","success");
+}
+async function signIn(){
+  clearMessage();
+  const phone=phoneClean($("phone").value), password=$("password").value;
+  if(!validPhone(phone)||!password) return message("اكتب رقم الهاتف وكلمة المرور.","error");
+  const {data,error}=await db.auth.signInWithPassword({email:phoneEmail(phone),password});
+  if(error) return message("فشل الدخول: "+error.message,"error");
+  user=data.user;await loadApp();
+}
+async function loadApp(){
+  $("auth").classList.add("hidden");$("app").classList.remove("hidden");
+  const {data,error}=await db.from("profiles")
+    .select("id,phone,balance,is_admin").eq("id",user.id).maybeSingle();
+  if(error) return message("تعذر تحميل الحساب. تأكد من تشغيل schema.sql: "+error.message,"error");
+  if(!data) return message("لم يتم إنشاء ملف الحساب. راجع إعدادات قاعدة البيانات وجرّب إنشاء حساب جديد.","error");
+  profile=data;
+  $("balance").textContent=money(profile.balance);
+  $("accountPhone").textContent="رقم الحساب: "+safe(profile.phone);
+  $("adminPanel").classList.toggle("hidden",!profile.is_admin);
+  await loadMyRequests();
+  if(profile.is_admin) await loadAdminRequests();
+}
+async function logout(){
+  await db.auth.signOut();user=null;profile=null;showAuth();clearMessage();
+}
+async function createRequest(type){
+  clearMessage();
+  const isDeposit=type==="deposit";
+  const amount=Number($(isDeposit?"depositAmount":"withdrawAmount").value);
+  const method=$(isDeposit?"depositMethod":"withdrawMethod").value;
+  const reference=$(isDeposit?"depositRef":"withdrawRef").value.trim();
+  if(!Number.isFinite(amount)||amount<1||amount>100000)
+    return message("أدخل مبلغًا صحيحًا من 1 إلى 100000 جنيه.","error");
+  if(!isDeposit&&!reference) return message("اكتب رقم الاستلام للسحب.","error");
+  const {error}=await db.from("wallet_requests").insert({
+    user_id:user.id, request_type:type, amount, method,
+    reference:reference||null, status:"pending"
+  });
+  if(error) return message("تعذر إرسال الطلب: "+error.message,"error");
+  $(isDeposit?"depositAmount":"withdrawAmount").value="";
+  $(isDeposit?"depositRef":"withdrawRef").value="";
+  message("تم إرسال الطلب للمراجعة. لم يتغير الرصيد تلقائيًا.","success");
+  await loadMyRequests();
+}
+async function loadMyRequests(){
+  const {data,error}=await db.from("wallet_requests")
+    .select("id,request_type,amount,method,reference,status,created_at,admin_note")
+    .eq("user_id",user.id).order("created_at",{ascending:false}).limit(50);
+  if(error){$("myRequests").textContent="تعذر تحميل الطلبات: "+error.message;return;}
+  if(!data.length){$("myRequests").textContent="لا توجد طلبات حتى الآن.";return;}
+  $("myRequests").innerHTML=data.map(r=>`
+    <div class="row">
+      <div><b>${r.request_type==="deposit"?"إيداع":"سحب"} — ${money(r.amount)} جنيه</b>
+      <span class="pill ${statusClass(r.status)}">${statusText(r.status)}</span></div>
+      <div class="muted">${safe(r.method)} • ${new Date(r.created_at).toLocaleString("ar-EG")}</div>
+      ${r.reference?`<div class="muted">المرجع/الوجهة: ${safe(r.reference)}</div>`:""}
+      ${r.admin_note?`<div class="muted">ملاحظة الإدارة: ${safe(r.admin_note)}</div>`:""}
+    </div>`).join("");
+}
+async function loadAdminRequests(){
+  if(!profile?.is_admin) return;
+  let query=db.from("wallet_requests")
+    .select("id,user_id,request_type,amount,method,reference,status,created_at")
+    .order("created_at",{ascending:false}).limit(100);
+  if(adminFilter==="pending") query=query.eq("status","pending");
+  const {data,error}=await query;
+  if(error){$("adminRequests").textContent="تعذر تحميل الطلبات: "+error.message;return;}
+  if(!data.length){$("adminRequests").textContent="لا توجد طلبات في هذا العرض.";return;}
+  $("adminRequests").innerHTML='<div class="tablewrap"><table><thead><tr><th>النوع</th><th>المبلغ</th><th>الطريقة</th><th>المرجع/الوجهة</th><th>الحالة</th><th>التاريخ</th><th>القرار</th></tr></thead><tbody>'+
+  data.map(r=>`<tr>
+    <td>${r.request_type==="deposit"?"إيداع":"سحب"}</td>
+    <td>${money(r.amount)} ج.م</td><td>${safe(r.method)}</td>
+    <td>${safe(r.reference||"—")}</td>
+    <td><span class="pill ${statusClass(r.status)}">${statusText(r.status)}</span></td>
+    <td>${new Date(r.created_at).toLocaleString("ar-EG")}</td>
+    <td>${r.status==="pending"?
+      `<button data-decision="approve" data-id="${r.id}">موافقة</button>
+       <button class="danger" data-decision="reject" data-id="${r.id}">رفض</button>`:"—"}</td>
+  </tr>`).join("")+'</tbody></table></div>';
+}
+async function reviewRequest(id,decision){
+  if(!profile?.is_admin) return message("غير مسموح.","error");
+  const note=prompt("اكتب ملاحظة اختيارية للطلب:")||null;
+  const {error}=await db.rpc("admin_review_wallet_request",{
+    p_request_id:id,p_decision:decision,p_note:note
+  });
+  if(error) return message("تعذر تنفيذ القرار: "+error.message,"error");
+  message(decision==="approve"?"تمت الموافقة على الطلب.":"تم رفض الطلب.","success");
+  await loadApp();
+}
+$("signupBtn").addEventListener("click",signUp);
+$("loginBtn").addEventListener("click",signIn);
+$("logoutBtn").addEventListener("click",logout);
+$("depositBtn").addEventListener("click",()=>createRequest("deposit"));
+$("withdrawBtn").addEventListener("click",()=>createRequest("withdraw"));
+$("refreshAdmin").addEventListener("click",loadAdminRequests);
+$("pendingFilter").addEventListener("click",()=>{adminFilter="pending";loadAdminRequests();});
+$("allFilter").addEventListener("click",()=>{adminFilter="all";loadAdminRequests();});
+$("adminRequests").addEventListener("click",e=>{
+  const b=e.target.closest("button[data-decision]");
+  if(b) reviewRequest(b.dataset.id,b.dataset.decision);
+});
+(async()=>{
+  const {data:{session}}=await db.auth.getSession();
+  if(session){user=session.user;await loadApp();}
+})();
+db.auth.onAuthStateChange((_event,session)=>{
+  setTimeout(async()=>{
+    user=session?.user||null;
+    if(user) await loadApp(); else showAuth();
+  },0);
+});
+</script>
 </body>
 </html>
