@@ -2,324 +2,108 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080d20">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>منصتي PRO</title>
-
-<style>
-*{box-sizing:border-box}
-:root{
-  --bg:#080d20;
-  --panel:#111a35;
-  --panel2:#172343;
-  --cyan:#00e5ff;
-  --purple:#7c3aed;
-  --text:#f4f7ff;
-  --muted:#a6b2d0;
-  --border:#283658;
-}
-body{
-  margin:0;
-  font-family:Arial,Tahoma,sans-serif;
-  color:var(--text);
-  background:linear-gradient(145deg,#080d20,#17113c,#0b1730);
-  min-height:100vh;
-}
-button,input,select{font:inherit}
-button{cursor:pointer}
-button:disabled{opacity:.6;cursor:not-allowed}
-.hidden{display:none!important}
-.container{max-width:1050px;margin:auto;padding:18px}
-header{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:15px 18px;border-bottom:1px solid var(--border);
-  background:#080d20f2;position:sticky;top:0;z-index:5;
-}
-.logo{font-size:22px;font-weight:bold;color:var(--cyan)}
-.logo span{color:#a78bfa}
-.card{
-  background:linear-gradient(145deg,#141e3b,#10172e);
-  border:1px solid var(--border);
-  border-radius:18px;padding:20px;margin-bottom:16px;
-  box-shadow:0 10px 30px #0002;
-}
-h2,h3{margin-top:0}
-.muted{color:var(--muted);font-size:14px;line-height:1.8}
-label{display:block;margin:14px 0 7px;color:#dce5ff}
-input,select{
-  width:100%;padding:13px;border-radius:11px;
-  border:1px solid #344365;background:#0a1228;
-  color:white;outline:none;
-}
-input:focus,select:focus{border-color:var(--cyan)}
-.btn{
-  width:100%;border:0;border-radius:12px;padding:13px;
-  font-weight:bold;color:#071222;
-  background:linear-gradient(90deg,#00e5ff,#65f3ff);
-  margin-top:12px;
-}
-.btn:hover{filter:brightness(1.08)}
-.btn-secondary{
-  background:#27345a;color:white;border:1px solid #3b4b72;
-}
-.btn-danger{background:#4a1f39;color:#ffdbe8}
-.auth-wrap{max-width:440px;margin:40px auto}
-.auth-tabs{display:flex;gap:8px;margin-bottom:15px}
-.auth-tabs button{flex:1}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-.stat{
-  background:linear-gradient(135deg,#18284c,#30205b);
-  border:1px solid #35446c;border-radius:16px;padding:18px;
-}
-.stat .number{
-  font-size:25px;font-weight:bold;color:var(--cyan);margin-top:12px;
-  overflow-wrap:anywhere
-}
-.section{display:none}
-.section.active{display:block}
-.bottom-nav{
-  position:fixed;bottom:0;left:0;right:0;z-index:10;
-  display:flex;justify-content:space-around;gap:4px;
-  padding:9px 4px calc(9px + env(safe-area-inset-bottom));
-  background:#090f23f5;border-top:1px solid var(--border);
-}
-.bottom-nav button{
-  flex:1;background:none;border:0;color:var(--muted);
-  padding:8px 2px;font-size:12px;border-radius:10px;
-}
-.bottom-nav button.active{color:var(--cyan);background:#132440}
-.content-space{padding-bottom:100px}
-.row{
-  display:flex;justify-content:space-between;align-items:center;
-  gap:10px;flex-wrap:wrap;
-}
-.item{
-  padding:13px;margin-top:10px;background:#0c142b;
-  border:1px solid var(--border);border-radius:12px;
-  overflow-wrap:anywhere;
-}
-.badge{font-size:12px;padding:5px 9px;border-radius:20px;background:#27345a}
-.status-pending{color:#ffe08a}
-.status-approved{color:#7dffbd}
-.status-rejected{color:#ff9fb5}
-.notice{
-  padding:12px;border-radius:10px;background:#142440;
-  color:#c5d8ff;line-height:1.8
-}
-footer{text-align:center;color:var(--muted);font-size:12px;padding:15px}
-.error-text{color:#ffb4c0}
-.success-text{color:#7dffbd}
-@media(max-width:480px){
-  .container{padding:12px}
-  .card{padding:15px}
-  .grid{gap:9px}
-  .stat{padding:13px}
-  .stat .number{font-size:21px}
-  header{padding:13px}
-}
-</style>
-</head>
-
-<body>
-
-<header>
-  <div class="logo">منصتي <span>PRO</span></div>
-  <button id="logoutBtn" class="btn btn-secondary hidden"
-    style="width:auto;margin:0;padding:9px 13px" onclick="logout()">
-    خروج
-  </button>
-</header>
-
-<!-- تسجيل الدخول وإنشاء الحساب -->
-<div id="authScreen" class="container">
-  <div class="auth-wrap">
-    <div class="card">
-      <h2 style="text-align:center">مرحبًا بك في منصتي PRO</h2>
-      <p class="muted" style="text-align:center">
-        سجّل الدخول إلى حسابك أو أنشئ حسابًا جديدًا.
-      </p>
-
-      <div class="auth-tabs">
-        <button class="btn" id="loginTab" onclick="showAuth('login')">
-          تسجيل الدخول
-        </button>
-        <button class="btn btn-secondary" id="registerTab"
-          onclick="showAuth('register')">
-          إنشاء حساب
-        </button>
-      </div>
-
-      <form id="loginForm">
-        <label for="loginEmail">البريد الإلكتروني</label>
-        <input id="loginEmail" type="email" autocomplete="email"
-          placeholder="name@example.com" required>
-
-        <label for="loginPassword">كلمة المرور</label>
-        <input id="loginPassword" type="password"
-          autocomplete="current-password" placeholder="كلمة المرور" required>
-
-        <button class="btn" id="loginBtn" type="submit">
-          دخول إلى حسابي
-        </button>
-      </form>
-
-      <form id="registerForm" class="hidden">
-        <label for="registerName">الاسم</label>
-        <input id="registerName" maxlength="60"
-          placeholder="اكتب اسمك" required>
-
-        <label for="registerEmail">البريد الإلكتروني</label>
-        <input id="registerEmail" type="email" autocomplete="email"
-          placeholder="name@example.com" required>
-
-        <label for="registerPassword">كلمة المرور</label>
-        <input id="registerPassword" type="password"
-          autocomplete="new-password" minlength="6"
-          placeholder="6 أحرف على الأقل" required>
-
-        <button class="btn" id="registerBtn" type="submit">
-          إنشاء الحساب
-        </button>
-      </form>
-
-      <p id="authMessage" class="muted" role="status" aria-live="polite"></p>
-    </div>
-  </div>
-</div>
-
-<!-- لوحة المستخدم -->
-<div id="appScreen" class="container hidden content-space">
-
-  <section id="homeSection" class="section active">
-    <div class="card">
-      <p class="muted">أهلًا بك</p>
-      <h2 id="welcomeName">مستخدم منصتي</h2>
-      <p class="muted">تابع محفظتك وطلباتك من مكان واحد.</p>
-    </div>
-
-    <div class="grid">
-      <div class="stat">
-        <div class="muted">رصيد المحفظة</div>
-        <div class="number"><span id="balance">0.00</span> ج.م</div>
-      </div>
-      <div class="stat">
-        <div class="muted">طلبات الإيداع المعلقة</div>
-        <div class="number" id="pendingCount">0</div>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:16px">
-      <h3>إيداع في المحفظة</h3>
-      <p class="muted">
-        أرسل التحويل إلى وسيلة الدفع المعتمدة، ثم أرسل طلب الإيداع
-        وانتظر مراجعة المدير.
-      </p>
-      <button class="btn" onclick="navigate('deposit')">طلب إيداع</button>
-    </div>
-
-    <div class="card">
-      <h3>آخر طلباتك</h3>
-      <div id="recentRequests" class="muted">لا توجد طلبات حتى الآن.</div>
-    </div>
-  </section>
-
-  <section id="depositSection" class="section">
-    <div class="card">
-      <h2>طلب إيداع</h2>
-
-      <div class="notice">
-        <strong>طريقة الإيداع</strong><br>
-        حوّل المبلغ إلى وسيلة الدفع المعلنة من المدير، ثم أدخل بيانات
-        العملية. لا ترسل طلبًا على أنه مدفوع قبل إجراء التحويل الفعلي.
-        <br><br>
-        <strong>رقم التحويل:</strong>
-        <span id="paymentNumber">سيتم الإعلان عنه لاحقًا</span>
-      </div>
-
-      <form id="depositForm">
-        <label for="depositAmount">المبلغ بالجنيه المصري</label>
-        <input id="depositAmount" type="number" min="1" max="100000"
-          step="0.01" placeholder="مثال: 200" required>
-
-        <label for="senderPhone">رقم الهاتف الذي حوّلت منه</label>
-        <input id="senderPhone" type="tel" maxlength="20"
-          placeholder="رقم الهاتف المستخدم في التحويل" required>
-
-        <label for="transferReference">رقم العملية أو مرجع التحويل</label>
-        <input id="transferReference" type="text" maxlength="100"
-          placeholder="رقم العملية الموجود في الإيصال" required>
-
-        <label for="depositNote">ملاحظة (اختياري)</label>
-        <input id="depositNote" type="text" maxlength="200"
-          placeholder="أي معلومات إضافية">
-
-        <button class="btn" id="depositBtn" type="submit">
-          إرسال طلب الإيداع
-        </button>
-      </form>
-
-      <p class="muted" id="depositMessage" aria-live="polite"></p>
-    </div>
-  </section>
-
-  <section id="walletSection" class="section">
-    <div class="card">
-      <h2>المحفظة</h2>
-      <p class="muted">رصيدك الحالي داخل الموقع</p>
-      <div class="number" style="font-size:32px;color:var(--cyan)">
-        <span id="walletBalance">0.00</span> جنيه
-      </div>
-      <p class="muted">
-        الرصيد المعروض داخل الموقع لا يثبت وجود أموال في حساب بنكي
-        ولا يضمن إمكانية السحب.
-      </p>
-    </div>
-  </section>
-
-  <section id="requestsSection" class="section">
-    <div class="card">
-      <h2>سجل طلبات الإيداع</h2>
-      <div id="allRequests" class="muted">جارٍ تحميل الطلبات...</div>
-    </div>
-  </section>
-
-  <section id="profileSection" class="section">
-    <div class="card">
-      <h2>الملف الشخصي</h2>
-
-      <label for="profileName">الاسم</label>
-      <input id="profileName" maxlength="60">
-
-      <label for="profileEmail">البريد الإلكتروني</label>
-      <input id="profileEmail" type="email" disabled>
-
-      <button class="btn" id="saveProfileBtn" onclick="saveProfile()">
-        حفظ الاسم
-      </button>
-      <p id="profileMessage" class="muted" aria-live="polite"></p>
-    </div>
-  </section>
-
-  <footer>منصتي PRO © جميع الحقوق محفوظة</footer>
-</div>
-
-<nav id="bottomNav" class="bottom-nav hidden">
-  <button class="active" data-page="home" onclick="navigate('home')">⌂<br>الرئيسية</button>
-  <button data-page="deposit" onclick="navigate('deposit')">＋<br>إيداع</button>
-  <button data-page="wallet" onclick="navigate('wallet')">◈<br>المحفظة</button>
-  <button data-page="requests" onclick="navigate('requests')">▤<br>الطلبات</button>
-  <button data-page="profile" onclick="navigate('profile')">♙<br>حسابي</button>
-</nav>
-
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(145deg,#071126,#201044);color:#fff;font-family:Arial,sans-serif;min-height:100vh}
+header{padding:20px;text-align:center;background:#11152b;border-bottom:1px solid #34335e}
+h1{color:#31e5ff;margin:5px}
+main{max-width:650px;margin:auto;padding:16px}
+.card{background:#151a35;border:1px solid #34375f;border-radius:16px;padding:18px;margin-bottom:15px}
+input,select,button{width:100%;padding:13px;margin:7px 0;border-radius:10px;border:1px solid #44476b;font-size:16px}
+input,select{background:#0b1024;color:white}
+button{background:#24d8ed;color:#071126;border:0;font-weight:bold;cursor:pointer}
+button.secondary{background:#303456;color:white}
+button.danger{background:#e85a72;color:white}
+.hidden{display:none}
+.muted{color:#aeb6d5;font-size:14px;line-height:1.7}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.item{padding:12px;background:#0c1228;border-radius:10px;margin:8px 0;overflow-wrap:anywhere}
+nav{position:sticky;bottom:0;background:#10152c;display:flex;justify-content:space-around;padding:10px;gap:5px}
+nav button{font-size:12px;padding:12px 5px;margin:0}
+h2{font-size:19px}
+</style>
+</head>
+<body>
+<header>
+<h1>منصتي PRO</h1>
+<div class="muted">المهام والعمولات والمحفظة</div>
+</header>
+
+<main>
+<section id="authBox" class="card">
+<h2>تسجيل الدخول</h2>
+<input id="email" type="email" placeholder="البريد الإلكتروني" autocomplete="email">
+<input id="password" type="password" placeholder="كلمة المرور" autocomplete="current-password">
+<button onclick="login()">تسجيل الدخول</button>
+<button class="secondary" onclick="register()">إنشاء حساب جديد</button>
+<div id="authMsg" class="muted"></div>
+</section>
+
+<div id="app" class="hidden">
+<section id="home" class="card">
+<h2>مرحبًا بك 👋</h2>
+<div id="userEmail" class="muted"></div>
+<div class="row">
+<div class="item">رصيد المحفظة<br><strong id="balance">0.00</strong> جنيه</div>
+<div class="item">حالة الحساب<br><strong>نشط</strong></div>
+</div>
+<p class="muted">الرصيد المعروض ليس إثباتًا على وجود أموال فعلية. لا تتم إضافة أي أموال تلقائيًا بمجرد إرسال طلب إيداع.</p>
+</section>
+
+<section id="tasks" class="card hidden">
+<h2>المهام المتاحة</h2>
+<div id="taskList">جارٍ تحميل المهام...</div>
+</section>
+
+<section id="wallet" class="card hidden">
+<h2>طلب إيداع</h2>
+<p class="muted">أرسل الطلب بعد تنفيذ الدفع بالطريقة التي يحددها الموقع. لا تدخل كلمة مرور البنك أو الرقم السري للبطاقة.</p>
+<input id="depositAmount" type="number" min="1" step="0.01" placeholder="مبلغ الإيداع بالجنيه">
+<input id="depositRef" maxlength="100" placeholder="رقم العملية أو مرجع التحويل">
+<button onclick="sendRequest('deposit')">إرسال طلب الإيداع</button>
+
+<hr style="border-color:#34375f;margin:25px 0">
+
+<h2>طلب سحب</h2>
+<input id="withdrawAmount" type="number" min="1" step="0.01" placeholder="مبلغ السحب بالجنيه">
+<select id="withdrawMethod">
+<option value="">اختر وسيلة الاستلام</option>
+<option value="محفظة إلكترونية">محفظة إلكترونية</option>
+<option value="تحويل بنكي">تحويل بنكي</option>
+</select>
+<input id="withdrawDetails" maxlength="150" placeholder="بيانات الاستلام الضرورية فقط">
+<button onclick="sendRequest('withdraw')">إرسال طلب السحب</button>
+<div id="requestMsg" class="muted"></div>
+</section>
+
+<section id="history" class="card hidden">
+<h2>طلباتي السابقة</h2>
+<div id="requestList">جارٍ التحميل...</div>
+</section>
+
+<section id="profile" class="card hidden">
+<h2>الملف الشخصي</h2>
+<div id="profileEmail"></div>
+<p class="muted">يمكنك تسجيل الخروج من حسابك في أي وقت.</p>
+<button class="danger" onclick="logout()">تسجيل الخروج</button>
+</section>
+</div>
+</main>
+
+<nav id="bottomNav" class="hidden">
+<button onclick="showPage('home')">الرئيسية</button>
+<button onclick="showPage('tasks')">المهام</button>
+<button onclick="showPage('wallet')">المحفظة</button>
+<button onclick="showPage('history')">طلباتي</button>
+<button onclick="showPage('profile')">حسابي</button>
+</nav>
 
 <script>
-/*
-  إعدادات مشروع Firebase الحالي.
-  أبقِ القيم مطابقة تمامًا لمشروع Firebase الذي يعمل عليه موقعك.
-*/
 const firebaseConfig = {
   apiKey: "AIzaSyA8q6z4McET3_d208PtSnFGEjlAVUezJ8k",
   authDomain: "mansatipro.firebaseapp.com",
@@ -332,498 +116,227 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-
 const auth = firebase.auth();
 const db = firebase.database();
 
-let currentUser = null;
-let requestsListener = null;
-let balanceListener = null;
-let profileListener = null;
-let requestsCache = {};
-let authGeneration = 0;
+const $ = id => document.getElementById(id);
+const money = n => Number(n || 0).toLocaleString('ar-EG',{
+  minimumFractionDigits:2,maximumFractionDigits:2
+});
 
-function message(id, text, type = "") {
-  const element = document.getElementById(id);
-  element.textContent = text;
-  element.classList.toggle("error-text", type === "error");
-  element.classList.toggle("success-text", type === "success");
+function errorText(e){
+  console.error(e);
+  const messages = {
+    'auth/email-already-in-use':'البريد الإلكتروني مسجل بالفعل.',
+    'auth/invalid-email':'البريد الإلكتروني غير صحيح.',
+    'auth/weak-password':'كلمة المرور ضعيفة؛ استخدم 6 أحرف على الأقل.',
+    'auth/invalid-credential':'البريد الإلكتروني أو كلمة المرور غير صحيحة.',
+    'auth/user-not-found':'الحساب غير موجود.',
+    'auth/wrong-password':'كلمة المرور غير صحيحة.',
+    'PERMISSION_DENIED':'قواعد قاعدة البيانات لا تسمح بهذه العملية.'
+  };
+  return messages[e.code] || messages[e.message] ||
+    ('حدث خطأ: ' + (e.message || 'يرجى المحاولة مجددًا'));
 }
 
-function setBusy(id, busy, busyText, normalText) {
-  const button = document.getElementById(id);
-  button.disabled = busy;
-  button.textContent = busy ? busyText : normalText;
+async function login(){
+  try{
+    $('authMsg').textContent='جارٍ تسجيل الدخول...';
+    await auth.signInWithEmailAndPassword(
+      $('email').value.trim(),
+      $('password').value
+    );
+    $('authMsg').textContent='';
+  }catch(e){
+    $('authMsg').textContent=errorText(e);
+  }
 }
 
-function showAuth(type) {
-  const isLogin = type === "login";
+async function register(){
+  try{
+    const email=$('email').value.trim();
+    const password=$('password').value;
+    if(!email || password.length<6){
+      $('authMsg').textContent='أدخل بريدًا صحيحًا وكلمة مرور من 6 أحرف على الأقل.';
+      return;
+    }
 
-  document.getElementById("loginForm").classList.toggle("hidden", !isLogin);
-  document.getElementById("registerForm").classList.toggle("hidden", isLogin);
+    $('authMsg').textContent='جارٍ إنشاء الحساب...';
+    const result=await auth.createUserWithEmailAndPassword(email,password);
+    const uid=result.user.uid;
 
-  document.getElementById("loginTab").className =
-    "btn" + (isLogin ? "" : " btn-secondary");
+    await db.ref('profiles/'+uid).set({
+      email:email,
+      createdAt:Date.now()
+    });
 
-  document.getElementById("registerTab").className =
-    "btn" + (!isLogin ? "" : " btn-secondary");
-
-  message("authMessage", "");
+    $('authMsg').textContent='تم إنشاء الحساب بنجاح.';
+  }catch(e){
+    $('authMsg').textContent=errorText(e);
+  }
 }
 
-function friendlyAuthError(error) {
-  const code = error && error.code ? error.code : "";
+auth.onAuthStateChanged(async user=>{
+  $('authBox').classList.toggle('hidden',!!user);
+  $('app').classList.toggle('hidden',!user);
+  $('bottomNav').classList.toggle('hidden',!user);
 
-  const errors = {
-    "auth/email-already-in-use":
-      "هذا البريد مسجل بالفعل. استخدم تسجيل الدخول أو بريدًا آخر.",
-    "auth/invalid-email":
-      "صيغة البريد الإلكتروني غير صحيحة.",
-    "auth/weak-password":
-      "كلمة المرور ضعيفة. استخدم 6 أحرف على الأقل.",
-    "auth/operation-not-allowed":
-      "تسجيل البريد وكلمة المرور غير مفعّل في مشروع Firebase المتصل.",
-    "auth/invalid-api-key":
-      "مفتاح Firebase غير صحيح. راجع إعدادات المشروع.",
-    "auth/network-request-failed":
-      "تعذر الاتصال بالإنترنت. تحقق من اتصالك وحاول مرة أخرى.",
-    "auth/too-many-requests":
-      "هناك محاولات كثيرة. انتظر قليلًا ثم حاول مرة أخرى.",
-    "auth/unauthorized-domain":
-      "عنوان الموقع غير مسموح به في إعدادات Firebase Authentication.",
-    "auth/invalid-credential":
-      "البريد أو كلمة المرور غير صحيحة.",
-    "auth/user-disabled":
-      "هذا الحساب معطّل. تواصل مع مدير الموقع.",
-    "auth/user-not-found":
-      "لا يوجد حساب بهذا البريد. أنشئ حسابًا جديدًا أولًا.",
-    "auth/wrong-password":
-      "كلمة المرور غير صحيحة.",
-    "auth/email-change-needs-verification":
-      "يلزم التحقق من البريد الإلكتروني."
+  if(!user)return;
+
+  $('userEmail').textContent=user.email || '';
+  $('profileEmail').textContent=user.email || '';
+
+  showPage('home');
+  loadBalance(user.uid);
+  loadTasks();
+  loadRequests(user.uid);
+});
+
+function showPage(page){
+  ['home','tasks','wallet','history','profile'].forEach(id=>{
+    $(id).classList.toggle('hidden',id!==page);
+  });
+}
+
+async function loadBalance(uid){
+  try{
+    const snap=await db.ref('balances/'+uid).once('value');
+    const value=snap.val();
+    $('balance').textContent=money(
+      value && typeof value==='object' ? value.amount : value
+    );
+  }catch(e){
+    $('balance').textContent='غير متاح';
+    console.error(e);
+  }
+}
+
+function safe(text){
+  return String(text??'').replace(/[&<>"']/g,c=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+async function loadTasks(){
+  try{
+    const snap=await db.ref('tasks').once('value');
+    const data=snap.val()||{};
+    const list=$('taskList');
+    list.innerHTML='';
+
+    Object.entries(data).forEach(([id,t])=>{
+      if(!t || t.enabled===false || t.active===false)return;
+      const item=document.createElement('div');
+      item.className='item';
+      item.innerHTML='<strong>'+safe(t.title||t.name||'مهمة')+
+        '</strong><p class="muted">'+safe(t.description||'')+
+        '</p><div class="muted">العمولة: '+money(t.commission||t.reward||0)+
+        ' جنيه</div>';
+      list.appendChild(item);
+    });
+
+    if(!list.children.length)list.textContent='لا توجد مهام متاحة حاليًا.';
+  }catch(e){
+    $('taskList').textContent='تعذر تحميل المهام. تحقق من صلاحيات قاعدة البيانات.';
+    console.error(e);
+  }
+}
+
+async function sendRequest(type){
+  const user=auth.currentUser;
+  if(!user){
+    $('requestMsg').textContent='سجل الدخول أولًا.';
+    return;
+  }
+
+  const amount=Number(
+    type==='deposit' ? $('depositAmount').value : $('withdrawAmount').value
+  );
+
+  if(!Number.isFinite(amount)||amount<=0){
+    $('requestMsg').textContent='أدخل مبلغًا صحيحًا أكبر من صفر.';
+    return;
+  }
+
+  const data={
+    type:type,
+    amount:amount,
+    status:'pending',
+    createdAt:Date.now()
   };
 
-  return errors[code] ||
-    "تعذر إتمام العملية. رمز الخطأ: " +
-    (code || (error && error.message) || "غير معروف");
+  if(type==='deposit'){
+    data.reference=$('depositRef').value.trim();
+    if(!data.reference){
+      $('requestMsg').textContent='أدخل رقم العملية أو مرجع التحويل.';
+      return;
+    }
+  }else{
+    data.method=$('withdrawMethod').value;
+    data.details=$('withdrawDetails').value.trim();
+    if(!data.method||!data.details){
+      $('requestMsg').textContent='أكمل وسيلة الاستلام وبياناتها.';
+      return;
+    }
+  }
+
+  try{
+    $('requestMsg').textContent='جارٍ إرسال الطلب...';
+
+    // المسار الذي تقرؤه لوحة الإدارة:
+    // requests/{UID}/{requestID}
+    const ref=db.ref('requests/'+user.uid).push();
+    await ref.set(data);
+
+    $('requestMsg').textContent='تم إرسال الطلب بنجاح، وهو قيد المراجعة.';
+    $('depositAmount').value='';
+    $('depositRef').value='';
+    $('withdrawAmount').value='';
+    $('withdrawMethod').value='';
+    $('withdrawDetails').value='';
+
+    loadRequests(user.uid);
+    showPage('history');
+  }catch(e){
+    $('requestMsg').textContent=errorText(e);
+  }
 }
 
-/* تسجيل الدخول */
-document.getElementById("loginForm").addEventListener("submit", async event => {
-  event.preventDefault();
+function loadRequests(uid){
+  const list=$('requestList');
+  db.ref('requests/'+uid).on('value',snap=>{
+    list.innerHTML='';
+    const data=snap.val()||{};
 
-  const email = document.getElementById("loginEmail").value.trim();
-  const password = document.getElementById("loginPassword").value;
+    Object.entries(data).reverse().forEach(([id,r])=>{
+      const item=document.createElement('div');
+      item.className='item';
+      const type=r.type==='deposit'?'إيداع':
+        r.type==='withdraw'?'سحب':'طلب';
+      const status={
+        pending:'قيد المراجعة',
+        approved:'مقبول',
+        rejected:'مرفوض'
+      }[r.status]||'غير محدد';
 
-  if (!email || !password) {
-    message("authMessage", "اكتب البريد الإلكتروني وكلمة المرور.", "error");
-    return;
-  }
-
-  setBusy("loginBtn", true, "جارٍ تسجيل الدخول...", "دخول إلى حسابي");
-  message("authMessage", "");
-
-  try {
-    await auth.signInWithEmailAndPassword(email, password);
-    message("authMessage", "");
-  } catch (error) {
-    console.error("Login error:", error);
-    message("authMessage", friendlyAuthError(error), "error");
-  } finally {
-    setBusy("loginBtn", false, "", "دخول إلى حسابي");
-  }
-});
-
-/* إنشاء حساب جديد */
-document.getElementById("registerForm").addEventListener("submit", async event => {
-  event.preventDefault();
-
-  const name = document.getElementById("registerName").value.trim();
-  const email = document.getElementById("registerEmail").value.trim();
-  const password = document.getElementById("registerPassword").value;
-
-  if (!name || !email || password.length < 6) {
-    message(
-      "authMessage",
-      "اكتب الاسم والبريد وكلمة مرور من 6 أحرف على الأقل.",
-      "error"
-    );
-    return;
-  }
-
-  setBusy("registerBtn", true, "جارٍ إنشاء الحساب...", "إنشاء الحساب");
-  message("authMessage", "جارٍ إنشاء الحساب...");
-
-  let createdUser = null;
-
-  try {
-    /*
-      أولًا: إنشاء حساب Authentication.
-      إذا فشلت هذه الخطوة، سيظهر رمز الخطأ الحقيقي.
-    */
-    const result = await auth.createUserWithEmailAndPassword(email, password);
-    createdUser = result.user;
-
-    /*
-      حفظ الاسم في ملف Firebase Authentication.
-      لا نعتبر فشل هذه الخطوة سببًا لإلغاء الحساب.
-    */
-    try {
-      await createdUser.updateProfile({ displayName: name });
-    } catch (profileError) {
-      console.error("Authentication profile update error:", profileError);
-    }
-
-    /*
-      ثانيًا: إنشاء ملف المستخدم في Realtime Database.
-      قد ترفض قواعد قاعدة البيانات الكتابة؛ وهذا منفصل عن إنشاء الحساب.
-    */
-    try {
-      await db.ref("profiles/" + createdUser.uid).set({
-        name: name,
-        email: email,
-        createdAt: firebase.database.ServerValue.TIMESTAMP
-      });
-
-      message("authMessage", "تم إنشاء الحساب بنجاح.", "success");
-    } catch (databaseError) {
-      console.error("Database profile creation error:", databaseError);
-
-      message(
-        "authMessage",
-        "تم إنشاء حساب الدخول، لكن تعذر حفظ الملف الشخصي. " +
-        "رمز خطأ قاعدة البيانات: " +
-        (databaseError.code || databaseError.message || "غير معروف"),
-        "error"
-      );
-    }
-
-    /*
-      لا ننشئ الحساب مرة أخرى إذا كان Authentication قد أنشأه بالفعل.
-      حالة تسجيل الدخول ستُحدّث لوحة المستخدم تلقائيًا.
-    */
-
-  } catch (error) {
-    console.error("Registration error:", error);
-    message("authMessage", friendlyAuthError(error), "error");
-  } finally {
-    setBusy("registerBtn", false, "", "إنشاء الحساب");
-  }
-});
-
-function clearListeners() {
-  if (currentUser) {
-    if (requestsListener) {
-      db.ref("requests/" + currentUser.uid).off("value", requestsListener);
-    }
-
-    if (balanceListener) {
-      db.ref("balances/" + currentUser.uid).off("value", balanceListener);
-    }
-
-    if (profileListener) {
-      db.ref("profiles/" + currentUser.uid).off("value", profileListener);
-    }
-  }
-
-  requestsListener = null;
-  balanceListener = null;
-  profileListener = null;
-}
-
-auth.onAuthStateChanged(async user => {
-  const generation = ++authGeneration;
-
-  clearListeners();
-  currentUser = user;
-  requestsCache = {};
-
-  document.getElementById("authScreen").classList.toggle("hidden", !!user);
-  document.getElementById("appScreen").classList.toggle("hidden", !user);
-  document.getElementById("bottomNav").classList.toggle("hidden", !user);
-  document.getElementById("logoutBtn").classList.toggle("hidden", !user);
-
-  if (!user) return;
-
-  document.getElementById("profileEmail").value = user.email || "";
-  document.getElementById("welcomeName").textContent =
-    user.displayName || "مستخدم منصتي";
-
-  try {
-    const profileRef = db.ref("profiles/" + user.uid);
-
-    profileListener = snapshot => {
-      const profile = snapshot.val() || {};
-      const name = profile.name || user.displayName || "مستخدم منصتي";
-
-      document.getElementById("welcomeName").textContent = name;
-      document.getElementById("profileName").value = name;
-    };
-
-    profileRef.on("value", profileListener, error => {
-      console.error("Profile read error:", error);
-      message("profileMessage", "تعذر تحميل الملف الشخصي. رمز الخطأ: " +
-        (error.code || "غير معروف"), "error");
+      item.innerHTML='<strong>'+type+'</strong>'+
+        '<p>المبلغ: '+money(r.amount)+' جنيه</p>'+
+        '<p>الحالة: '+safe(status)+'</p>'+
+        '<p class="muted">'+
+        safe(new Date(r.createdAt||Date.now()).toLocaleString('ar-EG'))+
+        '</p>';
+      list.appendChild(item);
     });
 
-    const balanceRef = db.ref("balances/" + user.uid);
-
-    balanceListener = snapshot => {
-      const value = snapshot.val();
-      let amount = 0;
-
-      if (typeof value === "number") {
-        amount = value;
-      } else if (value && typeof value.amount === "number") {
-        amount = value.amount;
-      }
-
-      const formatted = amount.toLocaleString("ar-EG", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
-
-      document.getElementById("balance").textContent = formatted;
-      document.getElementById("walletBalance").textContent = formatted;
-    };
-
-    balanceRef.on("value", balanceListener, error => {
-      console.error("Balance read error:", error);
-      message("depositMessage", "تعذر قراءة الرصيد. رمز الخطأ: " +
-        (error.code || "غير معروف"), "error");
-    });
-
-    const requestsRef = db.ref("requests/" + user.uid);
-
-    requestsListener = snapshot => {
-      requestsCache = snapshot.val() || {};
-      renderRequests();
-    };
-
-    requestsRef.on("value", requestsListener, error => {
-      console.error("Requests read error:", error);
-      message("depositMessage", "تعذر تحميل الطلبات. رمز الخطأ: " +
-        (error.code || "غير معروف"), "error");
-    });
-
-  } catch (error) {
-    console.error("App initialization error:", error);
-
-    if (generation === authGeneration) {
-      message("profileMessage", "تعذر تحميل بعض البيانات. رمز الخطأ: " +
-        (error.code || error.message || "غير معروف"), "error");
-    }
-  }
-});
-
-/* إرسال طلب إيداع */
-document.getElementById("depositForm").addEventListener("submit", async event => {
-  event.preventDefault();
-
-  if (!currentUser) {
-    message("depositMessage", "سجّل الدخول أولًا.", "error");
-    return;
-  }
-
-  const amount = Number(document.getElementById("depositAmount").value);
-  const senderPhone = document.getElementById("senderPhone").value.trim();
-  const reference = document.getElementById("transferReference").value.trim();
-  const note = document.getElementById("depositNote").value.trim();
-
-  if (!Number.isFinite(amount) || amount < 1 || amount > 100000) {
-    message("depositMessage", "اكتب مبلغًا صحيحًا بين 1 و100000 جنيه.", "error");
-    return;
-  }
-
-  if (!senderPhone || !reference || reference.length < 3) {
-    message("depositMessage", "اكتب رقم الهاتف ورقم العملية بشكل صحيح.", "error");
-    return;
-  }
-
-  setBusy("depositBtn", true, "جارٍ إرسال الطلب...", "إرسال طلب الإيداع");
-  message("depositMessage", "");
-
-  try {
-    const requestRef = db.ref("requests/" + currentUser.uid).push();
-
-    await requestRef.set({
-      uid: currentUser.uid,
-      email: currentUser.email || "",
-      amount: amount,
-      senderPhone: senderPhone,
-      reference: reference,
-      note: note,
-      status: "pending",
-      createdAt: firebase.database.ServerValue.TIMESTAMP
-    });
-
-    document.getElementById("depositForm").reset();
-
-    message(
-      "depositMessage",
-      "تم إرسال طلبك. سيظهر قيد المراجعة حتى يراجعه المدير.",
-      "success"
-    );
-
-    navigate("requests");
-  } catch (error) {
-    console.error("Deposit request error:", error);
-    message(
-      "depositMessage",
-      "تعذر إرسال الطلب. رمز الخطأ: " +
-      (error.code || error.message || "غير معروف"),
-      "error"
-    );
-  } finally {
-    setBusy("depositBtn", false, "", "إرسال طلب الإيداع");
-  }
-});
-
-/* عرض سجل الطلبات */
-function renderRequests() {
-  const entries = Object.entries(requestsCache || {}).sort((a, b) => {
-    return (b[1]?.createdAt || 0) - (a[1]?.createdAt || 0);
-  });
-
-  const pending = entries.filter(([, request]) =>
-    request.status === "pending"
-  ).length;
-
-  document.getElementById("pendingCount").textContent = pending;
-
-  const all = document.getElementById("allRequests");
-  const recent = document.getElementById("recentRequests");
-
-  all.replaceChildren();
-  recent.replaceChildren();
-
-  if (!entries.length) {
-    all.textContent = "لا توجد طلبات إيداع.";
-    recent.textContent = "لا توجد طلبات حتى الآن.";
-    return;
-  }
-
-  function makeItem(request) {
-    const wrapper = document.createElement("div");
-    wrapper.className = "item";
-
-    const row = document.createElement("div");
-    row.className = "row";
-
-    const title = document.createElement("strong");
-    title.textContent =
-      Number(request.amount || 0).toLocaleString("ar-EG") + " جنيه";
-
-    const status = document.createElement("span");
-    status.className = "badge";
-
-    if (request.status === "approved") {
-      status.classList.add("status-approved");
-      status.textContent = "تمت الموافقة";
-    } else if (request.status === "rejected") {
-      status.classList.add("status-rejected");
-      status.textContent = "مرفوض";
-    } else {
-      status.classList.add("status-pending");
-      status.textContent = "قيد المراجعة";
-    }
-
-    row.append(title, status);
-    wrapper.appendChild(row);
-
-    const details = document.createElement("p");
-    details.className = "muted";
-    details.textContent =
-      "رقم العملية: " + (request.reference || "—") +
-      " | هاتف التحويل: " + (request.senderPhone || "—");
-
-    wrapper.appendChild(details);
-
-    if (request.note) {
-      const note = document.createElement("p");
-      note.className = "muted";
-      note.textContent = "ملاحظة: " + request.note;
-      wrapper.appendChild(note);
-    }
-
-    return wrapper;
-  }
-
-  entries.forEach(([id, request], index) => {
-    all.appendChild(makeItem(request));
-
-    if (index < 3) {
-      recent.appendChild(makeItem(request));
-    }
+    if(!list.children.length)list.textContent='لا توجد طلبات حتى الآن.';
+  },e=>{
+    list.textContent='تعذر تحميل الطلبات: '+safe(e.message);
   });
 }
 
-/* حفظ الاسم */
-async function saveProfile() {
-  if (!currentUser) return;
-
-  const name = document.getElementById("profileName").value.trim();
-
-  if (!name) {
-    message("profileMessage", "اكتب الاسم أولًا.", "error");
-    return;
-  }
-
-  setBusy("saveProfileBtn", true, "جارٍ الحفظ...", "حفظ الاسم");
-
-  try {
-    await db.ref("profiles/" + currentUser.uid + "/name").set(name);
-
-    try {
-      await currentUser.updateProfile({ displayName: name });
-    } catch (profileError) {
-      console.error("Update display name error:", profileError);
-    }
-
-    document.getElementById("welcomeName").textContent = name;
-    message("profileMessage", "تم حفظ الاسم.", "success");
-  } catch (error) {
-    console.error("Save profile error:", error);
-
-    message(
-      "profileMessage",
-      "تعذر حفظ الاسم. رمز الخطأ: " +
-      (error.code || error.message || "غير معروف"),
-      "error"
-    );
-  } finally {
-    setBusy("saveProfileBtn", false, "", "حفظ الاسم");
-  }
-}
-
-/* التنقل بين الصفحات */
-function navigate(page) {
-  document.querySelectorAll(".section").forEach(section => {
-    section.classList.remove("active");
-  });
-
-  const target = document.getElementById(page + "Section");
-  if (target) target.classList.add("active");
-
-  document.querySelectorAll(".bottom-nav button").forEach(button => {
-    button.classList.toggle("active", button.dataset.page === page);
-  });
-
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-/* تسجيل الخروج */
-async function logout() {
-  try {
-    await auth.signOut();
-    showAuth("login");
-  } catch (error) {
-    console.error("Logout error:", error);
-    alert("تعذر تسجيل الخروج. رمز الخطأ: " +
-      (error.code || "غير معروف"));
-  }
+async function logout(){
+  await auth.signOut();
 }
 </script>
-
 </body>
 </html>
