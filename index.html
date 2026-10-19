@@ -2,719 +2,828 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#10142e">
 <title>منصتي PRO</title>
 
 <style>
 :root{
-  --bg:#0b1024;
-  --card:#171d3b;
-  --card2:#20274a;
-  --cyan:#22d3ee;
-  --purple:#8b5cf6;
-  --text:#f4f6ff;
-  --muted:#a6aecb;
-  --green:#4ade80;
-  --red:#fb7185;
-  --border:rgba(255,255,255,.09);
+ --bg:#0b1024;
+ --card:#171d3b;
+ --card2:#20274a;
+ --cyan:#22d3ee;
+ --purple:#8b5cf6;
+ --text:#f4f6ff;
+ --muted:#a6aecb;
+ --green:#4ade80;
+ --red:#fb7185;
+ --border:rgba(255,255,255,.09)
 }
 *{box-sizing:border-box}
 body{
-  margin:0;
-  font-family:Tahoma,Arial,sans-serif;
-  color:var(--text);
-  background:radial-gradient(ellipse at top,#27205b 0%,#10142e 42%,#080d1e 100%);
-  min-height:100vh;
+ margin:0;color:var(--text);
+ font-family:Tahoma,Arial,sans-serif;
+ background:radial-gradient(ellipse at top,#27205b,#10142e 45%,#080d1e);
+ min-height:100vh
 }
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
 .hidden{display:none!important}
-a{color:var(--cyan)}
-.container{max-width:1100px;margin:auto;padding:16px}
-.topbar{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:16px 0;gap:10px
-}
-.logo{font-size:22px;font-weight:bold}
+.container{max-width:1100px;margin:auto;padding:15px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:15px 0}
+.logo{font-size:23px;font-weight:bold}
 .logo span{color:var(--cyan)}
-.badge{
-  background:#252b4e;border:1px solid var(--border);
-  border-radius:30px;padding:8px 12px;font-size:12px;color:var(--muted)
-}
 .card{
-  background:linear-gradient(145deg,rgba(31,39,77,.96),rgba(20,25,53,.96));
-  border:1px solid var(--border);border-radius:20px;padding:18px;
-  box-shadow:0 12px 35px rgba(0,0,0,.15);margin-bottom:15px
+ background:linear-gradient(145deg,rgba(31,39,77,.97),rgba(20,25,53,.97));
+ border:1px solid var(--border);border-radius:20px;
+ padding:18px;margin-bottom:15px
 }
-h1,h2,h3,p{margin-top:0}
 h1{font-size:25px}
 h2{font-size:19px}
 p{line-height:1.8}
 .muted{color:var(--muted);font-size:13px}
 .btn{
-  border:0;border-radius:12px;padding:12px 16px;
-  background:linear-gradient(110deg,var(--cyan),#67e8f9);
-  color:#071322;font-weight:bold
+ border:0;border-radius:12px;padding:12px 16px;
+ background:linear-gradient(110deg,var(--cyan),#67e8f9);
+ color:#071322;font-weight:bold
 }
-.btn:hover{filter:brightness(1.07)}
 .btn.secondary{background:#292f56;color:white;border:1px solid var(--border)}
 .btn.purple{background:linear-gradient(110deg,#7c3aed,#a78bfa);color:white}
 .btn.danger{background:#7f1d35;color:white}
-.btn.small{padding:8px 10px;font-size:12px}
+.btn.small{padding:8px 11px;font-size:12px}
 input,textarea,select{
-  width:100%;padding:13px;margin:7px 0 14px;
-  color:white;background:#0d1430;border:1px solid #343d68;
-  border-radius:11px;outline:none
+ width:100%;padding:13px;margin:7px 0 14px;
+ color:white;background:#0d1430;border:1px solid #343d68;
+ border-radius:11px;outline:none
 }
 input:focus,textarea:focus,select:focus{border-color:var(--cyan)}
 label{font-size:13px;color:#dce4ff}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .stat{padding:15px;border-radius:16px;background:#111832;border:1px solid var(--border)}
-.stat .value{font-size:23px;font-weight:bold;margin:8px 0;color:var(--cyan)}
+.stat .value{font-size:21px;font-weight:bold;color:var(--cyan);margin:8px 0}
 .stat .label{font-size:12px;color:var(--muted)}
 .hero{
-  background:linear-gradient(125deg,#31216c,#172b5a 65%,#12364b);
-  border:1px solid #4a4382;border-radius:23px;padding:23px;margin-bottom:16px
+ background:linear-gradient(125deg,#31216c,#172b5a 65%,#12364b);
+ border:1px solid #4a4382;border-radius:23px;padding:23px;margin-bottom:16px
 }
-.hero .balance{font-size:30px;font-weight:bold;margin:12px 0}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.list-item{
-  padding:14px 0;border-bottom:1px solid var(--border)
+.balance{font-size:29px;font-weight:bold;margin:12px 0}
+.badge,.tag{
+ display:inline-block;border-radius:25px;padding:7px 10px;
+ background:#252b4e;color:#c6f7ff;font-size:12px
 }
-.list-item:last-child{border-bottom:0}
-.tag{display:inline-block;padding:5px 9px;border-radius:20px;font-size:11px;background:#263256;color:#b9f4ff}
 .tag.green{background:#123e35;color:#86efac}
 .tag.red{background:#4b1f31;color:#fda4af}
 .tag.yellow{background:#493a1b;color:#fde68a}
-.notice{
-  padding:12px;border-radius:12px;background:#302746;
-  border:1px solid #5b477e;font-size:12px;line-height:1.8;margin-bottom:15px
-}
-.success{color:var(--green)}
+.list-item{padding:14px 0;border-bottom:1px solid var(--border)}
+.list-item:last-child{border-bottom:0}
+.notice{padding:12px;border-radius:12px;background:#302746;border:1px solid #5b477e;font-size:12px;line-height:1.9;margin-bottom:15px}
 .error{color:var(--red)}
+.success{color:var(--green)}
+.empty{text-align:center;padding:25px 10px;color:var(--muted)}
 .auth-wrap{max-width:440px;margin:5vh auto;padding:15px}
 .auth-logo{text-align:center;margin:25px 0}
 .auth-logo .logo{font-size:32px}
 .auth-tabs{display:flex;gap:8px;margin-bottom:18px}
 .auth-tabs button{flex:1}
-.page{padding-bottom:95px}
+.page{padding-bottom:100px}
 .bottom-nav{
-  position:fixed;bottom:0;left:0;right:0;z-index:10;
-  display:flex;justify-content:space-around;gap:2px;
-  padding:9px 4px calc(9px + env(safe-area-inset-bottom));
-  background:rgba(9,14,33,.97);border-top:1px solid var(--border);
-  backdrop-filter:blur(15px)
+ position:fixed;bottom:0;left:0;right:0;z-index:10;
+ display:flex;justify-content:space-around;gap:2px;
+ padding:9px 3px calc(9px + env(safe-area-inset-bottom));
+ background:rgba(9,14,33,.97);border-top:1px solid var(--border);
+ backdrop-filter:blur(15px)
 }
-.nav-btn{
-  flex:1;max-width:110px;background:none;border:0;
-  color:#929bbd;font-size:10px;padding:6px 2px;border-radius:10px
-}
+.nav-btn{flex:1;max-width:110px;background:none;border:0;color:#929bbd;font-size:10px;padding:6px 2px;border-radius:10px}
 .nav-btn .icon{display:block;font-size:20px;margin-bottom:5px}
 .nav-btn.active{color:var(--cyan);background:#192343}
-.nav-btn:disabled{opacity:.35;cursor:not-allowed}
-.empty{text-align:center;padding:25px 10px;color:var(--muted)}
 hr{border:0;border-top:1px solid var(--border);margin:18px 0}
 footer{text-align:center;color:var(--muted);font-size:11px;padding:15px}
 @media(min-width:700px){
-  .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
-  .layout{display:grid;grid-template-columns:1.5fr 1fr;gap:16px}
-  .layout .card{height:fit-content}
+ .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
 </style>
 </head>
 
 <body>
 
-<!-- تسجيل الدخول -->
 <section id="authScreen" class="auth-wrap">
-  <div class="auth-logo">
-    <div class="logo">منصتي <span>PRO</span></div>
-    <p class="muted">منصتك لإدارة المهام والعمولات</p>
+ <div class="auth-logo">
+  <div class="logo">منصتي <span>PRO</span></div>
+  <p class="muted">منصتك لإدارة المهام والعمولات</p>
+ </div>
+
+ <div class="card">
+  <div class="auth-tabs">
+   <button id="loginTab" class="btn" onclick="setAuthMode('login')">تسجيل الدخول</button>
+   <button id="registerTab" class="btn secondary" onclick="setAuthMode('register')">إنشاء حساب</button>
   </div>
 
-  <div class="card">
-    <div class="auth-tabs">
-      <button id="loginTab" class="btn" onclick="showAuthForm('login')">تسجيل الدخول</button>
-      <button id="registerTab" class="btn secondary" onclick="showAuthForm('register')">إنشاء حساب</button>
-    </div>
+  <form id="authForm">
+   <div id="nameWrap" class="hidden">
+    <label>الاسم</label>
+    <input id="fullName" maxlength="80" placeholder="اكتب اسمك">
+   </div>
 
-    <form id="authForm">
-      <div id="nameField" class="hidden">
-        <label for="fullName">الاسم</label>
-        <input id="fullName" type="text" autocomplete="name" placeholder="اكتب اسمك">
-      </div>
+   <label>البريد الإلكتروني</label>
+   <input id="email" type="email" autocomplete="email" required placeholder="name@example.com">
 
-      <label for="email">البريد الإلكتروني</label>
-      <input id="email" type="email" autocomplete="email"
-             placeholder="name@example.com" required>
+   <label>كلمة المرور</label>
+   <input id="password" type="password" autocomplete="current-password" minlength="6" required placeholder="6 أحرف على الأقل">
 
-      <label for="password">كلمة المرور</label>
-      <input id="password" type="password" autocomplete="current-password"
-             placeholder="6 أحرف على الأقل" minlength="6" required>
-
-      <div id="authMessage" class="muted" role="status"></div>
-      <button id="authSubmit" class="btn" type="submit" style="width:100%;margin-top:10px">
-        تسجيل الدخول
-      </button>
-      <button type="button" class="btn secondary"
-              style="width:100%;margin-top:10px" onclick="resetPassword()">
-        نسيت كلمة المرور؟
-      </button>
-    </form>
-  </div>
-  <p class="muted" style="text-align:center">تسجيل الحسابات يتم عبر Firebase Authentication.</p>
+   <p id="authMessage" class="muted" role="status"></p>
+   <button id="authSubmit" class="btn" type="submit" style="width:100%">تسجيل الدخول</button>
+   <button type="button" class="btn secondary" style="width:100%;margin-top:10px" onclick="resetPassword()">نسيت كلمة المرور؟</button>
+  </form>
+ </div>
 </section>
 
-<!-- التطبيق -->
-<div id="appScreen" class="hidden">
-  <div class="container">
-    <header class="topbar">
-      <div class="logo">منصتي <span>PRO</span></div>
-      <div class="row">
-        <span class="badge" id="userBadge">مستخدم</span>
-        <button class="btn secondary small" onclick="logout()">خروج</button>
-      </div>
-    </header>
+<section id="appScreen" class="hidden">
+ <div class="container">
+  <header class="topbar">
+   <div class="logo">منصتي <span>PRO</span></div>
+   <div class="row">
+    <span class="badge" id="userBadge">مستخدم</span>
+    <button class="btn secondary small" onclick="logout()">خروج</button>
+   </div>
+  </header>
 
-    <main id="pageContent" class="page"></main>
+  <div id="globalMessage" class="notice hidden"></div>
+  <main id="pageContent" class="page"></main>
+  <footer>منصتي PRO</footer>
+ </div>
 
-    <footer>
-      منصتي PRO — نسخة تجريبية. الأرصدة والعمليات المعروضة هنا ليست أموالاً حقيقية.
-    </footer>
-  </div>
-
-  <nav class="bottom-nav" aria-label="التنقل الرئيسي">
-    <button class="nav-btn active" data-page="home" onclick="navigate('home')">
-      <span class="icon">⌂</span>الرئيسية
-    </button>
-    <button class="nav-btn" data-page="tasks" onclick="navigate('tasks')">
-      <span class="icon">✓</span>المهام
-    </button>
-    <button class="nav-btn" data-page="wallet" onclick="navigate('wallet')">
-      <span class="icon">▣</span>المحفظة
-    </button>
-    <button class="nav-btn" data-page="vip" onclick="navigate('vip')">
-      <span class="icon">♛</span>VIP
-    </button>
-    <button class="nav-btn" data-page="profile" onclick="navigate('profile')">
-      <span class="icon">♙</span>حسابي
-    </button>
-    <button class="nav-btn" data-page="more" onclick="navigate('more')">
-      <span class="icon">☰</span>المزيد
-    </button>
-  </nav>
-</div>
+ <nav class="bottom-nav">
+  <button class="nav-btn active" data-page="home" onclick="navigate('home')"><span class="icon">⌂</span>الرئيسية</button>
+  <button class="nav-btn" data-page="tasks" onclick="navigate('tasks')"><span class="icon">✓</span>المهام</button>
+  <button class="nav-btn" data-page="wallet" onclick="navigate('wallet')"><span class="icon">▣</span>المحفظة</button>
+  <button class="nav-btn" data-page="vip" onclick="navigate('vip')"><span class="icon">♛</span>VIP</button>
+  <button class="nav-btn" data-page="profile" onclick="navigate('profile')"><span class="icon">♙</span>حسابي</button>
+  <button class="nav-btn" data-page="more" onclick="navigate('more')"><span class="icon">☰</span>المزيد</button>
+ </nav>
+</section>
 
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
 
 <script>
-// إعداد Firebase الخاص بمشروعك
+/* إعدادات مشروع Firebase الحالي */
 const firebaseConfig = {
-  apiKey: "AIzaSyA8q6z4McET3_d208PtSnFGEjlAVUezJ8k",
-  authDomain: "mansatipro.firebaseapp.com",
-  databaseURL: "https://mansatipro-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "mansatipro",
-  storageBucket: "mansatipro.firebasestorage.app",
-  messagingSenderId: "114519438941",
-  appId: "1:114519438941:web:8b92991a652bb24150ffb4",
-  measurementId: "G-TMZBN1L9KV"
+ apiKey: "AIzaSyA8q6z4McET3_d208PtSnFGEjlAVUezJ8k",
+ authDomain: "mansatipro.firebaseapp.com",
+ databaseURL: "https://mansatipro-default-rtdb.europe-west1.firebasedatabase.app",
+ projectId: "mansatipro",
+ storageBucket: "mansatipro.firebasestorage.app",
+ messagingSenderId: "114519438941",
+ appId: "1:114519438941:web:8b92991a652bb24150ffb4",
+ measurementId: "G-TMZBN1L9KV"
 };
 
 firebase.initializeApp(firebaseConfig);
+
 const auth = firebase.auth();
+const db = firebase.database();
 
-// إعدادات تجريبية للواجهة فقط.
-// لا تعتبر هذه القائمة نظام صلاحيات حقيقياً.
-const ADMIN_EMAILS = []; // لا تضف بريد مدير حقيقياً قبل إعداد صلاحيات آمنة على الخادم.
-
+let currentUser = null;
+let isAdmin = false;
 let authMode = "login";
 let currentPage = "home";
-let currentUser = null;
+let tasks = {};
+let ownProfile = {};
+let ownBalance = 0;
+let ownRequests = {};
+let ownCompletions = {};
+let allUsers = {};
+let allRequests = {};
+let allCompletions = {};
+let listeners = [];
 
-const defaultTasks = [
-  {id:"task1", title:"التعرف على المنصة", description:"تعرف على أقسام منصتي PRO.", reward:5, enabled:true},
-  {id:"task2", title:"مراجعة التعليمات", description:"اقرأ تعليمات استخدام المنصة.", reward:3, enabled:true},
-  {id:"task3", title:"زيارة قسم المهام", description:"استعرض صفحة المهام المتاحة.", reward:2, enabled:true}
-];
+function esc(v){
+ return String(v ?? "").replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
+}
 
-function getStorageKey(key){
-  return "mansati_demo_" + (currentUser ? currentUser.uid : "guest") + "_" + key;
+function money(v){
+ return Number(v||0).toLocaleString("ar-EG",{
+  minimumFractionDigits:2,maximumFractionDigits:2
+ })+" ج.م";
 }
-function readData(key, fallback){
-  try{
-    const value = localStorage.getItem(getStorageKey(key));
-    return value ? JSON.parse(value) : fallback;
-  }catch(e){ return fallback; }
-}
-function saveData(key, value){
-  localStorage.setItem(getStorageKey(key), JSON.stringify(value));
-}
-function getTasks(){ return readData("tasks", defaultTasks); }
-function getCompletions(){ return readData("completions", []); }
-function getRequests(){ return readData("requests", []); }
-function getBalance(){ return Number(readData("balance", 0)) || 0; }
 
-function money(value){
-  return Number(value).toLocaleString("ar-EG", {
-    minimumFractionDigits:2, maximumFractionDigits:2
-  }) + " ج.م";
+function showMessage(text,error=false){
+ const el=document.getElementById("globalMessage");
+ el.textContent=text;
+ el.classList.remove("hidden");
+ el.className=error?"notice error":"notice success";
 }
-function escapeHTML(value){
-  return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
+function clearMessage(){
+ document.getElementById("globalMessage").classList.add("hidden");
 }
-function setMessage(id, message, isError=false){
-  const el=document.getElementById(id);
-  if(el){
-    el.textContent=message;
-    el.className=isError?"error":"success";
+
+function setAuthMode(mode){
+ authMode=mode;
+ document.getElementById("nameWrap").classList.toggle("hidden",mode!=="register");
+ document.getElementById("loginTab").className=mode==="login"?"btn":"btn secondary";
+ document.getElementById("registerTab").className=mode==="register"?"btn":"btn secondary";
+ document.getElementById("authSubmit").textContent=mode==="login"?"تسجيل الدخول":"إنشاء حساب";
+ document.getElementById("authMessage").textContent="";
+}
+setAuthMode("login");
+
+document.getElementById("authForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+
+ const email=document.getElementById("email").value.trim();
+ const password=document.getElementById("password").value;
+ const name=document.getElementById("fullName").value.trim();
+ const btn=document.getElementById("authSubmit");
+
+ btn.disabled=true;
+ btn.textContent="جارٍ التنفيذ...";
+ const msg=document.getElementById("authMessage");
+ msg.textContent="";
+
+ try{
+  if(authMode==="register"){
+   if(!name)throw new Error("اكتب اسمك أولاً.");
+   const cred=await auth.createUserWithEmailAndPassword(email,password);
+   await cred.user.updateProfile({displayName:name});
+   await db.ref("profiles/"+cred.user.uid).set({
+    name:name,
+    email:email,
+    createdAt:Date.now()
+   });
+  }else{
+   await auth.signInWithEmailAndPassword(email,password);
   }
-}
-
-function showAuthForm(mode){
-  authMode=mode;
-  document.getElementById("nameField").classList.toggle("hidden",mode!=="register");
-  document.getElementById("loginTab").className=mode==="login"?"btn":"btn secondary";
-  document.getElementById("registerTab").className=mode==="register"?"btn":"btn secondary";
-  document.getElementById("authSubmit").textContent=
-    mode==="login"?"تسجيل الدخول":"إنشاء حساب";
-  document.getElementById("authMessage").textContent="";
-}
-showAuthForm("login");
-
-document.getElementById("authForm").addEventListener("submit", async function(e){
-  e.preventDefault();
-  const email=document.getElementById("email").value.trim();
-  const password=document.getElementById("password").value;
-  const name=document.getElementById("fullName").value.trim();
-  const button=document.getElementById("authSubmit");
-  button.disabled=true;
-  button.textContent="جارٍ التنفيذ...";
-  setMessage("authMessage","");
-
-  try{
-    if(authMode==="register"){
-      if(!name){
-        setMessage("authMessage","اكتب اسمك أولاً.",true);
-        return;
-      }
-      const credential=await auth.createUserWithEmailAndPassword(email,password);
-      await credential.user.updateProfile({displayName:name});
-    }else{
-      await auth.signInWithEmailAndPassword(email,password);
-    }
-  }catch(error){
-    const messages={
-      "auth/email-already-in-use":"هذا البريد مسجل بالفعل. جرّب تسجيل الدخول.",
-      "auth/invalid-email":"صيغة البريد الإلكتروني غير صحيحة.",
-      "auth/weak-password":"كلمة المرور ضعيفة. استخدم 6 أحرف على الأقل.",
-      "auth/user-not-found":"لا يوجد حساب بهذا البريد.",
-      "auth/wrong-password":"كلمة المرور غير صحيحة.",
-      "auth/invalid-credential":"البريد أو كلمة المرور غير صحيحة.",
-      "auth/too-many-requests":"محاولات كثيرة. انتظر قليلاً ثم حاول مرة أخرى.",
-      "auth/network-request-failed":"تعذر الاتصال. تحقق من الإنترنت وإعدادات Firebase.",
-      "auth/operation-not-allowed":"فعّل تسجيل الدخول بالبريد وكلمة المرور من Firebase Authentication."
-    };
-    setMessage("authMessage",messages[error.code]||("تعذر إتمام العملية: "+error.message),true);
-  }finally{
-    button.disabled=false;
-    button.textContent=authMode==="login"?"تسجيل الدخول":"إنشاء حساب";
-  }
+ }catch(error){
+  const errors={
+   "auth/email-already-in-use":"هذا البريد مسجل بالفعل.",
+   "auth/invalid-email":"صيغة البريد الإلكتروني غير صحيحة.",
+   "auth/weak-password":"كلمة المرور يجب أن تكون 6 أحرف على الأقل.",
+   "auth/user-not-found":"الحساب غير موجود.",
+   "auth/wrong-password":"كلمة المرور غير صحيحة.",
+   "auth/invalid-credential":"البريد أو كلمة المرور غير صحيحة.",
+   "auth/operation-not-allowed":"فعّل Email/Password في Firebase Authentication.",
+   "auth/network-request-failed":"تعذر الاتصال بالإنترنت."
+  };
+  msg.textContent=errors[error.code]||error.message||"تعذر إتمام العملية.";
+  msg.className="error";
+ }finally{
+  btn.disabled=false;
+  btn.textContent=authMode==="login"?"تسجيل الدخول":"إنشاء حساب";
+ }
 });
 
 async function resetPassword(){
-  const email=document.getElementById("email").value.trim();
-  if(!email){
-    setMessage("authMessage","اكتب بريدك الإلكتروني أولاً.",true);
-    return;
-  }
-  try{
-    await auth.sendPasswordResetEmail(email);
-    setMessage("authMessage","تم إرسال رابط استعادة كلمة المرور إذا كان البريد مسجلاً.");
-  }catch(error){
-    setMessage("authMessage","تعذر إرسال الرابط. تحقق من البريد وإعدادات Firebase.",true);
-  }
+ const email=document.getElementById("email").value.trim();
+ if(!email){
+  document.getElementById("authMessage").textContent="اكتب بريدك الإلكتروني أولاً.";
+  return;
+ }
+ try{
+  await auth.sendPasswordResetEmail(email);
+  document.getElementById("authMessage").textContent="إذا كان البريد مسجلاً، فسيصلك رابط استعادة كلمة المرور.";
+ }catch(e){
+  document.getElementById("authMessage").textContent="تعذر إرسال الرابط. تحقق من إعدادات Firebase.";
+ }
 }
 
 async function logout(){
-  try{ await auth.signOut(); }
-  catch(e){ alert("تعذر تسجيل الخروج. حاول مرة أخرى."); }
+ try{await auth.signOut();}
+ catch(e){showMessage("تعذر تسجيل الخروج.",true);}
 }
 
-auth.onAuthStateChanged(user=>{
-  currentUser=user;
-  document.getElementById("authScreen").classList.toggle("hidden",!!user);
-  document.getElementById("appScreen").classList.toggle("hidden",!user);
-  if(user){
-    document.getElementById("userBadge").textContent=user.displayName||user.email;
-    navigate("home");
+function clearListeners(){
+ listeners.forEach(x=>x.ref.off("value",x.callback));
+ listeners=[];
+}
+function listen(ref,callback){
+ ref.on("value",callback);
+ listeners.push({ref,callback});
+}
+
+function startDataListeners(){
+ clearListeners();
+ if(!currentUser)return;
+
+ const uid=currentUser.uid;
+
+ listen(db.ref("adminUids/"+uid),snap=>{
+  isAdmin=snap.val()===true;
+  updateNav();
+  renderPage();
+  if(isAdmin)startAdminListeners();
+ });
+
+ listen(db.ref("profiles/"+uid),snap=>{
+  ownProfile=snap.val()||{};
+  renderPage();
+ });
+
+ listen(db.ref("balances/"+uid),snap=>{
+  ownBalance=Number(snap.val()||0);
+  renderPage();
+ });
+
+ listen(db.ref("tasks"),snap=>{
+  tasks=snap.val()||{};
+  renderPage();
+ });
+
+ listen(db.ref("requests/"+uid),snap=>{
+  ownRequests=snap.val()||{};
+  renderPage();
+ });
+
+ listen(db.ref("taskCompletions/"+uid),snap=>{
+  ownCompletions=snap.val()||{};
+  renderPage();
+ });
+}
+
+let adminListenersStarted=false;
+function startAdminListeners(){
+ if(!isAdmin||adminListenersStarted)return;
+ adminListenersStarted=true;
+
+ listen(db.ref("profiles"),snap=>{
+  allUsers=snap.val()||{};
+  renderPage();
+ });
+
+ listen(db.ref("requests"),snap=>{
+  allRequests=snap.val()||{};
+  renderPage();
+ });
+
+ listen(db.ref("taskCompletions"),snap=>{
+  allCompletions=snap.val()||{};
+  renderPage();
+ });
+}
+
+auth.onAuthStateChanged(async user=>{
+ clearListeners();
+ currentUser=user;
+ isAdmin=false;
+ adminListenersStarted=false;
+
+ document.getElementById("authScreen").classList.toggle("hidden",!!user);
+ document.getElementById("appScreen").classList.toggle("hidden",!user);
+
+ if(!user)return;
+
+ document.getElementById("userBadge").textContent=user.displayName||user.email||"مستخدم";
+
+ try{
+  const profileRef=db.ref("profiles/"+user.uid);
+  const profileSnap=await profileRef.once("value");
+
+  if(!profileSnap.exists()){
+   await profileRef.set({
+    name:user.displayName||"",
+    email:user.email||"",
+    createdAt:Date.now()
+   });
   }
+
+  startDataListeners();
+  navigate("home");
+ }catch(error){
+  showMessage("تعذر تحميل بيانات الحساب. تأكد من إعداد قواعد Firebase.",true);
+ }
 });
 
+function updateNav(){
+ const nav=document.querySelector('.nav-btn[data-page="more"]');
+ if(nav)nav.title=isAdmin?"المزيد ولوحة الإدارة":"المزيد";
+}
+
 function navigate(page){
-  currentPage=page;
-  document.querySelectorAll(".nav-btn").forEach(btn=>{
-    btn.classList.toggle("active",btn.dataset.page===page);
-  });
-  renderPage();
-  window.scrollTo({top:0,behavior:"smooth"});
+ currentPage=page;
+ document.querySelectorAll(".nav-btn").forEach(btn=>{
+  btn.classList.toggle("active",btn.dataset.page===page);
+ });
+ renderPage();
+ window.scrollTo({top:0,behavior:"smooth"});
 }
 
 function renderPage(){
-  const content=document.getElementById("pageContent");
-  const pages={
-    home:renderHome,
-    tasks:renderTasks,
-    wallet:renderWallet,
-    vip:renderVIP,
-    profile:renderProfile,
-    more:renderMore,
-    history:renderHistory,
-    deposit:()=>renderRequestForm("deposit"),
-    withdraw:()=>renderRequestForm("withdraw"),
-    support:renderSupport,
-    payments:renderPayments,
-    admin:renderAdmin
-  };
-  content.innerHTML=(pages[currentPage]||renderHome)();
-}
+ const el=document.getElementById("pageContent");
+ if(!el||!currentUser)return;
 
-function demoNotice(){
-  return `<div class="notice">⚠️ <b>نسخة تجريبية:</b> الرصيد والعمولات والطلبات المعروضة ليست أموالاً حقيقية، والبيانات محفوظة على هذا الجهاز فقط.</div>`;
+ const pages={
+  home:renderHome,
+  tasks:renderTasks,
+  wallet:renderWallet,
+  vip:renderVIP,
+  profile:renderProfile,
+  more:renderMore,
+  history:renderHistory,
+  deposit:()=>renderRequestForm("deposit"),
+  withdraw:()=>renderRequestForm("withdraw"),
+  support:renderSupport,
+  payments:renderPayments,
+  admin:renderAdmin
+ };
+
+ el.innerHTML=(pages[currentPage]||renderHome)();
 }
 
 function renderHome(){
-  const balance=getBalance();
-  const completed=getCompletions().length;
-  const tasks=getTasks().filter(t=>t.enabled);
-  return `
-    <section class="hero">
-      <div class="muted">أهلاً بك في منصتي PRO</div>
-      <h1 style="margin:12px 0">مرحباً ${escapeHTML(currentUser.displayName||"بك")} 👋</h1>
-      <div class="muted">رصيدك التجريبي</div>
-      <div class="balance">${money(balance)}</div>
-      <div class="row" style="justify-content:flex-start;flex-wrap:wrap">
-        <button class="btn" onclick="navigate('tasks')">استعرض المهام</button>
-        <button class="btn secondary" onclick="navigate('wallet')">المحفظة</button>
-      </div>
-    </section>
-    ${demoNotice()}
-    <div class="grid">
-      <div class="stat"><div class="label">الرصيد التجريبي</div><div class="value">${money(balance)}</div><div class="muted">غير قابل للسحب</div></div>
-      <div class="stat"><div class="label">مهام مكتملة</div><div class="value">${completed}</div><div class="muted">على هذا الجهاز</div></div>
-      <div class="stat"><div class="label">مهام متاحة</div><div class="value">${tasks.length}</div><div class="muted">للتجربة</div></div>
-      <div class="stat"><div class="label">مستوى العضوية</div><div class="value">مجاني</div><div class="muted">المستوى الحالي</div></div>
-    </div>
-    <div class="card">
-      <div class="row"><h2>ابدأ من هنا</h2><span class="tag">الرئيسية</span></div>
-      <div class="list-item row"><div><b>المهام والعمولات</b><p class="muted">استعرض المهام التجريبية المتاحة.</p></div><button class="btn small" onclick="navigate('tasks')">فتح</button></div>
-      <div class="list-item row"><div><b>طلبات المحفظة</b><p class="muted">تعرّف على نماذج الإيداع والسحب.</p></div><button class="btn small" onclick="navigate('wallet')">فتح</button></div>
-      <div class="list-item row"><div><b>خدمة الدعم</b><p class="muted">اكتب رسالة دعم تجريبية.</p></div><button class="btn small" onclick="navigate('support')">فتح</button></div>
-    </div>`;
+ const available=Object.values(tasks).filter(t=>t&&t.enabled!==false).length;
+ const completed=Object.keys(ownCompletions).length;
+ return `
+ <section class="hero">
+  <div class="muted">أهلاً بك في منصتي PRO</div>
+  <h1>مرحباً ${esc(currentUser.displayName||ownProfile.name||"بك")} 👋</h1>
+  <div class="muted">رصيد الحساب</div>
+  <div class="balance">${money(ownBalance)}</div>
+  <button class="btn" onclick="navigate('tasks')">استعرض المهام</button>
+  <button class="btn secondary" onclick="navigate('wallet')">المحفظة</button>
+ </section>
+
+ <div class="grid">
+  <div class="stat"><div class="label">رصيد الحساب</div><div class="value">${money(ownBalance)}</div></div>
+  <div class="stat"><div class="label">المهام المكتملة</div><div class="value">${completed}</div></div>
+  <div class="stat"><div class="label">المهام المتاحة</div><div class="value">${available}</div></div>
+  <div class="stat"><div class="label">حالة الحساب</div><div class="value" style="font-size:16px">نشط</div></div>
+ </div>
+
+ <div class="card">
+  <h2>ابدأ من هنا</h2>
+  <div class="list-item row"><div><b>المهام والعمولات</b><p class="muted">عرض المهام المتاحة.</p></div><button class="btn small" onclick="navigate('tasks')">فتح</button></div>
+  <div class="list-item row"><div><b>المحفظة</b><p class="muted">عرض الرصيد والطلبات.</p></div><button class="btn small" onclick="navigate('wallet')">فتح</button></div>
+  <div class="list-item row"><div><b>خدمة الدعم</b><p class="muted">إرسال رسالة للدعم.</p></div><button class="btn small" onclick="navigate('support')">فتح</button></div>
+ </div>`;
 }
 
 function renderTasks(){
-  const tasks=getTasks();
-  const completed=getCompletions();
-  return `<h1>المهام والطلبات</h1>
-    <p class="muted">اختر مهمة لإتمامها في النسخة التجريبية.</p>
-    ${demoNotice()}
-    <div class="card">
-      ${tasks.map(t=>{
-        const done=completed.includes(t.id);
-        return `<div class="list-item">
-          <div class="row"><h3>${escapeHTML(t.title)}</h3><span class="tag">${money(t.reward)}</span></div>
-          <p class="muted">${escapeHTML(t.description)}</p>
-          ${!t.enabled?'<span class="tag red">المهمة متوقفة</span>':
-            done?'<span class="tag green">تم الإتمام</span>':
-            `<button class="btn" onclick="completeTask('${t.id}')">إتمام المهمة</button>`}
-        </div>`;
-      }).join("")}
-    </div>`;
+ const list=Object.entries(tasks).filter(([id,t])=>t&&t.enabled!==false);
+ if(!list.length)return `<h1>المهام</h1><div class="card empty">لا توجد مهام متاحة حاليًا.</div>`;
+
+ return `<h1>المهام والطلبات</h1>
+ <div class="card">
+ ${list.map(([id,t])=>{
+  const done=!!ownCompletions[id];
+  return `<div class="list-item">
+   <div class="row"><h3>${esc(t.title)}</h3><span class="tag">${money(t.reward||0)}</span></div>
+   <p class="muted">${esc(t.description||"")}</p>
+   ${done?'<span class="tag yellow">تم إرسال الإتمام للمراجعة</span>':
+    `<button class="btn" onclick="completeTask('${esc(id)}')">إتمام المهمة</button>`}
+  </div>`;
+ }).join("")}
+ </div>`;
 }
 
-function completeTask(id){
-  const tasks=getTasks();
-  const task=tasks.find(t=>t.id===id);
-  if(!task||!task.enabled)return alert("المهمة غير متاحة حالياً.");
-  const completed=getCompletions();
-  if(completed.includes(id))return alert("تم إتمام هذه المهمة مسبقاً.");
-  completed.push(id);
-  saveData("completions",completed);
-  saveData("balance",getBalance()+Number(task.reward));
-  alert("تم إتمام المهمة التجريبية وإضافة مكافأتها إلى الرصيد التجريبي.");
-  renderPage();
+async function completeTask(id){
+ if(ownCompletions[id])return alert("سبق إرسال إتمام هذه المهمة.");
+ const task=tasks[id];
+ if(!task||task.enabled===false)return alert("المهمة غير متاحة.");
+
+ try{
+  await db.ref("taskCompletions/"+currentUser.uid+"/"+id).set({
+   taskId:id,
+   title:String(task.title||""),
+   reward:Number(task.reward||0),
+   status:"pending",
+   createdAt:Date.now()
+  });
+  alert("تم إرسال المهمة للمراجعة. تُضاف المكافأة بعد اعتمادها من الإدارة.");
+ }catch(e){
+  alert("تعذر إرسال المهمة. تحقق من قواعد قاعدة البيانات.");
+ }
 }
 
 function renderWallet(){
-  const balance=getBalance();
-  return `<h1>المحفظة</h1>
-    ${demoNotice()}
-    <div class="hero">
-      <div class="muted">الرصيد التجريبي الحالي</div>
-      <div class="balance">${money(balance)}</div>
-      <div class="muted">هذا الرصيد للتجربة داخل المتصفح فقط.</div>
-    </div>
-    <div class="grid">
-      <button class="btn" onclick="navigate('deposit')">طلب إيداع</button>
-      <button class="btn purple" onclick="navigate('withdraw')">طلب سحب</button>
-      <button class="btn secondary" onclick="navigate('history')">سجل المعاملات</button>
-      <button class="btn secondary" onclick="navigate('payments')">طريقة الدفع</button>
-    </div>
-    <div class="card" style="margin-top:15px">
-      <h2>تنبيه أمان</h2>
-      <p class="muted">لا تدخل كلمة مرور البنك أو الرقم السري للبطاقة أو محفظتك الإلكترونية في هذا الموقع.</p>
-    </div>`;
+ return `<h1>المحفظة</h1>
+ <div class="hero">
+  <div class="muted">رصيد الحساب</div>
+  <div class="balance">${money(ownBalance)}</div>
+ </div>
+ <div class="grid">
+  <button class="btn" onclick="navigate('deposit')">طلب إيداع</button>
+  <button class="btn purple" onclick="navigate('withdraw')">طلب سحب</button>
+  <button class="btn secondary" onclick="navigate('history')">سجل المعاملات</button>
+  <button class="btn secondary" onclick="navigate('payments')">طريقة الدفع</button>
+ </div>
+ <div class="card">
+  <h2>معلومات مهمة</h2>
+  <p class="muted">تُسجل الطلبات في قاعدة البيانات المشتركة. إرسال الطلب لا يعني إتمام تحويل مالي؛ يلزم مراجعة الإدارة وتنفيذ التحويل بالطريقة المعتمدة.</p>
+  <p class="muted">لا تدخل كلمة مرور البنك أو الرقم السري للبطاقة أو رموز التحقق في هذا الموقع.</p>
+ </div>`;
 }
 
 function renderVIP(){
-  const levels=[
-    {name:"مجاني",price:"مجاني",description:"استكشاف واجهة المنصة والمهام التجريبية."},
-    {name:"VIP 1",price:"غير مفعّل",description:"مستوى تجريبي للتصميم فقط."},
-    {name:"VIP 2",price:"غير مفعّل",description:"مستوى تجريبي للتصميم فقط."}
-  ];
-  return `<h1>مستويات VIP</h1>
-    <p class="muted">المستويات التالية للعرض فقط، ولا يوجد اشتراك مدفوع مفعّل.</p>
-    ${levels.map((v,i)=>`<div class="card">
-      <div class="row"><h2>${v.name}</h2><span class="tag">${v.price}</span></div>
-      <p class="muted">${v.description}</p>
-      ${i===0?'<span class="tag green">مستواك الحالي</span>':'<button class="btn secondary" disabled>غير متاح حالياً</button>'}
-    </div>`).join("")}`;
+ return `<h1>مستويات VIP</h1>
+ <div class="card">
+  <div class="row"><h2>المستوى المجاني</h2><span class="tag green">متاح</span></div>
+  <p class="muted">المستوى الحالي.</p>
+ </div>
+ <div class="card">
+  <div class="row"><h2>VIP 1</h2><span class="tag">غير مفعّل</span></div>
+  <p class="muted">يُفعّل بعد إعداد شروط العضوية من الإدارة.</p>
+ </div>
+ <div class="card">
+  <div class="row"><h2>VIP 2</h2><span class="tag">غير مفعّل</span></div>
+  <p class="muted">يُفعّل بعد إعداد شروط العضوية من الإدارة.</p>
+ </div>`;
 }
 
 function renderProfile(){
-  return `<h1>الملف الشخصي</h1>
-    <div class="card">
-      <div style="text-align:center;font-size:45px">👤</div>
-      <h2 style="text-align:center">${escapeHTML(currentUser.displayName||"مستخدم منصتي")}</h2>
-      <p class="muted" style="text-align:center;direction:ltr">${escapeHTML(currentUser.email||"")}</p>
-      <hr>
-      <label>الاسم</label>
-      <input id="profileName" value="${escapeHTML(currentUser.displayName||"")}" placeholder="اسم المستخدم">
-      <button class="btn" onclick="updateName()">حفظ الاسم</button>
-      <hr>
-      <p class="muted">حالة الحساب: مسجل الدخول</p>
-      <p class="muted">معرّف الحساب: ${escapeHTML(currentUser.uid)}</p>
-      <button class="btn secondary" onclick="resetPassword()">إرسال رابط تغيير كلمة المرور</button>
-    </div>`;
+ return `<h1>الملف الشخصي</h1>
+ <div class="card">
+  <div style="text-align:center;font-size:44px">👤</div>
+  <h2 style="text-align:center">${esc(currentUser.displayName||ownProfile.name||"المستخدم")}</h2>
+  <p class="muted" style="text-align:center;direction:ltr">${esc(currentUser.email||"")}</p>
+  <hr>
+  <label>الاسم</label>
+  <input id="profileName" maxlength="80" value="${esc(ownProfile.name||currentUser.displayName||"")}">
+  <button class="btn" onclick="saveProfile()">حفظ الاسم</button>
+  <hr>
+  <label>معرّف الحساب</label>
+  <input readonly value="${esc(currentUser.uid)}">
+  <button class="btn secondary" onclick="resetPassword()">إرسال رابط استعادة كلمة المرور</button>
+ </div>`;
 }
 
-async function updateName(){
-  const name=document.getElementById("profileName").value.trim();
-  if(!name)return alert("اكتب الاسم أولاً.");
-  try{
-    await currentUser.updateProfile({displayName:name});
-    document.getElementById("userBadge").textContent=name;
-    alert("تم تحديث الاسم في حساب Firebase.");
-    renderPage();
-  }catch(e){alert("تعذر تحديث الاسم. حاول مرة أخرى.");}
+async function saveProfile(){
+ const name=document.getElementById("profileName").value.trim();
+ if(!name)return alert("اكتب الاسم.");
+ try{
+  await db.ref("profiles/"+currentUser.uid+"/name").set(name);
+  await currentUser.updateProfile({displayName:name});
+  document.getElementById("userBadge").textContent=name;
+  alert("تم حفظ الاسم.");
+ }catch(e){alert("تعذر حفظ الاسم. تحقق من قواعد Firebase.");}
 }
 
 function renderMore(){
-  return `<h1>المزيد</h1>
-    <div class="card">
-      ${[
-        ["history","📜","سجل المعاملات","راجع طلباتك التجريبية."],
-        ["deposit","➕","طلب إيداع","نموذج طلب إيداع تجريبي."],
-        ["withdraw","➖","طلب سحب","نموذج طلب سحب تجريبي."],
-        ["payments","💳","طرق الدفع","إعدادات طريقة الدفع."],
-        ["support","💬","خدمة الدعم","إرسال رسالة تجريبية للدعم."],
-        ["admin","⚙️","لوحة الإدارة التجريبية","إدارة المهام التجريبية على هذا الجهاز."]
-      ].map(x=>`<div class="list-item row">
-        <div><b>${x[1]} ${x[2]}</b><p class="muted">${x[3]}</p></div>
-        <button class="btn secondary small" onclick="navigate('${x[0]}')">فتح</button>
-      </div>`).join("")}
-    </div>`;
+ return `<h1>المزيد</h1>
+ <div class="card">
+  ${[
+   ["history","📜","سجل المعاملات"],
+   ["deposit","➕","طلب إيداع"],
+   ["withdraw","➖","طلب سحب"],
+   ["payments","💳","طريقة الدفع"],
+   ["support","💬","خدمة الدعم"]
+  ].map(x=>`<div class="list-item row"><b>${x[1]} ${x[2]}</b><button class="btn secondary small" onclick="navigate('${x[0]}')">فتح</button></div>`).join("")}
+  ${isAdmin?`<hr><div class="list-item row"><b>⚙️ لوحة الإدارة</b><button class="btn purple" onclick="navigate('admin')">فتح الإدارة</button></div>`:""}
+ </div>`;
 }
 
 function renderRequestForm(type){
-  const isDeposit=type==="deposit";
-  const title=isDeposit?"طلب إيداع تجريبي":"طلب سحب تجريبي";
-  return `<h1>${title}</h1>
-    ${demoNotice()}
-    <div class="card">
-      <p class="muted">هذا النموذج يحفظ الطلب على هذا الجهاز فقط، ولا ينفذ أي تحويل مالي.</p>
-      <form onsubmit="submitRequest(event,'${type}')">
-        <label>المبلغ (جنيه مصري)</label>
-        <input id="requestAmount" type="number" min="1" max="100000" step="1" required placeholder="مثال: 100">
-        <label>${isDeposit?"طريقة الإيداع":"طريقة استلام الأموال"}</label>
-        <select id="requestMethod" required>
-          <option value="">اختر الطريقة</option>
-          <option>محفظة إلكترونية</option>
-          <option>تحويل بنكي</option>
-          <option>طريقة أخرى</option>
-        </select>
-        <label>ملاحظات (اختياري)</label>
-        <textarea id="requestNotes" rows="3" maxlength="300" placeholder="اكتب ملاحظاتك دون مشاركة كلمات المرور أو الأرقام السرية"></textarea>
-        <button class="btn" type="submit">إرسال الطلب التجريبي</button>
-      </form>
-    </div>
-    <button class="btn secondary" onclick="navigate('history')">عرض الطلبات</button>`;
+ const deposit=type==="deposit";
+ return `<h1>${deposit?"طلب إيداع":"طلب سحب"}</h1>
+ <div class="card">
+  <p class="muted">سيُحفظ الطلب في قاعدة البيانات المشتركة ليتمكن المدير من مراجعته.</p>
+  <form onsubmit="submitRequest(event,'${type}')">
+   <label>المبلغ بالجنيه المصري</label>
+   <input id="reqAmount" type="number" min="1" max="1000000" step="0.01" required>
+   <label>طريقة الدفع</label>
+   <select id="reqMethod" required>
+    <option value="">اختر الطريقة</option>
+    <option>محفظة إلكترونية</option>
+    <option>تحويل بنكي</option>
+    <option>طريقة أخرى</option>
+   </select>
+   <label>ملاحظات (اختياري)</label>
+   <textarea id="reqNotes" maxlength="300" rows="3"></textarea>
+   <button class="btn" type="submit">إرسال الطلب</button>
+  </form>
+ </div>`;
 }
 
-function submitRequest(event,type){
-  event.preventDefault();
-  const amount=Number(document.getElementById("requestAmount").value);
-  const method=document.getElementById("requestMethod").value;
-  const notes=document.getElementById("requestNotes").value.trim();
-  if(!Number.isFinite(amount)||amount<=0)return alert("أدخل مبلغاً صحيحاً.");
-  if(type==="withdraw"&&amount>getBalance()){
-    return alert("المبلغ أكبر من رصيدك التجريبي. أكمل المهام التجريبية أولاً.");
-  }
-  const requests=getRequests();
-  requests.unshift({
-    id:"REQ-"+Date.now(),
-    type,
-    amount,
-    method,
-    notes,
-    status:"قيد المراجعة (تجريبي)",
-    date:new Date().toLocaleString("ar-EG")
+async function submitRequest(event,type){
+ event.preventDefault();
+ const amount=Number(document.getElementById("reqAmount").value);
+ const method=document.getElementById("reqMethod").value;
+ const notes=document.getElementById("reqNotes").value.trim();
+
+ if(!Number.isFinite(amount)||amount<=0)return alert("أدخل مبلغًا صحيحًا.");
+ if(type==="withdraw"&&amount>ownBalance)return alert("المبلغ أكبر من رصيد حسابك.");
+
+ try{
+  const ref=db.ref("requests/"+currentUser.uid).push();
+  await ref.set({
+   id:ref.key,
+   uid:currentUser.uid,
+   type:type,
+   amount:amount,
+   method:method,
+   notes:notes,
+   status:"pending",
+   createdAt:Date.now()
   });
-  saveData("requests",requests);
-  alert("تم حفظ الطلب التجريبي على هذا الجهاز فقط.");
+  alert("تم إرسال الطلب بنجاح.");
   navigate("history");
+ }catch(e){
+  alert("تعذر إرسال الطلب. تأكد من إعداد قواعد قاعدة البيانات.");
+ }
 }
 
 function renderHistory(){
-  const requests=getRequests();
-  const completions=getCompletions();
-  const tasks=getTasks();
-  const taskRows=tasks.filter(t=>completions.includes(t.id)).map(t=>({
-    type:"إتمام مهمة",
-    amount:Number(t.reward),
-    method:"مكافأة تجريبية",
-    status:"مكتمل (تجريبي)",
-    date:""
-  }));
-  const rows=[...requests,...taskRows];
-  return `<h1>سجل المعاملات</h1>
-    ${demoNotice()}
-    <div class="card">
-      ${rows.length?rows.map(r=>`<div class="list-item">
-        <div class="row"><b>${escapeHTML(r.type==="deposit"?"طلب إيداع":r.type==="withdraw"?"طلب سحب":r.type)}</b>
-        <span class="tag">${money(r.amount)}</span></div>
-        <p class="muted">${escapeHTML(r.method||"")} ${r.date?"• "+escapeHTML(r.date):""}</p>
-        <span class="tag yellow">${escapeHTML(r.status||"")}</span>
-      </div>`).join(""):'<div class="empty">لا توجد معاملات حتى الآن.</div>'}
-    </div>`;
+ const requests=Object.values(ownRequests||{}).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+ const completions=Object.values(ownCompletions||{});
+ return `<h1>سجل المعاملات</h1>
+ <div class="card">
+  <h2>طلبات المحفظة</h2>
+  ${requests.length?requests.map(r=>`<div class="list-item">
+   <div class="row"><b>${r.type==="deposit"?"إيداع":"سحب"}</b><span class="tag">${money(r.amount)}</span></div>
+   <p class="muted">${esc(r.method||"")} • ${r.createdAt?new Date(r.createdAt).toLocaleString("ar-EG"):""}</p>
+   <span class="tag ${r.status==="approved"?"green":r.status==="rejected"?"red":"yellow"}">${esc(statusText(r.status))}</span>
+  </div>`).join(""):'<div class="empty">لا توجد طلبات حتى الآن.</div>'}
+ </div>
+ <div class="card">
+  <h2>المهام المكتملة</h2>
+  ${completions.length?completions.map(t=>`<div class="list-item"><b>${esc(t.title||"مهمة")}</b><p class="muted">المكافأة: ${money(t.reward||0)}</p><span class="tag yellow">${esc(statusText(t.status))}</span></div>`).join(""):'<div class="empty">لم تُرسل مهام مكتملة بعد.</div>'}
+ </div>`;
+}
+
+function statusText(status){
+ return ({
+  pending:"قيد المراجعة",
+  approved:"تمت الموافقة",
+  rejected:"مرفوض",
+  completed:"مكتمل"
+ })[status]||"قيد المراجعة";
 }
 
 function renderSupport(){
-  return `<h1>خدمة الدعم</h1>
-    <div class="card">
-      <p class="muted">هذه الرسالة تُحفظ على جهازك كتجربة فقط، ولا تصل إلى فريق دعم حقيقي.</p>
-      <form onsubmit="submitSupport(event)">
-        <label>موضوع الرسالة</label>
-        <input id="supportSubject" required maxlength="100" placeholder="موضوع الرسالة">
-        <label>تفاصيل الرسالة</label>
-        <textarea id="supportText" required maxlength="1000" rows="5" placeholder="اكتب رسالتك هنا"></textarea>
-        <button class="btn" type="submit">حفظ الرسالة التجريبية</button>
-      </form>
-    </div>`;
+ return `<h1>خدمة الدعم</h1>
+ <div class="card">
+  <form onsubmit="sendSupport(event)">
+   <label>موضوع الرسالة</label>
+   <input id="supportSubject" maxlength="100" required>
+   <label>تفاصيل الرسالة</label>
+   <textarea id="supportText" maxlength="1000" rows="5" required></textarea>
+   <button class="btn" type="submit">إرسال الرسالة</button>
+  </form>
+ </div>`;
 }
 
-function submitSupport(event){
-  event.preventDefault();
-  const messages=readData("support",[]);
-  messages.unshift({
-    subject:document.getElementById("supportSubject").value.trim(),
-    text:document.getElementById("supportText").value.trim(),
-    date:new Date().toLocaleString("ar-EG")
+async function sendSupport(event){
+ event.preventDefault();
+ try{
+  const ref=db.ref("support/"+currentUser.uid).push();
+  await ref.set({
+   subject:document.getElementById("supportSubject").value.trim(),
+   message:document.getElementById("supportText").value.trim(),
+   status:"pending",
+   createdAt:Date.now()
   });
-  saveData("support",messages);
-  alert("تم حفظ الرسالة على جهازك كتجربة.");
+  alert("تم إرسال رسالتك.");
   navigate("more");
+ }catch(e){alert("تعذر إرسال الرسالة. تحقق من قواعد Firebase.");}
 }
 
 function renderPayments(){
-  return `<h1>طرق الدفع</h1>
-    <div class="notice">لا تحفظ كلمات مرور البنوك أو أرقام PIN أو رموز التحقق في هذا الموقع.</div>
-    <div class="card">
-      <h2>إعدادات طريقة الدفع التجريبية</h2>
-      <form onsubmit="savePayment(event)">
-        <label>الاسم الظاهر للطريقة</label>
-        <input id="paymentName" maxlength="60" placeholder="مثال: محفظتي الإلكترونية">
-        <label>نوع الطريقة</label>
-        <select id="paymentType">
-          <option>محفظة إلكترونية</option>
-          <option>تحويل بنكي</option>
-          <option>طريقة أخرى</option>
-        </select>
-        <button class="btn" type="submit">حفظ الإعدادات التجريبية</button>
-      </form>
-      <div id="paymentSaved" class="muted"></div>
-    </div>`;
-}
-
-function savePayment(event){
-  event.preventDefault();
-  const name=document.getElementById("paymentName").value.trim();
-  const type=document.getElementById("paymentType").value;
-  saveData("payment",{name,type});
-  document.getElementById("paymentSaved").textContent=
-    name?`تم الحفظ على هذا الجهاز: ${type} — ${name}`:"تم حفظ نوع الطريقة على هذا الجهاز.";
+ return `<h1>طريقة الدفع</h1>
+ <div class="card">
+  <p class="muted">يمكنك تحديد طريقة الدفع في كل طلب إيداع أو سحب.</p>
+  <p class="muted">لا تحفظ كلمات مرور البنوك أو أرقام PIN أو رموز التحقق هنا.</p>
+  <button class="btn" onclick="navigate('deposit')">طلب إيداع</button>
+  <button class="btn secondary" onclick="navigate('withdraw')">طلب سحب</button>
+ </div>`;
 }
 
 function renderAdmin(){
-  const tasks=getTasks();
-  const completions=getCompletions();
-  const requests=getRequests();
-  return `<h1>لوحة الإدارة التجريبية</h1>
-    <div class="notice"><b>تنبيه أمني:</b> هذه ليست لوحة إدارة حقيقية. التغييرات هنا محفوظة في متصفحك فقط، ولا تتحكم في حسابات المستخدمين الآخرين. لا تستخدمها لإدارة أموال حقيقية.</div>
-    <div class="card">
-      <h2>إدارة المهام التجريبية</h2>
-      ${tasks.map(t=>`<div class="list-item">
-        <div class="row"><b>${escapeHTML(t.title)}</b><span class="tag">${money(t.reward)}</span></div>
-        <p class="muted">${escapeHTML(t.description)}</p>
-        <button class="btn ${t.enabled?"danger":"secondary"} small" onclick="toggleTask('${t.id}')">
-          ${t.enabled?"إيقاف المهمة":"تفعيل المهمة"}
-        </button>
-      </div>`).join("")}
-      <hr>
-      <h3>إضافة مهمة</h3>
-      <form onsubmit="addTask(event)">
-        <label>اسم المهمة</label>
-        <input id="newTaskTitle" required maxlength="80" placeholder="اسم المهمة">
-        <label>وصف المهمة</label>
-        <input id="newTaskDescription" required maxlength="180" placeholder="وصف مختصر">
-        <label>المكافأة التجريبية</label>
-        <input id="newTaskReward" type="number" min="0" max="1000" required>
-        <button class="btn" type="submit">إضافة مهمة تجريبية</button>
-      </form>
-    </div>
-    <div class="card">
-      <h2>ملخص تجريبي</h2>
-      <p>عدد المهام: ${tasks.length}</p>
-      <p>المهام المكتملة على هذا الجهاز: ${completions.length}</p>
-      <p>طلبات الإيداع والسحب المحفوظة على هذا الجهاز: ${requests.length}</p>
-    </div>`;
+ if(!isAdmin)return `<h1>لوحة الإدارة</h1><div class="card">ليس لديك صلاحية الوصول.</div>`;
+
+ const users=Object.entries(allUsers||{});
+ const requests=Object.entries(allRequests||{}).flatMap(([uid,items])=>
+  Object.entries(items||{}).map(([id,r])=>({uid,id,...r}))
+ );
+ const completions=Object.entries(allCompletions||{}).flatMap(([uid,items])=>
+  Object.entries(items||{}).map(([id,t])=>({uid,id,...t}))
+ );
+
+ return `<h1>لوحة الإدارة</h1>
+ <div class="notice">هذه اللوحة تعتمد على صلاحية المدير في قاعدة البيانات. راجع الطلبات قبل الموافقة، ولا تعدّل الأرصدة إلا بعد التحقق من المعاملة الفعلية.</div>
+
+ <div class="grid">
+  <div class="stat"><div class="label">المستخدمون</div><div class="value">${users.length}</div></div>
+  <div class="stat"><div class="label">طلبات المحفظة</div><div class="value">${requests.length}</div></div>
+  <div class="stat"><div class="label">إتمام المهام</div><div class="value">${completions.length}</div></div>
+  <div class="stat"><div class="label">المهام</div><div class="value">${Object.keys(tasks).length}</div></div>
+ </div>
+
+ <div class="card">
+  <h2>إضافة مهمة</h2>
+  <form onsubmit="addTask(event)">
+   <label>اسم المهمة</label><input id="taskTitle" required maxlength="100">
+   <label>وصف المهمة</label><textarea id="taskDesc" required maxlength="500"></textarea>
+   <label>المكافأة</label><input id="taskReward" type="number" min="0" max="100000" step="0.01" required>
+   <button class="btn" type="submit">إضافة المهمة</button>
+  </form>
+ </div>
+
+ <div class="card">
+  <h2>إدارة المهام</h2>
+  ${Object.entries(tasks).map(([id,t])=>`<div class="list-item">
+   <div class="row"><b>${esc(t.title)}</b><span class="tag">${money(t.reward||0)}</span></div>
+   <p class="muted">${esc(t.description||"")}</p>
+   <button class="btn ${t.enabled===false?"secondary":"danger"} small" onclick="toggleTask('${esc(id)}',${t.enabled===false?"true":"false"})">${t.enabled===false?"تفعيل":"إيقاف"}</button>
+   <button class="btn secondary small" onclick="deleteTask('${esc(id)}')">حذف</button>
+  </div>`).join("")||'<div class="empty">لا توجد مهام.</div>'}
+ </div>
+
+ <div class="card">
+  <h2>طلبات السحب والإيداع</h2>
+  ${requests.map(r=>`<div class="list-item">
+   <b>${r.type==="deposit"?"إيداع":"سحب"} — ${money(r.amount)}</b>
+   <p class="muted">المستخدم: ${esc(r.uid)}<br>الطريقة: ${esc(r.method||"")}<br>الحالة: ${esc(statusText(r.status))}</p>
+   <p class="muted">${esc(r.notes||"")}</p>
+   <button class="btn small" onclick="updateRequest('${esc(r.uid)}','${esc(r.id)}','approved')">موافقة</button>
+   <button class="btn danger small" onclick="updateRequest('${esc(r.uid)}','${esc(r.id)}','rejected')">رفض</button>
+  </div>`).join("")||'<div class="empty">لا توجد طلبات.</div>'}
+ </div>
+
+ <div class="card">
+  <h2>المستخدمون وإدارة الرصيد</h2>
+  ${users.map(([uid,u])=>`<div class="list-item">
+   <b>${esc(u.name||"مستخدم")}</b>
+   <p class="muted">${esc(u.email||"")}<br>UID: ${esc(uid)}</p>
+   <button class="btn secondary small" onclick="editBalance('${esc(uid)}')">إدارة الرصيد</button>
+  </div>`).join("")||'<div class="empty">لا يوجد مستخدمون.</div>'}
+ </div>
+
+ <div class="card">
+  <h2>إتمام المهام للمراجعة</h2>
+  ${completions.map(t=>`<div class="list-item">
+   <b>${esc(t.title||"مهمة")}</b>
+   <p class="muted">المستخدم: ${esc(t.uid)}<br>المكافأة المطلوبة: ${money(t.reward||0)}<br>الحالة: ${esc(statusText(t.status))}</p>
+   <button class="btn small" onclick="approveCompletion('${esc(t.uid)}','${esc(t.id)}')">اعتماد المهمة وإضافة المكافأة</button>
+  </div>`).join("")||'<div class="empty">لا توجد مهام بانتظار المراجعة.</div>'}
+ </div>`;
 }
 
-function toggleTask(id){
-  const tasks=getTasks();
-  const task=tasks.find(t=>t.id===id);
-  if(task){
-    task.enabled=!task.enabled;
-    saveData("tasks",tasks);
-    renderPage();
-  }
+async function addTask(event){
+ event.preventDefault();
+ if(!isAdmin)return alert("غير مصرح.");
+ const title=document.getElementById("taskTitle").value.trim();
+ const description=document.getElementById("taskDesc").value.trim();
+ const reward=Number(document.getElementById("taskReward").value);
+ if(!title||!description||!Number.isFinite(reward)||reward<0)return;
+ try{
+  const ref=db.ref("tasks").push();
+  await ref.set({title,description,reward,enabled:true,createdAt:Date.now()});
+  alert("تمت إضافة المهمة.");
+ }catch(e){alert("تعذر إضافة المهمة. تحقق من قواعد Firebase.");}
 }
 
-function addTask(event){
-  event.preventDefault();
-  const title=document.getElementById("newTaskTitle").value.trim();
-  const description=document.getElementById("newTaskDescription").value.trim();
-  const reward=Number(document.getElementById("newTaskReward").value);
-  if(!title||!description||!Number.isFinite(reward)||reward<0)return;
-  const tasks=getTasks();
-  tasks.push({id:"task_"+Date.now(),title,description,reward,enabled:true});
-  saveData("tasks",tasks);
-  alert("تمت إضافة المهمة التجريبية على هذا الجهاز.");
-  renderPage();
+async function toggleTask(id,enabled){
+ if(!isAdmin)return;
+ try{await db.ref("tasks/"+id+"/enabled").set(enabled);}
+ catch(e){alert("تعذر تغيير حالة المهمة.");}
+}
+
+async function deleteTask(id){
+ if(!isAdmin||!confirm("هل تريد حذف هذه المهمة؟"))return;
+ try{await db.ref("tasks/"+id).remove();}
+ catch(e){alert("تعذر حذف المهمة.");}
+}
+
+async function updateRequest(uid,id,status){
+ if(!isAdmin)return;
+ try{
+  await db.ref("requests/"+uid+"/"+id+"/status").set(status);
+  alert("تم تحديث حالة الطلب. يجب مراجعة التحويل الفعلي قبل الموافقة على السحب.");
+ }catch(e){alert("تعذر تحديث الطلب. تحقق من قواعد Firebase.");}
+}
+
+async function editBalance(uid){
+ if(!isAdmin)return;
+ const snap=await db.ref("balances/"+uid).once("value");
+ const old=Number(snap.val()||0);
+ const answer=prompt("الرصيد الحالي: "+old+"\nأدخل الرصيد الجديد بعد التحقق من العملية:",String(old));
+ if(answer===null)return;
+ const amount=Number(answer);
+ if(!Number.isFinite(amount)||amount<0)return alert("المبلغ غير صحيح.");
+ if(!confirm("تأكيد تغيير الرصيد إلى "+amount+"؟"))return;
+ try{
+  await db.ref("balances/"+uid).set(amount);
+  alert("تم تحديث الرصيد.");
+ }catch(e){alert("تعذر تحديث الرصيد. تحقق من قواعد Firebase.");}
+}
+
+async function approveCompletion(uid,id){
+ if(!isAdmin)return;
+ const ref=db.ref("taskCompletions/"+uid+"/"+id);
+ try{
+  const snap=await ref.once("value");
+  const item=snap.val();
+  if(!item)return alert("المهمة غير موجودة.");
+  if(item.status==="approved")return alert("تم اعتماد المهمة سابقًا.");
+
+  const balanceRef=db.ref("balances/"+uid);
+  const result=await balanceRef.transaction(v=>Number(v||0)+Number(item.reward||0));
+  if(!result.committed)return alert("تعذر تحديث الرصيد.");
+  await ref.child("status").set("approved");
+  alert("تم اعتماد المهمة وإضافة المكافأة.");
+ }catch(e){alert("تعذر اعتماد المهمة. راجع قواعد قاعدة البيانات.");}
 }
 </script>
 </body>
