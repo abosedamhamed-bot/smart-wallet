@@ -1,1197 +1,584 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لوحة الإدارة | منصتي PRO</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لوحة الإدارة | منصتي PRO</title>
 
-  <style>
-    :root {
-      --bg: #0b1020;
-      --panel: #151d32;
-      --panel2: #1c2740;
-      --text: #f4f7ff;
-      --muted: #9aa9c5;
-      --cyan: #28d7ee;
-      --purple: #8457ff;
-      --border: rgba(255,255,255,.09);
-      --red: #ff6376;
-      --green: #41dfa0;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Arial, Tahoma, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at top right, #25204d 0, transparent 38%),
-        linear-gradient(145deg, #080d1a, #11162b 65%, #17112d);
-    }
-
-    button, input {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .container {
-      max-width: 1150px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    .brand {
-      font-size: 25px;
-      font-weight: bold;
-      margin: 12px 0 5px;
-    }
-
-    .brand span {
-      color: var(--cyan);
-    }
-
-    .subtitle {
-      color: var(--muted);
-      margin-bottom: 25px;
-      line-height: 1.8;
-    }
-
-    .card {
-      background: rgba(21,29,50,.94);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 20px;
-      margin-bottom: 18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.15);
-    }
-
-    h2 {
-      margin-top: 0;
-      font-size: 20px;
-    }
-
-    label {
-      display: block;
-      margin: 15px 0 7px;
-      color: #dce6ff;
-    }
-
-    input {
-      display: block;
-      width: 100%;
-      padding: 14px;
-      color: white;
-      background: #0b1225;
-      border: 1px solid #303c59;
-      border-radius: 11px;
-      outline: none;
-    }
-
-    input:focus {
-      border-color: var(--cyan);
-    }
-
-    .btn {
-      border: 0;
-      border-radius: 11px;
-      padding: 12px 17px;
-      font-weight: bold;
-      color: #07121c;
-      background: var(--cyan);
-    }
-
-    .btn:hover {
-      filter: brightness(1.08);
-    }
-
-    .btn-secondary {
-      color: white;
-      background: #35415f;
-    }
-
-    .btn-danger {
-      color: white;
-      background: #a92e48;
-    }
-
-    .login-btn {
-      width: 100%;
-      margin-top: 20px;
-      padding: 15px;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .message {
-      margin-top: 15px;
-      padding: 12px;
-      border-radius: 10px;
-      background: #0b1225;
-      color: #dce6ff;
-      overflow-wrap: anywhere;
-      line-height: 1.8;
-      white-space: pre-wrap;
-    }
-
-    .message.error {
-      color: #ff9cab;
-      border: 1px solid #763044;
-    }
-
-    .message.success {
-      color: #75efbd;
-      border: 1px solid #23684f;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 13px;
-      margin: 20px 0;
-    }
-
-    .stat {
-      padding: 18px;
-      background: linear-gradient(140deg, #202b49, #171e36);
-      border: 1px solid var(--border);
-      border-radius: 15px;
-    }
-
-    .stat-label {
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .stat-value {
-      margin-top: 10px;
-      font-size: 25px;
-      font-weight: bold;
-      overflow-wrap: anywhere;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding: 5px 0 15px;
-      margin-bottom: 10px;
-    }
-
-    .tab {
-      white-space: nowrap;
-      padding: 11px 16px;
-      color: white;
-      background: #1b2540;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-    }
-
-    .tab.active {
-      background: var(--cyan);
-      color: #07121c;
-      font-weight: bold;
-    }
-
-    .section {
-      display: none;
-    }
-
-    .section.active {
-      display: block;
-    }
-
-    .table-wrap {
-      width: 100%;
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 500px;
-    }
-
-    th, td {
-      text-align: right;
-      padding: 13px 10px;
-      border-bottom: 1px solid var(--border);
-      vertical-align: top;
-      overflow-wrap: anywhere;
-    }
-
-    th {
-      color: var(--cyan);
-      font-size: 14px;
-    }
-
-    td {
-      color: #e4eaff;
-      font-size: 14px;
-    }
-
-    .empty {
-      padding: 20px;
-      text-align: center;
-      color: var(--muted);
-    }
-
-    .small {
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.8;
-    }
-
-    .uid {
-      direction: ltr;
-      text-align: left;
-      font-family: monospace;
-      overflow-wrap: anywhere;
-    }
-
-    .status {
-      display: inline-block;
-      padding: 5px 9px;
-      border-radius: 8px;
-      background: #283552;
-      font-size: 12px;
-    }
-
-    .status.pending {
-      color: #ffd77a;
-    }
-
-    .status.approved {
-      color: var(--green);
-    }
-
-    .status.rejected {
-      color: #ff8798;
-    }
-
-    .footer {
-      text-align: center;
-      color: var(--muted);
-      padding: 20px 0;
-      font-size: 12px;
-    }
-
-    @media (max-width: 650px) {
-      .container {
-        padding: 13px;
-      }
-
-      .stats {
-        grid-template-columns: 1fr;
-      }
-
-      .stat-value {
-        font-size: 22px;
-      }
-
-      .card {
-        padding: 15px;
-      }
-    }
-  </style>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;padding:16px;min-height:100vh;
+  font-family:Arial,Tahoma,sans-serif;color:#f5f7ff;
+  background:linear-gradient(145deg,#080d1b,#17152f,#211344)
+}
+main{max-width:1000px;margin:auto}
+.card{
+  background:#151d32;border:1px solid #303957;
+  border-radius:16px;padding:18px;margin:15px 0
+}
+h1{font-size:25px}
+h1 span{color:#28d7ee}
+h2{font-size:20px}
+p,.muted{color:#aab6d0;line-height:1.8}
+input{
+  display:block;width:100%;margin:8px 0 15px;
+  padding:13px;border-radius:10px;border:1px solid #35415f;
+  background:#0b1225;color:white;font-size:16px
+}
+button{
+  border:0;border-radius:10px;padding:12px 16px;
+  background:#28d7ee;color:#07121c;font-weight:bold;
+  cursor:pointer;margin:3px
+}
+.secondary{background:#35415f;color:white}
+.danger{background:#a92e48;color:white}
+.hidden{display:none!important}
+.message{
+  background:#0b1225;border-radius:10px;padding:12px;
+  margin:12px 0;line-height:1.8;overflow-wrap:anywhere;
+  white-space:pre-wrap
+}
+.error{color:#ff9cab}
+.success{color:#70efb9}
+.uid{direction:ltr;text-align:left;overflow-wrap:anywhere}
+.stats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px
+}
+.stat{padding:15px;background:#202b49;border-radius:12px}
+.stat strong{display:block;font-size:24px;margin-top:10px}
+nav{display:flex;gap:6px;overflow-x:auto;margin:15px 0}
+.tab{white-space:nowrap;background:#202b49;color:white}
+.tab.active{background:#28d7ee;color:#07121c}
+.section{display:none}
+.section.active{display:block}
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:500px}
+td,th{padding:12px;text-align:right;border-bottom:1px solid #303957}
+th{color:#28d7ee}
+td{overflow-wrap:anywhere}
+@media(max-width:600px){.stats{grid-template-columns:1fr}}
+</style>
 </head>
 
 <body>
-  <div class="container">
+<main>
+  <h1>منصتي <span>PRO</span></h1>
+  <p>لوحة الإدارة — جلسة منفصلة عن الموقع العادي</p>
 
-    <header>
-      <div class="brand">منصتي <span>PRO</span></div>
-      <div class="subtitle">لوحة إدارة المهام والمستخدمين والطلبات</div>
-    </header>
+  <section id="loginCard" class="card">
+    <h2>دخول المدير</h2>
+    <p>استخدم البريد الإلكتروني وكلمة مرور حساب المدير.</p>
 
-    <!-- تسجيل الدخول -->
-    <section id="loginCard" class="card">
-      <h2>تسجيل دخول المدير</h2>
+    <form id="loginForm">
+      <label for="email">البريد الإلكتروني</label>
+      <input id="email" type="email" autocomplete="username" required>
 
-      <p class="small">
-        استخدم بريد المدير المسجل في Firebase Authentication.
-      </p>
+      <label for="password">كلمة المرور</label>
+      <input id="password" type="password"
+             autocomplete="current-password" required>
 
-      <form id="loginForm">
-        <label for="email">البريد الإلكتروني</label>
-        <input
-          id="email"
-          type="email"
-          autocomplete="username"
-          placeholder="admin@example.com"
-          required
-        >
+      <button id="loginBtn" type="submit">تسجيل الدخول</button>
+    </form>
 
-        <label for="password">كلمة المرور</label>
-        <input
-          id="password"
-          type="password"
-          autocomplete="current-password"
-          placeholder="أدخل كلمة المرور"
-          required
-        >
+    <div id="loginMessage" class="message hidden"></div>
+  </section>
 
-        <button id="loginBtn" class="btn login-btn" type="submit">
-          تسجيل الدخول
-        </button>
-      </form>
+  <section id="dashboard" class="hidden">
+    <div class="card">
+      <h2>حالة حساب المدير</h2>
+      <div id="accountEmail"></div>
+      <p>UID المصرح به:</p>
+      <div id="adminUid" class="uid"></div>
+      <div id="status" class="message">جارٍ التحقق...</div>
+      <button id="logoutBtn" class="secondary">تسجيل الخروج من لوحة المدير</button>
+    </div>
 
-      <div id="loginMessage" class="message hidden"></div>
-    </section>
-
-    <!-- لوحة التحكم -->
-    <main id="adminApp" class="hidden">
-
-      <div class="card">
-        <div class="topbar">
-          <div>
-            <h2 style="margin-bottom:7px">لوحة التحكم</h2>
-            <div id="adminEmail" class="small"></div>
-          </div>
-
-          <button id="logoutBtn" class="btn btn-secondary">
-            تسجيل الخروج
-          </button>
-        </div>
-
-        <div id="connectionMessage" class="message">
-          جارٍ التحقق من صلاحيات المدير...
-        </div>
-
-        <div class="small">
-          معرّف حساب المدير المصرح به:
-          <div class="uid" id="expectedUid"></div>
-        </div>
+    <div id="content" class="hidden">
+      <div class="stats">
+        <div class="stat">المستخدمون<strong id="usersCount">0</strong></div>
+        <div class="stat">المهام<strong id="tasksCount">0</strong></div>
+        <div class="stat">الطلبات المعلقة<strong id="pendingCount">0</strong></div>
       </div>
 
-      <div id="dashboardContent" class="hidden">
+      <nav>
+        <button class="tab active" data-tab="home">الرئيسية</button>
+        <button class="tab" data-tab="users">المستخدمون</button>
+        <button class="tab" data-tab="tasks">المهام</button>
+        <button class="tab" data-tab="requests">الطلبات</button>
+        <button class="tab" data-tab="balances">الأرصدة</button>
+        <button class="tab" data-tab="completions">إتمام المهام</button>
+      </nav>
 
-        <div class="stats">
-          <div class="stat">
-            <div class="stat-label">المستخدمون</div>
-            <div class="stat-value" id="usersCount">—</div>
-          </div>
+      <section id="home" class="section active">
+        <div class="card">
+          <h2>لوحة التحكم</h2>
+          <p>تم التحقق من صلاحية المدير.</p>
+          <button id="refreshBtn">تحديث البيانات</button>
+        </div>
+      </section>
 
-          <div class="stat">
-            <div class="stat-label">المهام</div>
-            <div class="stat-value" id="tasksCount">—</div>
-          </div>
-
-          <div class="stat">
-            <div class="stat-label">طلبات قيد المراجعة</div>
-            <div class="stat-value" id="pendingCount">—</div>
+      <section id="users" class="section">
+        <div class="card">
+          <h2>المستخدمون</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>UID</th><th>الاسم</th><th>البريد</th></tr></thead>
+              <tbody id="usersTable"></tbody>
+            </table>
           </div>
         </div>
+      </section>
 
-        <nav class="tabs">
-          <button class="tab active" data-section="overview">الرئيسية</button>
-          <button class="tab" data-section="users">المستخدمون</button>
-          <button class="tab" data-section="tasks">المهام</button>
-          <button class="tab" data-section="requests">الطلبات</button>
-          <button class="tab" data-section="balances">الأرصدة</button>
-          <button class="tab" data-section="completions">إتمام المهام</button>
-        </nav>
-
-        <!-- الرئيسية -->
-        <section id="section-overview" class="section active">
-          <div class="card">
-            <h2>مرحبًا بك في لوحة الإدارة</h2>
-            <p>يمكنك الاطلاع على بيانات الموقع من الأقسام التالية.</p>
-
-            <button class="btn" id="refreshBtn">تحديث البيانات</button>
-
-            <div id="refreshMessage" class="message hidden"></div>
+      <section id="tasks" class="section">
+        <div class="card">
+          <h2>إضافة مهمة</h2>
+          <form id="taskForm">
+            <label for="taskTitle">اسم المهمة</label>
+            <input id="taskTitle" maxlength="120" required>
+            <label for="taskReward">العمولة التجريبية</label>
+            <input id="taskReward" type="number" min="0" step="0.01" value="0" required>
+            <button type="submit">إضافة المهمة</button>
+          </form>
+          <div id="taskMessage" class="message hidden"></div>
+        </div>
+        <div class="card">
+          <h2>المهام الموجودة</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>المهمة</th><th>العمولة</th><th>الحالة</th><th>إجراء</th></tr></thead>
+              <tbody id="tasksTable"></tbody>
+            </table>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <!-- المستخدمون -->
-        <section id="section-users" class="section">
-          <div class="card">
-            <h2>المستخدمون</h2>
-
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>معرّف المستخدم</th>
-                    <th>الاسم</th>
-                    <th>البريد</th>
-                  </tr>
-                </thead>
-                <tbody id="usersTable"></tbody>
-              </table>
-            </div>
+      <section id="requests" class="section">
+        <div class="card">
+          <h2>طلبات المستخدمين</h2>
+          <p class="muted">عرض الطلبات فقط. اعتماد السحب أو تعديل الأرصدة يحتاج إلى خادم موثوق.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>المستخدم</th><th>رقم الطلب</th><th>النوع</th><th>المبلغ</th><th>الحالة</th></tr></thead>
+              <tbody id="requestsTable"></tbody>
+            </table>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <!-- المهام -->
-        <section id="section-tasks" class="section">
-          <div class="card">
-            <h2>إدارة المهام</h2>
-
-            <form id="taskForm">
-              <label for="taskTitle">اسم المهمة</label>
-              <input id="taskTitle" required maxlength="120">
-
-              <label for="taskReward">العمولة التجريبية</label>
-              <input
-                id="taskReward"
-                type="number"
-                min="0"
-                step="0.01"
-                value="0"
-                required
-              >
-
-              <button class="btn login-btn" type="submit">
-                إضافة مهمة
-              </button>
-            </form>
-
-            <div id="taskMessage" class="message hidden"></div>
+      <section id="balances" class="section">
+        <div class="card">
+          <h2>الأرصدة المخزنة</h2>
+          <p class="muted">البيانات المخزنة ليست إثباتًا على وجود أموال حقيقية.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>المستخدم</th><th>الرصيد</th><th>تفاصيل</th></tr></thead>
+              <tbody id="balancesTable"></tbody>
+            </table>
           </div>
+        </div>
+      </section>
 
-          <div class="card">
-            <h2>المهام الموجودة</h2>
-
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>المهمة</th>
-                    <th>العمولة</th>
-                    <th>الحالة</th>
-                    <th>الإجراء</th>
-                  </tr>
-                </thead>
-                <tbody id="tasksTable"></tbody>
-              </table>
-            </div>
+      <section id="completions" class="section">
+        <div class="card">
+          <h2>إتمام المهام</h2>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>المستخدم</th><th>المهمة</th><th>الحالة</th></tr></thead>
+              <tbody id="completionsTable"></tbody>
+            </table>
           </div>
-        </section>
+        </div>
+      </section>
+    </div>
+  </section>
+</main>
 
-        <!-- الطلبات -->
-        <section id="section-requests" class="section">
-          <div class="card">
-            <h2>طلبات المستخدمين</h2>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
 
-            <p class="small">
-              هذا القسم للعرض والمراجعة فقط. لا يتم تحويل الأموال أو تعديل
-              الأرصدة تلقائيًا من المتصفح.
-            </p>
+<script>
+"use strict";
 
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>المستخدم</th>
-                    <th>رقم الطلب</th>
-                    <th>النوع</th>
-                    <th>المبلغ</th>
-                    <th>الحالة</th>
-                  </tr>
-                </thead>
-                <tbody id="requestsTable"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
+const firebaseConfig = {
+  apiKey: "AIzaSyA8q6z4McET3_d208PtSnFGEjlAVUezJ8k",
+  authDomain: "mansatipro.firebaseapp.com",
+  databaseURL: "https://mansatipro-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "mansatipro",
+  storageBucket: "mansatipro.firebasestorage.app",
+  messagingSenderId: "114519438941",
+  appId: "1:114519438941:web:8b92991a652bb24150ffb4",
+  measurementId: "G-TMZBN1L9KV"
+};
 
-        <!-- الأرصدة -->
-        <section id="section-balances" class="section">
-          <div class="card">
-            <h2>أرصدة المستخدمين</h2>
+const ADMIN_UID = "8aBvh2HxgEXrbeQEZsIvJjPLv6h1";
 
-            <p class="small">
-              الأرقام المعروضة بيانات مخزنة في قاعدة البيانات، وليست إثباتًا
-              على وجود أموال فعلية.
-            </p>
+const $ = id => document.getElementById(id);
 
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>المستخدم</th>
-                    <th>الرصيد</th>
-                    <th>البيانات</th>
-                  </tr>
-                </thead>
-                <tbody id="balancesTable"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
+let adminApp;
+let adminAuth;
+let adminDb;
+let currentAdmin = null;
+let loading = false;
 
-        <!-- إتمام المهام -->
-        <section id="section-completions" class="section">
-          <div class="card">
-            <h2>إتمام المهام</h2>
+function showMessage(id, message, error = false) {
+  $(id).textContent = message;
+  $(id).className = "message" + (error ? " error" : " success");
+}
 
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>المستخدم</th>
-                    <th>معرّف المهمة</th>
-                    <th>الحالة</th>
-                  </tr>
-                </thead>
-                <tbody id="completionsTable"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
+function explainError(error) {
+  const code = error?.code || "";
+  if (code.includes("permission-denied")) {
+    return "تم رفض الوصول من قواعد Firebase. لا تغيّر القواعد إلى وصول عام.";
+  }
+  if (code.includes("network")) {
+    return "تعذر الاتصال بالشبكة. تحقق من الإنترنت وحاول مجددًا.";
+  }
+  if (code.includes("invalid-credential") ||
+      code.includes("wrong-password") ||
+      code.includes("user-not-found")) {
+    return "البريد الإلكتروني أو كلمة المرور غير صحيحة.";
+  }
+  return (error?.message || "خطأ غير معروف") + (code ? "\n" + code : "");
+}
 
-      </div>
-    </main>
+function authorized() {
+  return !!(
+    currentAdmin &&
+    currentAdmin.uid === ADMIN_UID &&
+    adminAuth.currentUser &&
+    adminAuth.currentUser.uid === ADMIN_UID
+  );
+}
 
-    <div class="footer">منصتي PRO — لوحة الإدارة</div>
-  </div>
+function cell(row, value, className = "") {
+  const td = document.createElement("td");
+  td.textContent = value == null
+    ? "—"
+    : typeof value === "object"
+      ? JSON.stringify(value)
+      : String(value);
+  if (className) td.className = className;
+  row.appendChild(td);
+  return td;
+}
 
-  <!-- Firebase compat SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+function emptyRow(id, count, message) {
+  const body = $(id);
+  body.replaceChildren();
+  const row = document.createElement("tr");
+  const td = document.createElement("td");
+  td.colSpan = count;
+  td.textContent = message;
+  row.appendChild(td);
+  body.appendChild(row);
+}
 
-  <script>
-    "use strict";
+function entries(value) {
+  return value && typeof value === "object"
+    ? Object.entries(value)
+    : [];
+}
 
-    // إعدادات مشروع Firebase الحالي
-    const firebaseConfig = {
-      apiKey: "AIzaSyA8q6z4McET3_d208PtSnFGEjlAVUezJ8k",
-      authDomain: "mansatipro.firebaseapp.com",
-      databaseURL:
-        "https://mansatipro-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "mansatipro",
-      storageBucket: "mansatipro.firebasestorage.app",
-      messagingSenderId: "114519438941",
-      appId: "1:114519438941:web:8b92991a652bb24150ffb4",
-      measurementId: "G-TMZBN1L9KV"
-    };
+function statusCell(row, value) {
+  cell(row, value || "غير محدد");
+}
 
-    // UID المصرح له بإدارة الموقع
-    const ADMIN_UID = "8aBvh2HxgEXrbeQEZsIvJjPLv6h1";
+async function read(path) {
+  const snap = await adminDb.ref(path).once("value");
+  return snap.val();
+}
 
-    const loginCard = document.getElementById("loginCard");
-    const loginForm = document.getElementById("loginForm");
-    const loginBtn = document.getElementById("loginBtn");
-    const loginMessage = document.getElementById("loginMessage");
+/*
+ * إنشاء تطبيق Firebase مستقل للمدير.
+ * لا تستخدم firebase.auth() الخاص بالموقع العادي هنا.
+ * قاعدة البيانات أيضًا مأخوذة من تطبيق المدير نفسه.
+ */
+try {
+  adminApp = firebase.initializeApp(firebaseConfig, "adminSessionApp");
+  adminAuth = adminApp.auth();
+  adminDb = adminApp.database();
+} catch (error) {
+  $("loginCard").classList.remove("hidden");
+  showMessage("loginMessage", explainError(error), true);
+}
 
-    const adminApp = document.getElementById("adminApp");
-    const adminEmail = document.getElementById("adminEmail");
-    const connectionMessage =
-      document.getElementById("connectionMessage");
-    const dashboardContent =
-      document.getElementById("dashboardContent");
+$("adminUid").textContent = ADMIN_UID;
 
-    document.getElementById("expectedUid").textContent = ADMIN_UID;
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!adminAuth) return;
 
-    let auth;
-    let db;
-    let currentUser = null;
-    let authCheckNumber = 0;
-    let loadingData = false;
+  $("loginBtn").disabled = true;
+  $("loginBtn").textContent = "جارٍ تسجيل الدخول...";
 
-    try {
-      if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-      }
+  try {
+    const email = $("email").value.trim();
+    const password = $("password").value;
 
-      auth = firebase.auth();
-      db = firebase.database();
-    } catch (error) {
-      showLoginMessage(
-        "تعذر تشغيل Firebase. راجع إعدادات المشروع.\n" +
-        error.message,
+    await adminAuth.signInWithEmailAndPassword(email, password);
+
+    showMessage("loginMessage", "تم تسجيل الدخول، جارٍ التحقق من الصلاحيات.");
+  } catch (error) {
+    showMessage("loginMessage", explainError(error), true);
+  } finally {
+    $("loginBtn").disabled = false;
+    $("loginBtn").textContent = "تسجيل الدخول";
+  }
+});
+
+adminAuth?.onAuthStateChanged(async user => {
+  currentAdmin = user || null;
+
+  if (!user) {
+    $("loginCard").classList.remove("hidden");
+    $("dashboard").classList.add("hidden");
+    $("content").classList.add("hidden");
+    return;
+  }
+
+  $("loginCard").classList.add("hidden");
+  $("dashboard").classList.remove("hidden");
+  $("content").classList.add("hidden");
+
+  $("accountEmail").textContent = "الحساب: " + (user.email || "بدون بريد");
+
+  if (user.uid !== ADMIN_UID) {
+    showMessage(
+      "status",
+      "هذا ليس حساب المدير المصرح به.\nUID الحالي:\n" +
+      user.uid + "\nUID المطلوب:\n" + ADMIN_UID,
+      true
+    );
+    return;
+  }
+
+  try {
+    const snap = await adminDb.ref("adminUids/" + user.uid).once("value");
+
+    if (!authorized()) return;
+
+    if (snap.val() !== true) {
+      showMessage(
+        "status",
+        "الحساب صحيح، لكن adminUids لا تحتوي على القيمة true لهذا المدير.",
         true
       );
+      return;
     }
 
-    function showLoginMessage(message, isError = false) {
-      loginMessage.textContent = message;
-      loginMessage.className =
-        "message" + (isError ? " error" : " success");
-    }
+    $("content").classList.remove("hidden");
+    showMessage("status", "تم التحقق من صلاحية المدير بنجاح.");
+    await loadDashboard();
 
-    function showConnectionMessage(message, isError = false) {
-      connectionMessage.textContent = message;
-      connectionMessage.className =
-        "message" + (isError ? " error" : " success");
-    }
+  } catch (error) {
+    showMessage("status", explainError(error), true);
+  }
+});
 
-    function showBoxMessage(id, message, isError = false) {
-      const element = document.getElementById(id);
-      element.textContent = message;
-      element.className =
-        "message" + (isError ? " error" : " success");
-    }
+$("logoutBtn").addEventListener("click", async () => {
+  try {
+    await adminAuth.signOut();
+  } catch (error) {
+    showMessage("status", explainError(error), true);
+  }
+});
 
-    function errorText(error) {
-      const code = error && error.code ? error.code : "";
-      const message = error && error.message ? error.message : "";
+document.querySelectorAll(".tab").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
 
-      if (
-        code.includes("permission-denied") ||
-        message.toLowerCase().includes("permission_denied")
-      ) {
-        return "Firebase رفض الوصول. راجع قواعد Realtime Database.";
-      }
+    button.classList.add("active");
+    $(button.dataset.tab).classList.add("active");
+  });
+});
 
-      if (
-        code.includes("network") ||
-        message.toLowerCase().includes("network")
-      ) {
-        return "تعذر الاتصال بالإنترنت أو بخدمة Firebase.";
-      }
+async function loadDashboard() {
+  if (!authorized() || loading) return;
+  loading = true;
 
-      return message || "حدث خطأ غير معروف.";
-    }
+  try {
+    const [profiles, tasks, requests, balances, completions] =
+      await Promise.all([
+        read("profiles"),
+        read("tasks"),
+        read("requests"),
+        read("balances"),
+        read("taskCompletions")
+      ]);
 
-    function setSignedOutView() {
-      loginCard.classList.remove("hidden");
-      adminApp.classList.add("hidden");
-      dashboardContent.classList.add("hidden");
-      currentUser = null;
-    }
+    if (!authorized()) return;
 
-    function setSignedInView(user) {
-      loginCard.classList.add("hidden");
-      adminApp.classList.remove("hidden");
-      adminEmail.textContent = user.email || "حساب بدون بريد";
-    }
+    $("usersCount").textContent = entries(profiles).length;
+    $("tasksCount").textContent = entries(tasks).length;
 
-    // تسجيل الدخول
-    loginForm.addEventListener("submit", async function(event) {
-      event.preventDefault();
-
-      if (!auth) {
-        showLoginMessage("Firebase لم يتم تشغيله.", true);
-        return;
-      }
-
-      loginBtn.disabled = true;
-      loginBtn.textContent = "جارٍ تسجيل الدخول...";
-
-      try {
-        const email = document.getElementById("email").value.trim();
-        const password = document.getElementById("password").value;
-
-        await auth.signInWithEmailAndPassword(email, password);
-
-        showLoginMessage("تم تسجيل الدخول، جارٍ التحقق من الصلاحيات.");
-      } catch (error) {
-        showLoginMessage(
-          "فشل تسجيل الدخول: " + errorText(error),
-          true
-        );
-      } finally {
-        loginBtn.disabled = false;
-        loginBtn.textContent = "تسجيل الدخول";
-      }
-    });
-
-    // تسجيل الخروج
-    document.getElementById("logoutBtn").addEventListener(
-      "click",
-      async function() {
-        if (!auth) return;
-
-        try {
-          await auth.signOut();
-        } catch (error) {
-          showConnectionMessage(errorText(error), true);
-        }
-      }
-    );
-
-    // التحقق من المستخدم الفعلي والصلاحية من قاعدة البيانات
-    if (auth) {
-      auth.onAuthStateChanged(async function(user) {
-        const checkNumber = ++authCheckNumber;
-
-        currentUser = user || null;
-
-        if (!user) {
-          setSignedOutView();
-          showLoginMessage("سجّل الدخول بحساب المدير.");
-          return;
-        }
-
-        setSignedInView(user);
-
-        showConnectionMessage(
-          "الحساب الحالي: " + (user.email || "بدون بريد") +
-          "\nUID الحالي: " + user.uid +
-          "\nجارٍ التحقق من حساب المدير..."
-        );
-
-        dashboardContent.classList.add("hidden");
-
-        // لا تسمح لحساب آخر بالدخول إلى لوحة الإدارة
-        if (user.uid !== ADMIN_UID) {
-          showConnectionMessage(
-            "هذا الحساب ليس حساب المدير المحدد في الكود." +
-            "\n\nUID المسجل حاليًا:\n" + user.uid +
-            "\n\nUID المدير المطلوب:\n" + ADMIN_UID +
-            "\n\nتأكد من البريد المستخدم في تسجيل الدخول.",
-            true
-          );
-
-          return;
-        }
-
-        try {
-          // نقرأ سجل المدير الخاص به فقط، بما يتوافق مع قواعدك
-          const snapshot = await db
-            .ref("adminUids/" + user.uid)
-            .once("value");
-
-          if (checkNumber !== authCheckNumber) return;
-
-          if (snapshot.val() !== true) {
-            showConnectionMessage(
-              "معرّف الحساب صحيح، لكن صلاحية المدير غير مفعّلة " +
-              "في adminUids. تأكد أن القيمة هي true.",
-              true
-            );
-            return;
-          }
-
-          dashboardContent.classList.remove("hidden");
-
-          showConnectionMessage(
-            "تم التحقق من حساب المدير بنجاح."
-          );
-
-          await loadDashboard();
-
-        } catch (error) {
-          if (checkNumber !== authCheckNumber) return;
-
-          showConnectionMessage(
-            "تعذر التحقق من صلاحيات المدير.\n" +
-            errorText(error),
-            true
-          );
-        }
-      });
-    }
-
-    // تبديل أقسام لوحة الإدارة
-    document.querySelectorAll(".tab").forEach(function(button) {
-      button.addEventListener("click", function() {
-        document.querySelectorAll(".tab").forEach(function(tab) {
-          tab.classList.remove("active");
-        });
-
-        document.querySelectorAll(".section").forEach(function(section) {
-          section.classList.remove("active");
-        });
-
-        button.classList.add("active");
-
-        document
-          .getElementById("section-" + button.dataset.section)
-          .classList.add("active");
-      });
-    });
-
-    function safeString(value) {
-      if (value === null || value === undefined) return "";
-      if (typeof value === "object") return JSON.stringify(value);
-      return String(value);
-    }
-
-    function addCell(row, value, className = "") {
-      const cell = document.createElement("td");
-      cell.textContent = safeString(value);
-
-      if (className) cell.className = className;
-
-      row.appendChild(cell);
-      return cell;
-    }
-
-    function addEmptyRow(tbodyId, columns, message) {
-      const tbody = document.getElementById(tbodyId);
-      tbody.replaceChildren();
-
-      const row = document.createElement("tr");
-      const cell = document.createElement("td");
-
-      cell.colSpan = columns;
-      cell.className = "empty";
-      cell.textContent = message;
-
-      row.appendChild(cell);
-      tbody.appendChild(row);
-    }
-
-    function getStatusClass(status) {
-      const value = String(status || "").toLowerCase();
-
-      if (
-        value === "approved" ||
-        value === "completed" ||
-        value === "active" ||
-        value === "مقبول" ||
-        value === "مكتمل"
-      ) {
-        return "approved";
-      }
-
-      if (
-        value === "rejected" ||
-        value === "disabled" ||
-        value === "مرفوض"
-      ) {
-        return "rejected";
-      }
-
-      return "pending";
-    }
-
-    function addStatusCell(row, value) {
-      const cell = document.createElement("td");
-      const badge = document.createElement("span");
-
-      badge.className = "status " + getStatusClass(value);
-      badge.textContent = safeString(value || "غير محدد");
-
-      cell.appendChild(badge);
-      row.appendChild(cell);
-    }
-
-    async function readData(path) {
-      const snapshot = await db.ref(path).once("value");
-      return snapshot.val();
-    }
-
-    function objectEntries(value) {
-      if (!value || typeof value !== "object") return [];
-      return Object.entries(value);
-    }
-
-    function renderUsers(profiles) {
-      const tbody = document.getElementById("usersTable");
-      tbody.replaceChildren();
-
-      const entries = objectEntries(profiles);
-
-      if (!entries.length) {
-        addEmptyRow("usersTable", 3, "لا توجد ملفات مستخدمين.");
-        return;
-      }
-
-      entries.forEach(function([uid, profile]) {
+    // المستخدمون
+    $("usersTable").replaceChildren();
+    if (!entries(profiles).length) {
+      emptyRow("usersTable", 3, "لا توجد ملفات مستخدمين.");
+    } else {
+      entries(profiles).forEach(([uid, profile]) => {
         profile = profile || {};
-
         const row = document.createElement("tr");
-
-        addCell(row, uid, "uid");
-        addCell(row, profile.name || profile.displayName || "—");
-        addCell(row, profile.email || "—");
-
-        tbody.appendChild(row);
+        cell(row, uid, "uid");
+        cell(row, profile.name || profile.displayName || "—");
+        cell(row, profile.email || "—");
+        $("usersTable").appendChild(row);
       });
     }
 
-    function renderTasks(tasks) {
-      const tbody = document.getElementById("tasksTable");
-      tbody.replaceChildren();
-
-      const entries = objectEntries(tasks);
-
-      if (!entries.length) {
-        addEmptyRow("tasksTable", 4, "لا توجد مهام.");
-        return;
-      }
-
-      entries.forEach(function([id, task]) {
+    // المهام
+    $("tasksTable").replaceChildren();
+    if (!entries(tasks).length) {
+      emptyRow("tasksTable", 4, "لا توجد مهام.");
+    } else {
+      entries(tasks).forEach(([id, task]) => {
         task = task || {};
-
         const row = document.createElement("tr");
 
-        addCell(row, task.title || task.name || id);
-        addCell(row, task.reward ?? task.commission ?? 0);
-        addStatusCell(
-          row,
-          task.status || (task.active === false ? "disabled" : "active")
-        );
+        cell(row, task.title || task.name || id);
+        cell(row, task.reward ?? task.commission ?? 0);
+        cell(row, task.active === false ? "متوقفة" : "مفعلة");
 
-        const actionCell = document.createElement("td");
-        const button = document.createElement("button");
+        const td = document.createElement("td");
+        const btn = document.createElement("button");
+        btn.className = "secondary";
+        btn.textContent = task.active === false ? "تفعيل" : "إيقاف";
 
-        button.className = "btn btn-secondary";
-        button.textContent =
-          task.active === false ? "تفعيل" : "إيقاف";
+        btn.addEventListener("click", async () => {
+          if (!authorized()) return;
 
-        button.addEventListener("click", async function() {
-          if (!isAuthorizedNow()) return;
-
-          button.disabled = true;
-
+          btn.disabled = true;
           try {
-            const newActive = task.active === false;
-
-            await db.ref("tasks/" + id + "/active").set(newActive);
-
-            task.active = newActive;
-
+            await adminDb.ref("tasks/" + id + "/active")
+              .set(task.active === false);
             await loadDashboard();
-
           } catch (error) {
-            alert("تعذر تغيير حالة المهمة: " + errorText(error));
+            alert(explainError(error));
           } finally {
-            button.disabled = false;
+            btn.disabled = false;
           }
         });
 
-        actionCell.appendChild(button);
-        row.appendChild(actionCell);
-        tbody.appendChild(row);
+        td.appendChild(btn);
+        row.appendChild(td);
+        $("tasksTable").appendChild(row);
       });
     }
 
-    function renderRequests(requests) {
-      const tbody = document.getElementById("requestsTable");
-      tbody.replaceChildren();
-
-      let pending = 0;
-      const rows = [];
-
-      objectEntries(requests).forEach(function([uid, userRequests]) {
-        objectEntries(userRequests).forEach(function([id, request]) {
-          request = request || {};
-
-          if (
-            String(request.status || "pending").toLowerCase() === "pending"
-          ) {
-            pending++;
-          }
-
-          rows.push({ uid, id, request });
-        });
+    // الطلبات
+    const requestRows = [];
+    entries(requests).forEach(([uid, userRequests]) => {
+      entries(userRequests).forEach(([id, request]) => {
+        request = request || {};
+        requestRows.push({uid, id, request});
       });
+    });
 
-      document.getElementById("pendingCount").textContent = pending;
+    $("pendingCount").textContent = requestRows.filter(
+      item => (item.request.status || "pending") === "pending"
+    ).length;
 
-      if (!rows.length) {
-        addEmptyRow("requestsTable", 5, "لا توجد طلبات.");
-        return;
-      }
-
-      rows.forEach(function(item) {
+    $("requestsTable").replaceChildren();
+    if (!requestRows.length) {
+      emptyRow("requestsTable", 5, "لا توجد طلبات.");
+    } else {
+      requestRows.forEach(({uid, id, request}) => {
         const row = document.createElement("tr");
-        const request = item.request;
-
-        addCell(row, item.uid, "uid");
-        addCell(row, item.id);
-        addCell(row, request.type || request.kind || "—");
-        addCell(row, request.amount ?? "—");
-        addStatusCell(row, request.status || "pending");
-
-        tbody.appendChild(row);
+        cell(row, uid, "uid");
+        cell(row, id);
+        cell(row, request.type || request.kind || "—");
+        cell(row, request.amount ?? "—");
+        statusCell(row, request.status || "pending");
+        $("requestsTable").appendChild(row);
       });
     }
 
-    function renderBalances(balances) {
-      const tbody = document.getElementById("balancesTable");
-      tbody.replaceChildren();
-
-      const entries = objectEntries(balances);
-
-      if (!entries.length) {
-        addEmptyRow("balancesTable", 3, "لا توجد بيانات أرصدة.");
-        return;
-      }
-
-      entries.forEach(function([uid, balance]) {
+    // الأرصدة
+    $("balancesTable").replaceChildren();
+    if (!entries(balances).length) {
+      emptyRow("balancesTable", 3, "لا توجد بيانات أرصدة.");
+    } else {
+      entries(balances).forEach(([uid, value]) => {
         const row = document.createElement("tr");
-
-        addCell(row, uid, "uid");
-
-        if (balance && typeof balance === "object") {
-          addCell(
-            row,
-            balance.amount ?? balance.balance ?? balance.available ?? "—"
-          );
-
-          addCell(row, balance);
-        } else {
-          addCell(row, balance);
-          addCell(row, "—");
-        }
-
-        tbody.appendChild(row);
+        cell(row, uid, "uid");
+        cell(row, value && typeof value === "object"
+          ? value.amount ?? value.balance ?? value.available ?? "—"
+          : value);
+        cell(row, value);
+        $("balancesTable").appendChild(row);
       });
     }
 
-    function renderCompletions(completions) {
-      const tbody = document.getElementById("completionsTable");
-      tbody.replaceChildren();
+    // إتمام المهام
+    $("completionsTable").replaceChildren();
+    const completionRows = [];
 
-      const rows = [];
-
-      objectEntries(completions).forEach(function([uid, userTasks]) {
-        objectEntries(userTasks).forEach(function([taskId, item]) {
-          rows.push({ uid, taskId, item: item || {} });
-        });
+    entries(completions).forEach(([uid, userTasks]) => {
+      entries(userTasks).forEach(([taskId, item]) => {
+        completionRows.push({uid, taskId, item: item || {}});
       });
+    });
 
-      if (!rows.length) {
-        addEmptyRow(
-          "completionsTable",
-          3,
-          "لا توجد عمليات إتمام مهام."
-        );
-        return;
-      }
-
-      rows.forEach(function(item) {
+    if (!completionRows.length) {
+      emptyRow("completionsTable", 3, "لا توجد عمليات إتمام مهام.");
+    } else {
+      completionRows.forEach(({uid, taskId, item}) => {
         const row = document.createElement("tr");
-
-        addCell(row, item.uid, "uid");
-        addCell(row, item.taskId);
-        addStatusCell(row, item.item.status || "غير محدد");
-
-        tbody.appendChild(row);
+        cell(row, uid, "uid");
+        cell(row, taskId);
+        statusCell(row, item.status || "غير محدد");
+        $("completionsTable").appendChild(row);
       });
     }
 
-    function isAuthorizedNow() {
-      return Boolean(
-        currentUser &&
-        currentUser.uid === ADMIN_UID &&
-        auth &&
-        auth.currentUser &&
-        auth.currentUser.uid === ADMIN_UID
-      );
-    }
+  } catch (error) {
+    showMessage("status", "تعذر تحميل البيانات:\n" + explainError(error), true);
+  } finally {
+    loading = false;
+  }
+}
 
-    async function loadDashboard() {
-      if (!isAuthorizedNow() || loadingData) return;
+// إضافة مهمة
+$("taskForm").addEventListener("submit", async event => {
+  event.preventDefault();
 
-      loadingData = true;
+  if (!authorized()) {
+    showMessage("taskMessage", "ليس لديك صلاحية المدير.", true);
+    return;
+  }
 
-      try {
-        const results = await Promise.all([
-          readData("profiles"),
-          readData("tasks"),
-          readData("requests"),
-          readData("balances"),
-          readData("taskCompletions")
-        ]);
+  const title = $("taskTitle").value.trim();
+  const reward = Number($("taskReward").value);
 
-        if (!isAuthorizedNow()) return;
+  if (!title || !Number.isFinite(reward) || reward < 0) {
+    showMessage("taskMessage", "تحقق من اسم المهمة والعمولة.", true);
+    return;
+  }
 
-        const profiles = results[0];
-        const tasks = results[1];
-        const requests = results[2];
-        const balances = results[3];
-        const completions = results[4];
+  try {
+    await adminDb.ref("tasks").push({
+      title,
+      reward,
+      active: true,
+      status: "active",
+      createdAt: firebase.database.ServerValue.TIMESTAMP
+    });
 
-        renderUsers(profiles);
-        renderTasks(tasks);
-        renderRequests(requests);
-        renderBalances(balances);
-        renderCompletions(completions);
+    $("taskTitle").value = "";
+    $("taskReward").value = "0";
 
-        document.getElementById("usersCount").textContent =
-          objectEntries(profiles).length;
+    showMessage("taskMessage", "تمت إضافة المهمة.");
+    await loadDashboard();
 
-        document.getElementById("tasksCount").textContent =
-          objectEntries(tasks).length;
+  } catch (error) {
+    showMessage("taskMessage", explainError(error), true);
+  }
+});
 
-        showBoxMessage(
-          "refreshMessage",
-          "تم تحديث بيانات لوحة الإدارة بنجاح."
-        );
-
-      } catch (error) {
-        showConnectionMessage(
-          "تعذر تحميل بعض بيانات لوحة الإدارة.\n" +
-          errorText(error),
-          true
-        );
-      } finally {
-        loadingData = false;
-      }
-    }
-
-    // إضافة مهمة جديدة
-    document.getElementById("taskForm").addEventListener(
-      "submit",
-      async function(event) {
-        event.preventDefault();
-
-        if (!isAuthorizedNow()) {
-          showBoxMessage("taskMessage", "ليس لديك صلاحية.", true);
-          return;
-        }
-
-        const title = document.getElementById("taskTitle").value.trim();
-        const reward = Number(
-          document.getElementById("taskReward").value
-        );
-
-        if (!title || !Number.isFinite(reward) || reward < 0) {
-          showBoxMessage(
-            "taskMessage",
-            "أدخل اسمًا صحيحًا وعمولة غير سالبة.",
-            true
-          );
-          return;
-        }
-
-        try {
-          await db.ref("tasks").push({
-            title: title,
-            reward: reward,
-            active: true,
-            status: "active",
-            createdAt: firebase.database.ServerValue.TIMESTAMP
-          });
-
-          document.getElementById("taskTitle").value = "";
-          document.getElementById("taskReward").value = "0";
-
-          showBoxMessage("taskMessage", "تمت إضافة المهمة.");
-
-          await loadDashboard();
-
-        } catch (error) {
-          showBoxMessage(
-            "taskMessage",
-            "تعذرت إضافة المهمة: " + errorText(error),
-            true
-          );
-        }
-      }
-    );
-
-    document.getElementById("refreshBtn").addEventListener(
-      "click",
-      async function() {
-        await loadDashboard();
-      }
-    );
-  </script>
+$("refreshBtn").addEventListener("click", loadDashboard);
+</script>
 </body>
 </html>
