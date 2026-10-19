@@ -4,889 +4,601 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#101126">
-<title>ربح المال</title>
+<title>Smart Wallet</title>
 
 <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#101126;--panel:#1b1c39;--panel2:#242547;
+--gold:#f5c76a;--gold2:#ffe6a6;--text:#fff;
+--muted:#aaaecb;--green:#45d6a0;--red:#ff7d91
 }
-
-:root {
-  --bg: #101126;
-  --panel: #1b1c39;
-  --panel2: #242547;
-  --gold: #f5c76a;
-  --text: #ffffff;
-  --muted: #aaaecb;
-  --green: #45d6a0;
-  --red: #ff7d91;
-}
-
-body {
-  font-family: Tahoma, Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  line-height: 1.7;
-}
-
-button, input, select, textarea {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-header {
-  background: var(--panel);
-  padding: 17px;
-  border-bottom: 1px solid #343557;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.header-inner {
-  max-width: 1000px;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.logo {
-  color: var(--gold);
-  font-size: 23px;
-  font-weight: bold;
-}
-
-.logo small {
-  display: block;
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: normal;
-}
-
-.container {
-  width: min(100% - 24px, 1000px);
-  margin: 22px auto;
-}
-
-.card {
-  background: var(--panel);
-  border: 1px solid #303151;
-  border-radius: 17px;
-  padding: 20px;
-  margin-bottom: 16px;
-}
-
-h1, h2, h3 {
-  margin-bottom: 12px;
-}
-
-h1 {
-  font-size: 25px;
-}
-
-h2 {
-  font-size: 20px;
-}
-
-p {
-  color: var(--muted);
-}
-
-.hero {
-  background: linear-gradient(135deg, #29294f, #171832);
-  border: 1px solid #444366;
-  border-radius: 20px;
-  padding: 25px;
-  margin-bottom: 18px;
-}
-
-.hero p {
-  margin-top: 7px;
-}
-
-.balance {
-  color: var(--gold);
-  font-size: 36px;
-  font-weight: bold;
-  margin: 12px 0;
-  direction: rtl;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.stat {
-  background: var(--panel2);
-  padding: 15px;
-  border-radius: 14px;
-}
-
-.stat span {
-  display: block;
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.stat strong {
-  display: block;
-  color: var(--gold);
-  font-size: 19px;
-  margin-top: 5px;
-}
-
-button, .btn {
-  border: 0;
-  border-radius: 11px;
-  padding: 12px 15px;
-  background: var(--gold);
-  color: #17172b;
-  font-weight: bold;
-}
-
-button:disabled {
-  opacity: .6;
-  cursor: wait;
-}
-
-.secondary {
-  background: var(--panel2);
-  color: white;
-  border: 1px solid #414267;
-}
-
-.danger {
-  background: #542737;
-  color: #fff;
-}
-
-.success {
-  color: var(--green);
-}
-
-.error {
-  color: var(--red);
-}
-
-form {
-  display: grid;
-  gap: 13px;
-}
-
-label {
-  display: block;
-  color: var(--muted);
-  font-size: 14px;
-  margin-bottom: 5px;
-}
-
-input, select, textarea {
-  width: 100%;
-  background: #11122b;
-  color: white;
-  border: 1px solid #414267;
-  border-radius: 10px;
-  padding: 12px;
-  outline: none;
-}
-
-input:focus, select:focus, textarea:focus {
-  border-color: var(--gold);
-}
-
-.nav {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-  margin-bottom: 18px;
-}
-
-.nav button {
-  background: var(--panel);
-  color: white;
-  border: 1px solid #343557;
-  padding: 11px 5px;
-  font-size: 13px;
-}
-
-.nav button.active {
-  background: var(--gold);
-  color: #17172b;
-}
-
-.page {
-  display: none;
-}
-
-.page.active {
-  display: block;
-}
-
-.notice {
-  border-right: 3px solid var(--gold);
-  padding: 10px 12px;
-  background: #242547;
-  border-radius: 8px;
-  font-size: 13px;
-  color: var(--muted);
-  margin: 12px 0;
-}
-
-.task {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.task h3 {
-  margin: 0;
-}
-
-.task p {
-  font-size: 13px;
-}
-
-.item {
-  padding: 13px 0;
-  border-bottom: 1px solid #343557;
-  overflow-wrap: anywhere;
-}
-
-.item:last-child {
-  border-bottom: 0;
-}
-
-.item strong {
-  color: var(--gold);
-}
-
-.muted {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-#message {
-  display: none;
-  padding: 12px;
-  margin-bottom: 15px;
-  border-radius: 10px;
-  background: var(--panel2);
-}
-
-footer {
-  text-align: center;
-  color: var(--muted);
-  font-size: 12px;
-  padding: 25px 10px;
-}
-
-@media (max-width: 500px) {
-  .balance {
-    font-size: 30px;
-  }
-
-  .card {
-    padding: 15px;
-  }
-
-  .hero {
-    padding: 19px;
-  }
-}
+body{background:var(--bg);color:var(--text);font-family:Arial,Tahoma,sans-serif;min-height:100vh}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0}
+.hidden{display:none!important}
+.page{display:none;padding:20px 16px 105px;max-width:600px;margin:auto}
+.page.active{display:block}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:bold;font-size:19px}
+.logo-icon{width:42px;height:42px;display:grid;place-items:center;border-radius:14px;color:#17172c;background:linear-gradient(135deg,var(--gold2),var(--gold));font-size:24px}
+.icon-button{width:43px;height:43px;background:var(--panel);color:white;border:1px solid #333455;border-radius:14px;font-size:19px}
+h1{font-size:25px;margin-bottom:8px}
+.subtitle{color:var(--muted);line-height:1.8;font-size:14px;margin-bottom:22px}
+.balance-card{position:relative;overflow:hidden;background:linear-gradient(135deg,#38345f,#222344 60%,#594629);border:1px solid #6b5b46;border-radius:26px;padding:24px;margin-bottom:22px;min-height:205px}
+.balance-card:before{content:"EGP";position:absolute;left:-5px;bottom:-38px;font-size:95px;font-weight:900;color:rgba(255,255,255,.055);transform:rotate(-12deg)}
+.balance-card:after{content:"ج";position:absolute;left:28px;top:15px;font-size:70px;font-weight:bold;color:rgba(255,230,166,.12)}
+.balance-label{color:#e1dff4;font-size:14px;margin-bottom:17px}
+.balance-number{position:relative;z-index:1;font-size:35px;font-weight:800;color:var(--gold2);margin-bottom:18px}
+.balance-number small{font-size:16px;color:white}
+.balance-bottom{display:flex;justify-content:space-between;color:#d3d1e9;font-size:12px;position:relative;z-index:1}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin:24px 0 15px;font-size:18px}
+.section-title small{color:var(--muted);font-size:12px;font-weight:normal}
+.quick-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.action{background:var(--panel);border:1px solid #303153;border-radius:19px;padding:18px 8px;text-align:center;color:white}
+.action-icon{width:45px;height:45px;margin:0 auto 12px;display:grid;place-items:center;border-radius:15px;background:#323253;font-size:22px}
+.action span:last-child{display:block;font-size:13px}
+.panel{background:var(--panel);border:1px solid #303153;border-radius:22px;padding:19px;margin-bottom:15px}
+.panel h3{margin-bottom:9px;font-size:17px}
+.panel p{color:var(--muted);line-height:1.8;font-size:13px}
+.field{margin-bottom:17px}
+.field label{display:block;font-size:14px;margin-bottom:9px;color:#e2e2f5}
+.field input,.field select{width:100%;border:1px solid #3b3c61;border-radius:14px;padding:15px;outline:none;color:white;background:#13142c}
+.field input:focus,.field select:focus{border-color:var(--gold)}
+.field input::placeholder{color:#777b9e}
+.field select option{background:#1b1c39}
+.primary-btn{width:100%;padding:16px;border-radius:15px;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#211c13;font-weight:800;font-size:15px}
+.primary-btn:disabled{opacity:.6;cursor:wait}
+.secondary-btn{width:100%;padding:14px;border-radius:14px;background:#303153;color:white;margin-top:10px}
+.notice{padding:14px;background:#242547;border:1px solid #393a62;border-radius:15px;color:#dedff7;line-height:1.8;font-size:13px;margin:13px 0 18px}
+.notice.success{border-color:#276c56;color:#8ff0c6}
+.notice.error{border-color:#78414b;color:#ffb6c1}
+.task-card{background:linear-gradient(135deg,#292b52,#1c1d3c);border:1px solid #46476f;border-radius:23px;padding:21px;margin-bottom:15px}
+.task-top{display:flex;align-items:center;gap:13px;margin-bottom:15px}
+.task-icon{width:54px;height:54px;flex-shrink:0;display:grid;place-items:center;border-radius:17px;background:linear-gradient(135deg,#fce7a6,#e6a93e);color:#302414;font-size:27px}
+.task-title{font-size:17px;font-weight:bold;margin-bottom:6px}
+.reward{color:var(--gold);font-size:19px;font-weight:bold;margin:15px 0}
+.task-card .primary-btn{margin-top:5px}
+.status-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:15px 0;border-bottom:1px solid #303153}
+.status-row:last-child{border-bottom:0}
+.status-label{color:var(--muted);font-size:13px}
+.status-value{font-size:14px;overflow-wrap:anywhere}
+.profile-avatar{width:76px;height:76px;display:grid;place-items:center;border-radius:25px;margin:0 auto 14px;background:linear-gradient(135deg,var(--gold2),var(--gold));color:#302414;font-size:34px}
+.profile-head{text-align:center;padding:25px 15px}
+.empty{text-align:center;padding:30px 10px;color:var(--muted);line-height:2}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:10;background:rgba(18,19,42,.97);border-top:1px solid #303153;display:flex;justify-content:space-around;padding:10px 4px calc(10px + env(safe-area-inset-bottom));backdrop-filter:blur(15px)}
+.nav-item{flex:1;color:#888bac;background:transparent;padding:5px 2px;font-size:11px}
+.nav-item .nav-icon{display:block;font-size:21px;margin-bottom:5px}
+.nav-item.active{color:var(--gold)}
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px;background:radial-gradient(circle at 15% 20%,#343158 0,transparent 35%),radial-gradient(circle at 90% 80%,#453a29 0,transparent 35%),var(--bg)}
+.login-box{width:100%;max-width:430px;background:rgba(27,28,57,.94);border:1px solid #3c3d60;border-radius:27px;padding:27px;box-shadow:0 25px 80px rgba(0,0,0,.28)}
+.login-brand{text-align:center;margin-bottom:27px}
+.login-brand .logo-icon{margin:0 auto 14px;width:65px;height:65px;font-size:32px;border-radius:21px}
+.login-brand h1{color:var(--gold2);font-size:26px}
+.login-brand p{color:var(--muted);margin-top:10px;font-size:13px;line-height:1.8}
+.small-note{color:var(--muted);font-size:12px;line-height:1.8;margin-top:15px;text-align:center}
+@media(max-width:360px){.balance-number{font-size:29px}.quick-actions{gap:6px}.action{padding:14px 5px}}
 </style>
 </head>
 
 <body>
 
-<header>
-  <div class="header-inner">
-    <div class="logo">
-      ربح المال 💰
-      <small>اكسب من مهامك، واجمع عمولاتك.</small>
+<section id="loginScreen" class="login-screen">
+  <div class="login-box">
+    <div class="login-brand">
+      <div class="logo-icon">ج</div>
+      <h1>Smart Wallet</h1>
+      <p>محفظتك لإدارة الرصيد والطلبات والمهام</p>
     </div>
-    <button id="logoutBtn" class="secondary"
-      onclick="logout()" hidden>خروج</button>
-  </div>
-</header>
 
-<main class="container">
-
-  <div id="message" role="status" aria-live="polite"></div>
-
-  <!-- تسجيل الدخول -->
-  <section id="loginSection" class="card">
-    <h1>أهلًا بيك في ربح المال</h1>
-    <p>سجّل برقم الموبايل لعرض حسابك.</p>
-
-    <div class="notice">
-      هذا النموذج يستخدم رقم الموبايل للتعرّف على الحساب فقط.
-      لا تعتبره تسجيل دخول آمنًا أو تحققًا من ملكية الرقم.
-    </div>
+    <h2 style="font-size:21px;margin-bottom:9px">الدخول على الحساب</h2>
+    <p class="subtitle">اكتب رقم الموبايل للدخول إلى حسابك.</p>
 
     <form id="loginForm">
-      <div>
-        <label for="phone">رقم الموبايل</label>
-        <input id="phone" type="tel"
-          inputmode="tel" autocomplete="tel"
-          placeholder="مثال: 01xxxxxxxxx"
-          required maxlength="20">
+      <div class="field">
+        <label for="loginPhone">رقم الموبايل</label>
+        <input id="loginPhone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="01xxxxxxxxx" maxlength="15" required>
       </div>
-      <button type="submit">دخول</button>
+      <button class="primary-btn" type="submit">الدخول على الحساب ←</button>
     </form>
+
+    <p class="small-note">تنبيه: رقم الموبايل وحده لا يثبت ملكية الحساب، لذلك لا تستخدم الموقع لحفظ أموال حقيقية دون تسجيل دخول آمن.</p>
+  </div>
+</section>
+
+<div id="app" class="hidden">
+
+<header class="header" style="padding:18px 16px 0;max-width:600px;margin:auto">
+  <div class="logo"><div class="logo-icon">ج</div><span>Smart Wallet</span></div>
+  <button class="icon-button" onclick="showPage('notifications')" aria-label="الإشعارات">♧</button>
+</header>
+
+<main id="home" class="page active">
+  <h1>أهلاً بيك 👋</h1>
+  <p class="subtitle">تابع رصيدك وطلباتك من مكان واحد.</p>
+
+  <section class="balance-card">
+    <div class="balance-label">إجمالي رصيد الحساب</div>
+    <div class="balance-number"><span id="balanceAmount">جارٍ التحميل...</span> <small>جنيه مصري</small></div>
+    <div class="balance-bottom"><span>EGP · الجنيه المصري</span><span>● حسابك</span></div>
   </section>
 
-  <!-- التطبيق -->
-  <section id="appSection" hidden>
+  <div class="quick-actions">
+    <button class="action" onclick="showPage('deposit')"><span class="action-icon">＋</span><span>إيداع</span></button>
+    <button class="action" onclick="showPage('withdraw')"><span class="action-icon">↗</span><span>سحب</span></button>
+    <button class="action" onclick="showPage('tasks')"><span class="action-icon">★</span><span>المهام</span></button>
+  </div>
 
-    <div class="hero">
-      <h1>أهلًا بيك 👋</h1>
-      <p>اكسب من مهامك، واجمع عمولاتك.</p>
-      <div class="balance" id="balanceAmount">جارٍ التحميل...</div>
-      <p>رصيد حسابك بالجنيه المصري</p>
-      <button onclick="loadBalance()">تحديث الرصيد ↻</button>
-    </div>
-
-    <div class="grid" style="margin-bottom:18px">
-      <div class="stat">
-        <span>حسابك</span>
-        <strong id="accountPhone">—</strong>
-      </div>
-      <div class="stat">
-        <span>حالة الاتصال</span>
-        <strong id="connectionStatus">جارٍ الاتصال</strong>
-      </div>
-    </div>
-
-    <nav class="nav" aria-label="أقسام الموقع">
-      <button class="active" data-page="home">الرئيسية</button>
-      <button data-page="tasks">المهام</button>
-      <button data-page="deposit">الإيداع</button>
-      <button data-page="withdraw">السحب</button>
-      <button data-page="history">السجل</button>
-      <button data-page="account">حسابي</button>
-    </nav>
-
-    <!-- الرئيسية -->
-    <section class="page active" id="home">
-      <div class="card">
-        <h2>مرحبًا بيك في ربح المال</h2>
-        <p>
-          تابع رصيدك، وقدّم طلباتك، واستكشف المهام المتاحة.
-        </p>
-      </div>
-
-      <div class="card">
-        <h2>معلومات مهمة</h2>
-        <p>
-          طلب الإيداع أو السحب لا يعني تنفيذ تحويل مالي تلقائيًا.
-          يجب مراجعة الطلب من الإدارة والتأكد من تنفيذ التحويل
-          عبر وسيلة الدفع الفعلية.
-        </p>
-      </div>
-    </section>
-
-    <!-- المهام -->
-    <section class="page" id="tasks">
-      <div class="card">
-        <h2>المهام والمكافآت 🎯</h2>
-        <p>قدّم طلب مكافأة المهمة التجريبية.</p>
-
-        <div class="notice">
-          قيمة المكافأة هنا تجريبية، ولا تُضاف إلى الرصيد
-          إلا إذا عالجها الخادم ووافق عليها وفق قواعده.
-        </div>
-
-        <div class="task">
-          <div>
-            <h3>المهمة التجريبية</h3>
-            <p>المكافأة المقترحة: 100 جنيه</p>
-          </div>
-          <button id="taskBtn" onclick="claimTask()">
-            طلب المكافأة
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- الإيداع -->
-    <section class="page" id="deposit">
-      <div class="card">
-        <h2>طلب إيداع 💳</h2>
-        <p>أدخل بيانات الطلب ليتمكن المسؤول من مراجعته.</p>
-
-        <form id="depositForm">
-          <div>
-            <label for="depositAmount">المبلغ بالجنيه المصري</label>
-            <input id="depositAmount" type="number"
-              min="1" max="100000" step="1" required>
-          </div>
-
-          <div>
-            <label for="depositMethod">وسيلة الدفع</label>
-            <select id="depositMethod" required>
-              <option value="">اختر الوسيلة</option>
-              <option value="Vodafone Cash">فودافون كاش</option>
-              <option value="Orange Cash">أورنج كاش</option>
-              <option value="Etisalat Cash">اتصالات كاش</option>
-              <option value="InstaPay">إنستاباي</option>
-              <option value="Bank Transfer">تحويل بنكي</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="depositReference">
-              رقم العملية أو ملاحظات الطلب
-            </label>
-            <textarea id="depositReference" rows="3"
-              maxlength="500"
-              placeholder="اكتب رقم العملية إن وجد"></textarea>
-          </div>
-
-          <button type="submit">إرسال طلب الإيداع</button>
-        </form>
-      </div>
-    </section>
-
-    <!-- السحب -->
-    <section class="page" id="withdraw">
-      <div class="card">
-        <h2>طلب سحب 💸</h2>
-        <p>أدخل بيانات وسيلة استلام الأموال.</p>
-
-        <div class="notice">
-          إرسال الطلب لا ينفّذ التحويل تلقائيًا.
-          لا تدخل كلمة مرور محفظتك أو بيانات بطاقتك السرية هنا.
-        </div>
-
-        <form id="withdrawForm">
-          <div>
-            <label for="withdrawAmount">المبلغ المطلوب سحبه</label>
-            <input id="withdrawAmount" type="number"
-              min="1" max="100000" step="1" required>
-          </div>
-
-          <div>
-            <label for="withdrawMethod">وسيلة الاستلام</label>
-            <select id="withdrawMethod" required>
-              <option value="">اختر الوسيلة</option>
-              <option value="Vodafone Cash">فودافون كاش</option>
-              <option value="Orange Cash">أورنج كاش</option>
-              <option value="Etisalat Cash">اتصالات كاش</option>
-              <option value="InstaPay">إنستاباي</option>
-              <option value="Bank Transfer">تحويل بنكي</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="withdrawDetails">
-              رقم الاستلام أو تفاصيل الطلب
-            </label>
-            <input id="withdrawDetails" type="text"
-              maxlength="100" required
-              placeholder="رقم المحفظة أو وسيلة الاستلام">
-          </div>
-
-          <button type="submit">إرسال طلب السحب</button>
-        </form>
-      </div>
-    </section>
-
-    <!-- السجل -->
-    <section class="page" id="history">
-      <div class="card">
-        <h2>سجل الطلبات 📜</h2>
-        <p>
-          يعرض هذا القسم الطلبات التي سُجلت محليًا على هذا الجهاز،
-          وليس سجلًا رسميًا كاملًا من قاعدة البيانات.
-        </p>
-        <div id="historyList">
-          <p class="muted">لا توجد طلبات محلية حتى الآن.</p>
-        </div>
-        <button class="secondary" onclick="showHistory()">
-          تحديث السجل
-        </button>
-      </div>
-    </section>
-
-    <!-- الحساب -->
-    <section class="page" id="account">
-      <div class="card">
-        <h2>حسابي 👤</h2>
-        <p>رقم الموبايل المرتبط بالجلسة الحالية:</p>
-        <div class="item"><strong id="accountPhone2">—</strong></div>
-        <p class="muted">
-          تسجيل الدخول الحالي برقم الموبايل وحده ليس وسيلة
-          آمنة لحماية حسابات أو أرصدة مالية حقيقية.
-        </p>
-        <br>
-        <button class="danger" onclick="logout()">تسجيل الخروج</button>
-      </div>
-    </section>
-
-  </section>
+  <div class="section-title"><span>الوصول السريع</span><small>خدمات المحفظة</small></div>
+  <div class="panel" onclick="showPage('history')" style="cursor:pointer"><h3>▤ سجل المعاملات</h3><p>تابع طلبات الإيداع والسحب والمهام.</p></div>
+  <div class="panel" onclick="showPage('account')" style="cursor:pointer"><h3>♙ حسابي</h3><p>اعرض رقم الموبايل المسجل في حسابك.</p></div>
 </main>
 
-<footer>
-  ربح المال © 2026 — اكسب من مهامك، واجمع عمولاتك.
-</footer>
+<main id="deposit" class="page">
+  <h1>إيداع الأموال</h1>
+  <p class="subtitle">أنشئ طلب إيداع لمراجعته من الإدارة.</p>
+
+  <div class="panel"><h3>طلب إيداع جديد</h3><p>اكتب المبلغ واختر طريقة الدفع المناسبة.</p></div>
+
+  <form id="depositForm">
+    <div class="field"><label for="depositAmount">المبلغ بالجنيه المصري</label><input id="depositAmount" type="number" min="1" step="0.01" placeholder="مثال: 100" required></div>
+    <div class="field"><label for="depositMethod">طريقة الدفع</label>
+      <select id="depositMethod" required>
+        <option value="">اختر طريقة الدفع</option>
+        <option>Vodafone Cash</option><option>Orange Cash</option>
+        <option>Etisalat Cash</option><option>InstaPay</option><option>Visa</option>
+      </select>
+    </div>
+    <div class="field"><label for="depositPhone">رقم الدفع</label><input id="depositPhone" type="tel" placeholder="رقم الموبايل أو رقم الدفع" required></div>
+    <div id="depositMessage" class="hidden"></div>
+    <button class="primary-btn" type="submit">إرسال طلب الإيداع</button>
+  </form>
+</main>
+
+<main id="withdraw" class="page">
+  <h1>سحب الأموال</h1>
+  <p class="subtitle">أرسل طلب سحب لمراجعته من الإدارة.</p>
+
+  <div class="panel">
+    <h3>رصيدك الحالي</h3>
+    <div class="balance-number" style="font-size:27px;margin:12px 0"><span id="withdrawBalance">جارٍ التحميل...</span> <small>جنيه</small></div>
+  </div>
+
+  <form id="withdrawForm">
+    <div class="field"><label for="withdrawAmount">مبلغ السحب</label><input id="withdrawAmount" type="number" min="1" step="0.01" placeholder="اكتب المبلغ" required></div>
+    <div class="field"><label for="withdrawMethod">طريقة استلام الأموال</label>
+      <select id="withdrawMethod" required>
+        <option value="">اختر الطريقة</option>
+        <option>Vodafone Cash</option><option>Orange Cash</option>
+        <option>Etisalat Cash</option><option>InstaPay</option><option>Visa</option>
+      </select>
+    </div>
+    <div class="field"><label for="withdrawPhone">رقم الاستلام</label><input id="withdrawPhone" type="tel" placeholder="رقم الموبايل أو الحساب" required></div>
+    <div class="field"><label for="withdrawPassword">كلمة سر السحب</label><input id="withdrawPassword" type="password" minlength="4" placeholder="أدخل كلمة سر السحب" required></div>
+    <div id="withdrawMessage" class="hidden"></div>
+    <button class="primary-btn" type="submit">إرسال طلب السحب</button>
+  </form>
+</main>
+
+<main id="tasks" class="page">
+  <h1>المهام والمكافآت</h1>
+  <p class="subtitle">أرسل طلبك للحصول على المكافأة المتاحة.</p>
+
+  <div class="task-card">
+    <div class="task-top">
+      <div class="task-icon">★</div>
+      <div><div class="task-title">مهمة الربح الأولى</div><p style="color:var(--muted);font-size:13px;line-height:1.7">اضغط على الزر لإرسال طلب الحصول على المكافأة.</p></div>
+    </div>
+    <div class="reward">+ 100 جنيه</div>
+    <button id="claimTaskButton" class="primary-btn" onclick="claimTask()">اضغط هنا للربح 100 جنيه</button>
+    <div id="taskMessage" class="hidden" style="margin-top:13px"></div>
+  </div>
+
+  <div class="notice">المكافأة لا تُضاف إلا بعد موافقة الإدارة من خلال الخادم.</div>
+</main>
+
+<main id="history" class="page">
+  <h1>سجل المعاملات</h1>
+  <p class="subtitle">الطلبات التي أُرسلت من هذا الجهاز.</p>
+  <div id="historyList" class="panel"><div class="empty">لا توجد معاملات حتى الآن.</div></div>
+</main>
+
+<main id="account" class="page">
+  <h1>حسابي</h1>
+  <p class="subtitle">معلومات حسابك.</p>
+
+  <div class="panel profile-head">
+    <div class="profile-avatar">♙</div>
+    <h2 style="margin-bottom:8px">حساب المستخدم</h2>
+    <p id="profilePhone">—</p>
+  </div>
+
+  <div class="panel">
+    <div class="status-row"><span class="status-label">رقم الموبايل</span><span class="status-value" id="accountPhone">—</span></div>
+    <div class="status-row"><span class="status-label">الرصيد الظاهر</span><span class="status-value"><span id="accountBalance">جارٍ التحميل...</span> جنيه</span></div>
+  </div>
+  <button class="secondary-btn" onclick="logout()">تسجيل الخروج</button>
+</main>
+
+<main id="notifications" class="page">
+  <h1>الإشعارات</h1>
+  <p class="subtitle">آخر التحديثات الخاصة بحسابك.</p>
+  <div class="panel"><h3>مرحباً بك في Smart Wallet</h3><p>يمكنك إرسال طلبات الإيداع والسحب والمهام من الموقع.</p></div>
+</main>
+
+<nav class="bottom-nav">
+  <button class="nav-item active" data-page="home" onclick="showPage('home')"><span class="nav-icon">⌂</span>الرئيسية</button>
+  <button class="nav-item" data-page="deposit" onclick="showPage('deposit')"><span class="nav-icon">＋</span>إيداع</button>
+  <button class="nav-item" data-page="withdraw" onclick="showPage('withdraw')"><span class="nav-icon">↗</span>سحب</button>
+  <button class="nav-item" data-page="tasks" onclick="showPage('tasks')"><span class="nav-icon">★</span>المهام</button>
+  <button class="nav-item" data-page="account" onclick="showPage('account')"><span class="nav-icon">♙</span>حسابي</button>
+</nav>
+</div>
 
 <script>
-"use strict";
+const API_URL = "https://sjhjxbnhhwftwlkshpql.supabase.co/functions/v1/smart-service";
+const STORAGE_KEY = "smart_wallet_requests_v2";
+const PHONE_KEY = "smart_wallet_phone_v2";
 
-/*
-  عنوان خدمة Supabase الحالية.
-  هذا الكود لا يحتوي على مفتاح service_role.
-*/
-const API_URL =
-  "https://sjhjxbnhhwftwlkshpql.supabase.co/functions/v1/smart-service";
+let currentPhone = localStorage.getItem(PHONE_KEY) || "";
+let currentBalance = null;
+let taskSending = false;
 
-let currentPhone = "";
-let balanceLoading = false;
-
-const $ = id => document.getElementById(id);
-
-function showMessage(text, type = "") {
-  const box = $("message");
-  box.textContent = text;
-  box.className = type;
-  box.style.display = "block";
-  box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+function normalizePhone(value){
+  return String(value || "").trim().replace(/[^\d+]/g, "");
 }
 
-function hideMessage() {
-  $("message").style.display = "none";
+function validPhone(value){
+  const digits = String(value || "").replace(/\D/g, "");
+  return digits.length >= 10 && digits.length <= 15;
 }
 
-function normalizePhone(value) {
-  return value.trim().replace(/\s+/g, "");
-}
-
-function validPhone(value) {
-  return /^[0-9+()-]{8,20}$/.test(value);
-}
-
-function formatMoney(value) {
-  const amount = Number(value);
-  if (!Number.isFinite(amount)) return "غير متاح";
-  return amount.toLocaleString("ar-EG", {
+function formatBalance(value){
+  return Number(value).toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
-  }) + " ج.م";
+  });
 }
 
-async function apiRequest(payload) {
+function showMessage(id, message, type){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.className = "notice " + (type || "");
+  el.textContent = message;
+}
+
+function hideMessage(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.className = "hidden";
+  el.textContent = "";
+}
+
+async function sendServerRequest(payload){
   const response = await fetch(API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: {"Content-Type": "application/json"},
     body: JSON.stringify(payload)
   });
 
-  const text = await response.text();
-  let data;
+  const data = await response.json().catch(() => ({}));
 
-  try {
-    data = text ? JSON.parse(text) : {};
-  } catch {
-    throw new Error("الخادم أعاد استجابة غير مفهومة.");
-  }
-
-  if (!response.ok) {
-    throw new Error(
-      data.error || data.message ||
-      "تعذر إكمال الطلب. حاول مرة أخرى."
-    );
-  }
-
-  if (data && data.error) {
-    throw new Error(data.error);
+  if(!response.ok || data.success === false){
+    throw new Error(data.error || data.message || "تعذر الاتصال بالخادم.");
   }
 
   return data;
 }
 
-function enterApp(phone) {
-  currentPhone = phone;
-  $("loginSection").hidden = true;
-  $("appSection").hidden = false;
-  $("logoutBtn").hidden = false;
-  $("accountPhone").textContent = phone;
-  $("accountPhone2").textContent = phone;
+function updateBalanceDisplay(value){
+  const formatted = formatBalance(value);
 
-  loadBalance();
-  showHistory();
+  ["balanceAmount", "withdrawBalance", "accountBalance"].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = formatted;
+  });
 }
 
-function logout() {
-  currentPhone = "";
-  sessionStorage.removeItem("ribh_phone");
-  $("loginSection").hidden = false;
-  $("appSection").hidden = true;
-  $("logoutBtn").hidden = true;
-  $("balanceAmount").textContent = "—";
-  $("connectionStatus").textContent = "غير متصل";
-  $("phone").value = "";
-  hideMessage();
-}
+async function loadBalance(){
+  if(!currentPhone) return;
 
-$("loginForm").addEventListener("submit", event => {
-  event.preventDefault();
-  hideMessage();
+  ["balanceAmount", "withdrawBalance", "accountBalance"].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = "جارٍ التحميل...";
+  });
 
-  const phone = normalizePhone($("phone").value);
-
-  if (!validPhone(phone)) {
-    showMessage("من فضلك أدخل رقم موبايل صحيح.", "error");
-    return;
-  }
-
-  /*
-    هذه جلسة بسيطة على الجهاز وليست مصادقة آمنة.
-    لا تستخدمها لحماية أموال حقيقية.
-  */
-  sessionStorage.setItem("ribh_phone", phone);
-  enterApp(phone);
-});
-
-async function loadBalance() {
-  if (!currentPhone || balanceLoading) return;
-
-  balanceLoading = true;
-  $("connectionStatus").textContent = "جارٍ التحميل";
-  $("balanceAmount").textContent = "جارٍ التحميل...";
-
-  try {
-    const data = await apiRequest({
+  try{
+    const data = await sendServerRequest({
       action: "get_balance",
       phone_number: currentPhone
     });
 
-    const balance =
-      data.balance ??
-      data.data?.balance ??
-      data.wallet?.balance;
-
-    if (balance === undefined || !Number.isFinite(Number(balance))) {
-      throw new Error("لم يصل الرصيد في الاستجابة المتوقعة.");
+    if(!data.success || data.balance === undefined ||
+       !Number.isFinite(Number(data.balance))){
+      throw new Error("استجابة الرصيد غير صحيحة.");
     }
 
-    $("balanceAmount").textContent = formatMoney(balance);
-    $("connectionStatus").textContent = "متصل";
-    $("connectionStatus").className = "success";
-  } catch (error) {
-    $("balanceAmount").textContent = "تعذر التحميل";
-    $("connectionStatus").textContent = "تعذر الاتصال";
-    $("connectionStatus").className = "error";
-    showMessage(
-      "تعذر تحميل الرصيد: " + error.message,
-      "error"
-    );
-  } finally {
-    balanceLoading = false;
+    currentBalance = Number(data.balance);
+    updateBalanceDisplay(currentBalance);
+  }catch(error){
+    console.error("Balance loading error:", error);
+
+    ["balanceAmount", "withdrawBalance", "accountBalance"].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.textContent = "تعذر التحميل";
+    });
   }
 }
 
-function saveLocalRequest(type, amount, method, details) {
-  const key = "ribh_local_requests_" + currentPhone;
-  const list = JSON.parse(localStorage.getItem(key) || "[]");
-
-  list.unshift({
-    type,
-    amount: Number(amount),
-    method,
-    details,
-    status: "تم إرسال الطلب — بانتظار المراجعة",
-    created_at: new Date().toISOString()
+function showPage(pageId){
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.toggle("active", page.id === pageId);
   });
 
-  localStorage.setItem(key, JSON.stringify(list.slice(0, 100)));
+  document.querySelectorAll(".nav-item").forEach(button => {
+    button.classList.toggle("active", button.dataset.page === pageId);
+  });
+
+  window.scrollTo({top:0, behavior:"smooth"});
+
+  if(pageId === "history") renderHistory();
+  if(["withdraw", "account", "home"].includes(pageId)) loadBalance();
 }
 
-function showHistory() {
-  const key = "ribh_local_requests_" + currentPhone;
-  const list = JSON.parse(localStorage.getItem(key) || "[]");
-  const box = $("historyList");
+function enterApp(phone){
+  currentPhone = normalizePhone(phone);
+  localStorage.setItem(PHONE_KEY, currentPhone);
 
-  box.replaceChildren();
+  document.getElementById("loginScreen").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+  document.getElementById("profilePhone").textContent = currentPhone;
+  document.getElementById("accountPhone").textContent = currentPhone;
 
-  if (!list.length) {
-    const p = document.createElement("p");
-    p.className = "muted";
-    p.textContent = "لا توجد طلبات محلية حتى الآن.";
-    box.appendChild(p);
+  currentBalance = null;
+  renderHistory();
+  showPage("home");
+  loadBalance();
+}
+
+document.getElementById("loginForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const phone = normalizePhone(document.getElementById("loginPhone").value);
+
+  if(!validPhone(phone)){
+    alert("من فضلك اكتب رقم موبايل صحيح.");
     return;
   }
 
-  for (const item of list) {
+  enterApp(phone);
+});
+
+function getLocalRequests(){
+  try{
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]")
+      .filter(item => item.user_id === currentPhone);
+  }catch{
+    return [];
+  }
+}
+
+function saveLocalRequest(item){
+  let all = [];
+
+  try{
+    all = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  }catch{}
+
+  all.unshift(item);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+}
+
+function renderHistory(){
+  const container = document.getElementById("historyList");
+  if(!container) return;
+
+  const items = getLocalRequests();
+
+  if(!items.length){
+    container.innerHTML = '<div class="empty">لا توجد معاملات مسجلة على هذا الجهاز حتى الآن.</div>';
+    return;
+  }
+
+  container.innerHTML = "";
+
+  items.forEach(item => {
     const row = document.createElement("div");
-    row.className = "item";
+    row.className = "status-row";
 
-    const title = document.createElement("strong");
-    title.textContent = item.type;
-
-    const amount = document.createElement("div");
-    amount.textContent = formatMoney(item.amount);
-
-    const method = document.createElement("div");
-    method.className = "muted";
-    method.textContent = item.method || "";
-
-    const status = document.createElement("div");
-    status.className = "muted";
-    status.textContent = item.status;
+    const info = document.createElement("div");
+    const title = document.createElement("div");
+    title.className = "status-value";
+    title.textContent = item.title || "طلب";
 
     const date = document.createElement("div");
-    date.className = "muted";
-    date.textContent = new Date(item.created_at).toLocaleString("ar-EG");
+    date.className = "status-label";
+    date.textContent = item.date || "";
 
-    row.append(title, amount, method, status, date);
-    box.appendChild(row);
-  }
-}
+    info.append(title, date);
 
-async function submitRequest(button, type, amount, method, details) {
-  if (!currentPhone) {
-    showMessage("سجّل الدخول أولًا.", "error");
-    return;
-  }
+    const amount = document.createElement("strong");
+    amount.style.color = "var(--gold)";
+    amount.textContent = Number(item.amount || 0).toLocaleString("ar-EG") + " جنيه";
 
-  const value = Number(amount);
-
-  if (!Number.isFinite(value) || value <= 0) {
-    showMessage("أدخل مبلغًا صحيحًا.", "error");
-    return;
-  }
-
-  button.disabled = true;
-
-  try {
-    /*
-      نحافظ على اسم الإجراء والحقول الأساسية في النظام الحالي.
-      قد يحتاج شكل بيانات الوسيلة إلى مطابقة الحقول التي
-      تقبلها دالة smart-service الموجودة لديك.
-    */
-    const data = await apiRequest({
-      action: "create_request",
-      type,
-      phone_number: currentPhone,
-      amount: value,
-      method,
-      details
-    });
-
-    saveLocalRequest(type, value, method, details);
-    showHistory();
-
-    showMessage(
-      data.message ||
-      "تم إرسال الطلب. انتظر مراجعة الإدارة؛ هذه الرسالة لا تعني تنفيذ تحويل مالي.",
-      "success"
-    );
-  } catch (error) {
-    showMessage("تعذر إرسال الطلب: " + error.message, "error");
-  } finally {
-    button.disabled = false;
-  }
-}
-
-$("depositForm").addEventListener("submit", event => {
-  event.preventDefault();
-
-  submitRequest(
-    event.submitter,
-    "deposit",
-    $("depositAmount").value,
-    $("depositMethod").value,
-    $("depositReference").value.trim()
-  );
-});
-
-$("withdrawForm").addEventListener("submit", event => {
-  event.preventDefault();
-
-  submitRequest(
-    event.submitter,
-    "withdrawal",
-    $("withdrawAmount").value,
-    $("withdrawMethod").value,
-    $("withdrawDetails").value.trim()
-  );
-});
-
-async function claimTask() {
-  const button = $("taskBtn");
-  button.disabled = true;
-
-  try {
-    const data = await apiRequest({
-      action: "create_request",
-      type: "task",
-      phone_number: currentPhone,
-      amount: 100,
-      details: "المهمة التجريبية"
-    });
-
-    saveLocalRequest("مكافأة مهمة", 100, "مهمة تجريبية", "");
-    showHistory();
-
-    showMessage(
-      data.message ||
-      "تم إرسال طلب المهمة. انتظر مراجعة الإدارة.",
-      "success"
-    );
-  } catch (error) {
-    showMessage("تعذر إرسال طلب المهمة: " + error.message, "error");
-  } finally {
-    button.disabled = false;
-  }
-}
-
-/* التنقل بين الأقسام */
-document.querySelectorAll(".nav button").forEach(button => {
-  button.addEventListener("click", () => {
-    const pageId = button.dataset.page;
-
-    document.querySelectorAll(".nav button").forEach(item => {
-      item.classList.toggle("active", item === button);
-    });
-
-    document.querySelectorAll(".page").forEach(page => {
-      page.classList.toggle("active", page.id === pageId);
-    });
-
-    hideMessage();
-
-    if (pageId === "history") showHistory();
-    if (pageId === "home") loadBalance();
+    row.append(info, amount);
+    container.appendChild(row);
   });
-});
-
-/* استعادة الجلسة على نفس علامة التبويب */
-const savedPhone = sessionStorage.getItem("ribh_phone");
-
-if (savedPhone && validPhone(savedPhone)) {
-  $("phone").value = savedPhone;
-  enterApp(savedPhone);
 }
 
-/* تحديث الرصيد عند الرجوع إلى الصفحة */
-window.addEventListener("focus", () => {
-  if (currentPhone) loadBalance();
-});
-</script>
+async function submitRequest(type, amount, method, phone, password){
+  const payload = {
+    action: "create_request",
+    user_id: currentPhone,
+    amount: Number(amount),
+    request_type: type,
+    payment_method: method,
+    phone_number: phone
+  };
 
+  if(password) payload.withdrawal_password = password;
+
+  await sendServerRequest(payload);
+
+  const title = type === "deposit" ? "طلب إيداع" :
+                type === "withdraw" ? "طلب سحب" : "طلب مهمة";
+
+  saveLocalRequest({
+    user_id: currentPhone,
+    title,
+    amount: Number(amount),
+    status: "pending",
+    date: new Date().toLocaleString("ar-EG")
+  });
+
+  renderHistory();
+}
+
+document.getElementById("depositForm").addEventListener("submit", async function(event){
+  event.preventDefault();
+  hideMessage("depositMessage");
+
+  const amount = Number(document.getElementById("depositAmount").value);
+  const method = document.getElementById("depositMethod").value;
+  const phone = normalizePhone(document.getElementById("depositPhone").value);
+
+  if(!Number.isFinite(amount) || amount <= 0){
+    showMessage("depositMessage", "اكتب مبلغاً صحيحاً.", "error");
+    return;
+  }
+
+  const button = this.querySelector('button[type="submit"]');
+  button.disabled = true;
+  button.textContent = "جارٍ إرسال الطلب...";
+
+  try{
+    await submitRequest("deposit", amount, method, phone, "");
+    showMessage("depositMessage", "تم إرسال الطلب إلى الإدارة للمراجعة.", "success");
+    this.reset();
+  }catch(error){
+    showMessage("depositMessage", "تعذر إرسال الطلب: " + error.message, "error");
+  }finally{
+    button.disabled = false;
+    button.textContent = "إرسال طلب الإيداع";
+  }
+});
+
+document.getElementById("withdrawForm").addEventListener("submit", async function(event){
+  event.preventDefault();
+  hideMessage("withdrawMessage");
+
+  const amount = Number(document.getElementById("withdrawAmount").value);
+  const method = document.getElementById("withdrawMethod").value;
+  const phone = normalizePhone(document.getElementById("withdrawPhone").value);
+  const password = document.getElementById("withdrawPassword").value;
+
+  if(!Number.isFinite(amount) || amount <= 0){
+    showMessage("withdrawMessage", "اكتب مبلغ سحب صحيحاً.", "error");
+    return;
+  }
+
+  if(currentBalance === null){
+    showMessage("withdrawMessage", "استنى لحد ما الرصيد يكتمل تحميله.", "error");
+    return;
+  }
+
+  if(amount > currentBalance){
+    showMessage("withdrawMessage", "مبلغ السحب أكبر من رصيدك الحالي.", "error");
+    return;
+  }
+
+  if(password.length < 4){
+    showMessage("withdrawMessage", "كلمة سر السحب يجب أن تكون 4 أحرف أو أرقام على الأقل.", "error");
+    return;
+  }
+
+  const button = this.querySelector('button[type="submit"]');
+  button.disabled = true;
+  button.textContent = "جارٍ إرسال الطلب...";
+
+  try{
+    await submitRequest("withdraw", amount, method, phone, password);
+    showMessage("withdrawMessage", "تم إرسال طلب السحب إلى الإدارة للمراجعة.", "success");
+    this.reset();
+    await loadBalance();
+  }catch(error){
+    showMessage("withdrawMessage", "تعذر إرسال طلب السحب: " + error.message, "error");
+  }finally{
+    button.disabled = false;
+    button.textContent = "إرسال طلب السحب";
+  }
+});
+
+async function claimTask(){
+  if(taskSending) return;
+
+  taskSending = true;
+  const button = document.getElementById("claimTaskButton");
+  button.disabled = true;
+  button.textContent = "جارٍ إرسال الطلب...";
+  hideMessage("taskMessage");
+
+  try{
+    await sendServerRequest({
+      action: "create_request",
+      user_id: currentPhone,
+      amount: 100,
+      request_type: "task",
+      payment_method: "task_reward",
+      phone_number: currentPhone
+    });
+
+    saveLocalRequest({
+      user_id: currentPhone,
+      title: "طلب مكافأة مهمة",
+      amount: 100,
+      status: "pending",
+      date: new Date().toLocaleString("ar-EG")
+    });
+
+    renderHistory();
+
+    showMessage(
+      "taskMessage",
+      "تم إرسال طلب المكافأة. سيتم تحديث الرصيد بعد موافقة الإدارة.",
+      "success"
+    );
+
+    button.textContent = "تم إرسال الطلب";
+  }catch(error){
+    showMessage("taskMessage", "تعذر إرسال الطلب: " + error.message, "error");
+    button.disabled = false;
+    button.textContent = "اضغط هنا للربح 100 جنيه";
+  }finally{
+    taskSending = false;
+  }
+}
+
+function logout(){
+  localStorage.removeItem(PHONE_KEY);
+  currentPhone = "";
+  currentBalance = null;
+
+  document.getElementById("app").classList.add("hidden");
+  document.getElementById("loginScreen").classList.remove("hidden");
+  document.getElementById("loginPhone").value = "";
+}
+
+window.addEventListener("focus", () => {
+  if(currentPhone) loadBalance();
+});
+
+setInterval(() => {
+  if(currentPhone) loadBalance();
+}, 20000);
+
+if(currentPhone && validPhone(currentPhone)){
+  enterApp(currentPhone);
+}
+</script>
 </body>
 </html>
