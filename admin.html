@@ -233,3 +233,102 @@ async function logout(){
 </script>
 </body>
 </html>
+const { onCall, HttpsError } = require("firebase-functions/v2/https");
+const { initializeApp } = require("firebase-admin/app");
+const { getDatabase } = require("firebase-admin/database");
+
+initializeApp();
+
+const db = getDatabase();
+
+const ADMIN_UID = "8aBvh2HxgEXrbeQEZsIvJjPLv6h1";
+
+exports.reviewDeposit = onCall(async (request) => {
+  if (!request.auth || request.auth.uid !== ADMIN_UID) {
+    throw new HttpsError(
+      "permission-denied",
+      "غير مسموح إلا للمدير."
+    );
+  }
+
+  const { uid, requestId, action } = request.data || {};
+
+  if (
+    typeof uid !== "string" ||
+    typeof requestId !== "string" ||
+    !["approved", "rejected"].includes(action)
+  ) {
+    throw new HttpsError("invalid-argument", "بيانات الطلب غير صحيحة.");
+  }
+
+  const requestRef = db.ref(`requests/${uid}/${requestId}`);
+
+  const result = await requestRef.transaction((item) => {
+    if (!item || item.status !== "pending") return;
+
+    if (item.type !== "deposit") {
+      throw new Error("NOT_DEPOSIT");
+    }
+
+    const amount = Number(item.amount);
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      throw new Error("INVALID_AMOUNT");
+    }
+
+    return {
+      ...item,
+      status: action,
+      reviewedAt: Date.now(),
+      reviewedBy: request.auth.uid
+    };
+  });
+
+  if (!result.committed) {
+    throw new HttpsError(
+      "failed-precondition",
+      "الطلب تمت مراجعته بالفعل أو لم يعد موجودًا."
+    );
+  }
+
+  if (action === "rejected") {
+    return { success: true, message: "تم رفض الطلب." };
+  }
+
+  const amount = Number(result.snapshot.val().amount);
+  const balanceRef = db.ref(`balances/${uid}`);
+
+  try {
+    await balanceRef.transaction((current) => {
+      const currentAmount =
+        current && typeof current === "object"
+          ? Number(current.amount || 0)
+          : Number(current || 0);
+
+      if (!Number.isFinite(currentAmount) || currentAmount < 0) {
+        throw new Error("INVALID_BALANCE");
+      }
+
+      return {
+        amount: currentAmount + amount
+      };
+    });
+
+    await requestRef.update({
+      credited: true,
+      creditedAt: Date.now()
+    });
+
+    return { success: true, message: "تمت إضافة الرصيد." };
+  } catch (error) {
+    await requestRef.update({
+      status: "approved",
+      creditError: true
+    });
+
+    throw new HttpsError(
+      "internal",
+      "تم قبول الطلب لكن تعذرت إضافة الرصيد. يلزم فحص الطلب قبل إعادة المحاولة."
+    );
+  }
+});
