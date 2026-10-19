@@ -1,148 +1,141 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>لوحة إدارة منصتي PRO</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>إدارة منصتي PRO</title>
 
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      color: #f5f7ff;
-      background: linear-gradient(145deg, #080d20, #201044);
-      min-height: 100vh;
-    }
-    header {
-      padding: 22px 16px;
-      background: #10152c;
-      border-bottom: 1px solid #30395d;
-    }
-    header h1 { margin: 0 0 8px; font-size: 23px; }
-    header p { margin: 0; color: #aeb9d9; font-size: 14px; }
-    main { max-width: 1000px; margin: auto; padding: 16px; }
-    .card {
-      background: #151c35;
-      border: 1px solid #303b60;
-      border-radius: 15px;
-      padding: 18px;
-      margin-bottom: 15px;
-    }
-    h2 { font-size: 18px; margin-top: 0; }
-    input, button {
-      width: 100%;
-      padding: 13px;
-      border-radius: 10px;
-      margin: 6px 0;
-      font-size: 15px;
-    }
-    input {
-      background: #0c1228;
-      border: 1px solid #394568;
-      color: white;
-    }
-    button {
-      border: 0;
-      background: #16c9df;
-      color: #061322;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button.secondary {
-      background: #303a60;
-      color: white;
-    }
-    button.danger {
-      background: #9c314f;
-      color: white;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-    .stat {
-      background: #0e152e;
-      padding: 15px;
-      border-radius: 12px;
-    }
-    .stat span { display: block; color: #aeb9d9; font-size: 13px; }
-    .stat strong { display: block; margin-top: 8px; font-size: 23px; }
-    .muted { color: #aeb9d9; font-size: 13px; line-height: 1.7; }
-    .row {
-      border-bottom: 1px solid #303b60;
-      padding: 12px 0;
-      overflow-wrap: anywhere;
-    }
-    .row:last-child { border-bottom: 0; }
-    .hidden { display: none !important; }
-    .status { padding: 10px 0; line-height: 1.7; }
-    @media (max-width: 500px) {
-      .grid { grid-template-columns: 1fr 1fr; }
-      main { padding: 10px; }
-    }
-  </style>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:Arial,Tahoma,sans-serif;color:#f4f7ff;
+  background:linear-gradient(145deg,#080d20,#20113e,#0b1730);
+  min-height:100vh
+}
+header{
+  padding:18px;background:#090f23eF;border-bottom:1px solid #293657;
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  position:sticky;top:0;z-index:5
+}
+.logo{font-size:21px;font-weight:bold;color:#00e5ff}
+.logo span{color:#a78bfa}
+.container{max-width:1100px;margin:auto;padding:16px}
+.card{
+  background:linear-gradient(145deg,#141e3b,#10172e);
+  border:1px solid #2b3a5d;border-radius:17px;
+  padding:18px;margin-bottom:16px
+}
+h2,h3{margin-top:0}
+.muted{color:#aab6d2;font-size:14px;line-height:1.8}
+input{
+  width:100%;padding:13px;border-radius:10px;
+  border:1px solid #344365;background:#0a1228;color:#fff;
+  margin:8px 0;outline:none
+}
+button{
+  border:0;border-radius:10px;padding:11px 14px;
+  cursor:pointer;font-weight:bold
+}
+.primary{background:#00e5ff;color:#071222}
+.secondary{background:#293759;color:#fff}
+.approve{background:#0c674d;color:#fff}
+.reject{background:#772b42;color:#fff}
+button:disabled{opacity:.5;cursor:not-allowed}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.stat{
+  padding:17px;border-radius:14px;
+  background:linear-gradient(135deg,#17294c,#30205b);
+  border:1px solid #35446c
+}
+.num{font-size:25px;color:#00e5ff;font-weight:bold;margin-top:9px}
+.request{
+  background:#0b142b;border:1px solid #2b3a5d;
+  padding:15px;border-radius:13px;margin-top:12px;
+  overflow-wrap:anywhere
+}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.badge{font-size:12px;padding:5px 9px;border-radius:20px;background:#293759}
+.pending{color:#ffe08a}
+.done{color:#7dffbd}
+.failed{color:#ff9fb5}
+.hidden{display:none!important}
+.notice{padding:12px;border-radius:10px;background:#142440;color:#c5d8ff;line-height:1.8}
+@media(max-width:600px){
+ .grid{grid-template-columns:1fr}
+ header{padding:13px}
+ .container{padding:10px}
+ .card{padding:14px}
+}
+</style>
 </head>
 
 <body>
 <header>
-  <h1>🛡️ منصتي PRO — لوحة الإدارة</h1>
-  <p>إدارة المهام والمستخدمين وطلبات السحب</p>
+  <div class="logo">منصتي <span>PRO | الإدارة</span></div>
+  <button id="logoutBtn" class="secondary hidden" onclick="logout()">تسجيل الخروج</button>
 </header>
 
-<main>
-  <section id="loginCard" class="card">
+<div class="container">
+
+  <div id="loginScreen" class="card" style="max-width:440px;margin:35px auto">
     <h2>دخول المدير</h2>
+    <p class="muted">سجّل الدخول بحساب Firebase المصرح له بالإدارة.</p>
+
+    <label>البريد الإلكتروني</label>
+    <input id="email" type="email" autocomplete="username" placeholder="البريد الإلكتروني">
+
+    <label>كلمة المرور</label>
+    <input id="password" type="password" autocomplete="current-password" placeholder="كلمة المرور">
+
+    <button id="loginBtn" class="primary" style="width:100%" onclick="login()">دخول لوحة الإدارة</button>
+    <p id="loginMessage" class="muted"></p>
+  </div>
+
+  <div id="deniedScreen" class="card hidden">
+    <h2>لا توجد صلاحية إدارة</h2>
     <p class="muted">
-      سجّل الدخول بحساب المدير الموجود في Firebase Authentication.
+      الحساب مسجل الدخول، لكنه غير موجود ضمن قائمة المديرين المصرح لهم.
+      تأكد من إعداد adminUids في Firebase.
     </p>
-    <input id="email" type="email" placeholder="البريد الإلكتروني" autocomplete="email">
-    <input id="password" type="password" placeholder="كلمة المرور" autocomplete="current-password">
-    <button id="loginBtn">تسجيل الدخول</button>
-    <div id="loginStatus" class="status"></div>
-  </section>
+    <button class="secondary" onclick="logout()">تسجيل الخروج</button>
+  </div>
 
-  <section id="dashboard" class="hidden">
+  <main id="adminScreen" class="hidden">
+
     <div class="card">
-      <h2>لوحة التحكم</h2>
-      <div class="grid">
-        <div class="stat">
-          <span>المستخدمون</span>
-          <strong id="userCount">—</strong>
+      <div class="row">
+        <div>
+          <h2>لوحة التحكم</h2>
+          <p class="muted">إدارة طلبات الإيداع وأرصدة المستخدمين.</p>
         </div>
-        <div class="stat">
-          <span>المهام</span>
-          <strong id="taskCount">—</strong>
-        </div>
-        <div class="stat">
-          <span>طلبات السحب</span>
-          <strong id="withdrawCount">—</strong>
-        </div>
-        <div class="stat">
-          <span>إتمام المهام</span>
-          <strong id="completionCount">—</strong>
-        </div>
+        <button class="secondary" onclick="loadProfiles()">تحديث البيانات</button>
       </div>
-      <p id="adminStatus" class="status"></p>
-      <button id="logoutBtn" class="secondary">تسجيل الخروج</button>
+      <p id="adminEmail" class="muted"></p>
+      <p id="mainMessage" class="muted"></p>
     </div>
 
-    <div class="card">
-      <h2>إضافة مهمة</h2>
-      <input id="taskTitle" placeholder="اسم المهمة">
-      <input id="taskReward" type="number" min="0" step="0.01" placeholder="المكافأة">
-      <button id="addTaskBtn">إضافة المهمة</button>
-      <div id="taskStatus" class="status"></div>
+    <div class="grid">
+      <div class="stat">
+        <div class="muted">كل الطلبات المحملة</div>
+        <div class="num" id="totalCount">0</div>
+      </div>
+      <div class="stat">
+        <div class="muted">طلبات تنتظر المراجعة</div>
+        <div class="num" id="pendingCount">0</div>
+      </div>
+      <div class="stat">
+        <div class="muted">طلبات تمت الموافقة عليها</div>
+        <div class="num" id="approvedCount">0</div>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>المهام الحالية</h2>
-      <div id="tasksList" class="muted">جارٍ تحميل المهام...</div>
-    </div>
-
-    <div class="card">
-      <h2>طلبات السحب والإيداع</h2>
+    <div class="card" style="margin-top:16px">
+      <h2>طلبات الإيداع</h2>
+      <div class="notice">
+        لا توافق على أي طلب إلا بعد التأكد من وصول التحويل فعلًا.
+        رقم العملية الذي يكتبه المستخدم ليس دليلًا كافيًا وحده.
+      </div>
       <div id="requestsList" class="muted">جارٍ تحميل الطلبات...</div>
     </div>
 
@@ -151,12 +144,8 @@
       <div id="usersList" class="muted">جارٍ تحميل المستخدمين...</div>
     </div>
 
-    <div class="card">
-      <h2>إتمام المهام</h2>
-      <div id="completionsList" class="muted">جارٍ تحميل الإتمام...</div>
-    </div>
-  </section>
-</main>
+  </main>
+</div>
 
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -178,269 +167,448 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
 
-const $ = id => document.getElementById(id);
-let activeListeners = [];
+/* معرّف المدير الذي أكدته سابقًا */
+const ADMIN_UID = "8aBvh2HxgEXrbeQEZsIvJjPLv6h1";
+
+let currentUser = null;
+let isAdmin = false;
+let profilesCache = {};
+let allRequests = [];
+let requestListeners = [];
+let profileListener = null;
+let busyRequests = new Set();
+
+function setText(id, text) {
+  document.getElementById(id).textContent = text;
+}
 
 function show(id, visible) {
-  $(id).classList.toggle("hidden", !visible);
+  document.getElementById(id).classList.toggle("hidden", !visible);
 }
 
-function setStatus(id, message) {
-  $(id).textContent = message;
+function stopListeners() {
+  requestListeners.forEach(item => item.ref.off("value", item.callback));
+  requestListeners = [];
+
+  if (profileListener) {
+    db.ref("profiles").off("value", profileListener);
+    profileListener = null;
+  }
 }
 
-function safeText(value) {
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  }[char]));
-}
-
-function listen(path, callback, errorCallback) {
-  const ref = db.ref(path);
-  const handler = snapshot => callback(snapshot.val() || {});
-  ref.on("value", handler, error => {
-    if (errorCallback) errorCallback(error);
-    else console.error(error);
-  });
-  activeListeners.push(() => ref.off("value", handler));
-}
-
-function clearListeners() {
-  activeListeners.forEach(remove => remove());
-  activeListeners = [];
-}
-
-function showDashboard() {
-  show("loginCard", false);
-  show("dashboard", true);
-}
-
-function showLogin(message = "") {
-  show("loginCard", true);
-  show("dashboard", false);
-  setStatus("loginStatus", message);
-}
-
-$("loginBtn").addEventListener("click", async () => {
-  const email = $("email").value.trim();
-  const password = $("password").value;
+async function login() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const btn = document.getElementById("loginBtn");
 
   if (!email || !password) {
-    setStatus("loginStatus", "اكتب البريد الإلكتروني وكلمة المرور.");
+    setText("loginMessage", "اكتب البريد الإلكتروني وكلمة المرور.");
     return;
   }
 
-  $("loginBtn").disabled = true;
-  setStatus("loginStatus", "جارٍ تسجيل الدخول...");
+  btn.disabled = true;
+  setText("loginMessage", "جارٍ التحقق...");
 
   try {
     await auth.signInWithEmailAndPassword(email, password);
+    setText("loginMessage", "");
   } catch (error) {
-    setStatus("loginStatus", "تعذر تسجيل الدخول: " + error.message);
+    console.error(error);
+    setText("loginMessage", "تعذر الدخول. راجع البريد وكلمة المرور.");
   } finally {
-    $("loginBtn").disabled = false;
+    btn.disabled = false;
   }
-});
-
-$("logoutBtn").addEventListener("click", () => auth.signOut());
+}
 
 auth.onAuthStateChanged(async user => {
-  clearListeners();
+  stopListeners();
+  currentUser = user;
+  isAdmin = false;
+  allRequests = [];
+  profilesCache = {};
 
-  if (!user) {
-    showLogin();
-    return;
-  }
+  show("loginScreen", !user);
+  show("deniedScreen", false);
+  show("adminScreen", false);
+  show("logoutBtn", !!user);
+
+  if (!user) return;
+
+  setText("adminEmail", "الحساب: " + (user.email || ""));
 
   try {
     const adminSnap = await db.ref("adminUids/" + user.uid).get();
+    const permitted = adminSnap.val() === true && user.uid === ADMIN_UID;
 
-    if (adminSnap.val() !== true) {
-      await auth.signOut();
-      showLogin("هذا الحساب ليس لديه صلاحية الإدارة.");
+    if (!permitted) {
+      show("deniedScreen", true);
       return;
     }
 
-    showDashboard();
-    setStatus("adminStatus", "تم التحقق من صلاحية المدير.");
+    isAdmin = true;
+    show("adminScreen", true);
+    await loadProfiles();
 
-    loadTasks();
-    loadUsers();
-    loadRequests();
-    loadCompletions();
   } catch (error) {
-    showLogin("تعذر التحقق من صلاحيات المدير. تأكد من قواعد Firebase.");
+    console.error(error);
+    show("deniedScreen", true);
+    setText("mainMessage", "تعذر التحقق من صلاحية المدير. راجع قواعد Firebase.");
   }
 });
 
-function loadTasks() {
-  listen("tasks", tasks => {
-    const entries = Object.entries(tasks);
-    $("taskCount").textContent = entries.length;
-
-    $("tasksList").innerHTML = entries.length
-      ? entries.map(([id, task]) => `
-          <div class="row">
-            <strong>${safeText(task.title || "مهمة بلا اسم")}</strong>
-            <p>المكافأة: ${safeText(task.reward ?? 0)}</p>
-            <p>الحالة: ${task.enabled === false ? "متوقفة" : "مفعّلة"}</p>
-            <button class="secondary" data-toggle="${safeText(id)}">
-              ${task.enabled === false ? "تفعيل" : "إيقاف"}
-            </button>
-            <button class="danger" data-delete="${safeText(id)}">حذف المهمة</button>
-          </div>
-        `).join("")
-      : "لا توجد مهام حتى الآن.";
-
-    $("tasksList").querySelectorAll("[data-toggle]").forEach(button => {
-      button.onclick = async () => {
-        const id = button.dataset.toggle;
-        const task = tasks[id];
-        try {
-          await db.ref("tasks/" + id + "/enabled")
-            .set(task.enabled === false);
-        } catch {
-          alert("تعذر تعديل المهمة. تحقق من قواعد قاعدة البيانات.");
-        }
-      };
-    });
-
-    $("tasksList").querySelectorAll("[data-delete]").forEach(button => {
-      button.onclick = async () => {
-        if (!confirm("هل تريد حذف هذه المهمة؟")) return;
-        try {
-          await db.ref("tasks/" + button.dataset.delete).remove();
-        } catch {
-          alert("تعذر حذف المهمة.");
-        }
-      };
-    });
-  }, error => {
-    setStatus("taskStatus", "تعذر تحميل المهام: " + error.message);
-  });
+async function logout() {
+  stopListeners();
+  await auth.signOut();
 }
 
-$("addTaskBtn").addEventListener("click", async () => {
-  const title = $("taskTitle").value.trim();
-  const reward = Number($("taskReward").value);
+async function loadProfiles() {
+  if (!currentUser || !isAdmin) return;
 
-  if (!title || !Number.isFinite(reward) || reward < 0) {
-    setStatus("taskStatus", "اكتب اسم المهمة ومكافأة صحيحة.");
+  setText("mainMessage", "جارٍ تحميل المستخدمين والطلبات...");
+
+  try {
+    const snap = await db.ref("profiles").get();
+    profilesCache = snap.val() || {};
+
+    renderUsers();
+
+    requestListeners.forEach(item => item.ref.off("value", item.callback));
+    requestListeners = [];
+    allRequests = [];
+
+    const uids = Object.keys(profilesCache);
+
+    if (uids.length === 0) {
+      renderRequests();
+      setText("mainMessage", "لا توجد ملفات مستخدمين حتى الآن.");
+      return;
+    }
+
+    let completedReads = 0;
+
+    uids.forEach(uid => {
+      const ref = db.ref("requests/" + uid);
+
+      const callback = snapshot => {
+        allRequests = allRequests.filter(r => r.uid !== uid);
+
+        const data = snapshot.val() || {};
+        Object.entries(data).forEach(([requestId, request]) => {
+          allRequests.push({
+            ...request,
+            uid: uid,
+            requestId: requestId
+          });
+        });
+
+        completedReads++;
+        renderRequests();
+
+        if (completedReads >= uids.length) {
+          setText("mainMessage", "تم تحميل البيانات.");
+        }
+      };
+
+      ref.on("value", callback, error => {
+        console.error(error);
+        setText("mainMessage",
+          "تعذر قراءة طلبات بعض المستخدمين. راجع قواعد Firebase.");
+      });
+
+      requestListeners.push({ref, callback});
+    });
+
+  } catch (error) {
+    console.error(error);
+    setText("mainMessage",
+      "تعذر تحميل المستخدمين. تأكد من قواعد قاعدة البيانات.");
+  }
+}
+
+function statusInfo(status) {
+  if (status === "approved") {
+    return {text: "تمت الموافقة", cls: "done"};
+  }
+  if (status === "rejected") {
+    return {text: "مرفوض", cls: "failed"};
+  }
+  if (status === "processing") {
+    return {text: "جارٍ اعتماد الطلب", cls: "pending"};
+  }
+  return {text: "قيد المراجعة", cls: "pending"};
+}
+
+function renderRequests() {
+  const list = document.getElementById("requestsList");
+  list.replaceChildren();
+
+  const sorted = [...allRequests].sort((a,b) =>
+    (b.createdAt || 0) - (a.createdAt || 0)
+  );
+
+  setText("totalCount", String(sorted.length));
+  setText("pendingCount",
+    String(sorted.filter(r => r.status === "pending").length));
+  setText("approvedCount",
+    String(sorted.filter(r => r.status === "approved").length));
+
+  if (!sorted.length) {
+    list.textContent = "لا توجد طلبات إيداع.";
     return;
   }
 
-  try {
-    await db.ref("tasks").push({
-      title,
-      reward,
-      enabled: true,
-      createdAt: Date.now()
-    });
-    $("taskTitle").value = "";
-    $("taskReward").value = "";
-    setStatus("taskStatus", "تمت إضافة المهمة.");
-  } catch (error) {
-    setStatus("taskStatus", "تعذرت الإضافة: " + error.message);
-  }
-});
+  sorted.forEach(request => {
+    const card = document.createElement("div");
+    card.className = "request";
 
-function loadUsers() {
-  listen("profiles", users => {
-    const entries = Object.entries(users);
-    $("userCount").textContent = entries.length;
+    const heading = document.createElement("div");
+    heading.className = "row";
 
-    $("usersList").innerHTML = entries.length
-      ? entries.map(([uid, profile]) => `
-          <div class="row">
-            <strong>${safeText(profile.name || "مستخدم")}</strong>
-            <p>${safeText(profile.email || "")}</p>
-            <p class="muted">UID: ${safeText(uid)}</p>
-          </div>
-        `).join("")
-      : "لا يوجد مستخدمون مسجلون في قاعدة البيانات.";
-  }, error => {
-    $("usersList").textContent = "تعذر تحميل المستخدمين: " + error.message;
+    const title = document.createElement("strong");
+    title.textContent =
+      Number(request.amount || 0).toLocaleString("ar-EG") + " جنيه";
+
+    const status = statusInfo(request.status);
+    const badge = document.createElement("span");
+    badge.className = "badge " + status.cls;
+    badge.textContent = status.text;
+
+    heading.append(title, badge);
+    card.appendChild(heading);
+
+    const profile = profilesCache[request.uid] || {};
+    const details = document.createElement("p");
+    details.className = "muted";
+    details.textContent =
+      "الاسم: " + (profile.name || "غير محدد") +
+      "\nالبريد: " + (request.email || profile.email || "غير متوفر") +
+      "\nمعرّف المستخدم: " + request.uid +
+      "\nرقم الهاتف المحوّل منه: " + (request.senderPhone || "—") +
+      "\nرقم العملية: " + (request.reference || "—") +
+      "\nملاحظة: " + (request.note || "لا توجد") +
+      "\nتاريخ الطلب: " + formatDate(request.createdAt);
+
+    details.style.whiteSpace = "pre-line";
+    card.appendChild(details);
+
+    if (request.status === "pending") {
+      const actions = document.createElement("div");
+      actions.className = "actions";
+
+      const approve = document.createElement("button");
+      approve.className = "approve";
+      approve.textContent = "موافقة وإضافة الرصيد";
+      approve.onclick = () => approveRequest(request, approve);
+
+      const reject = document.createElement("button");
+      reject.className = "reject";
+      reject.textContent = "رفض الطلب";
+      reject.onclick = () => rejectRequest(request, reject);
+
+      actions.append(approve, reject);
+      card.appendChild(actions);
+    }
+
+    list.appendChild(card);
   });
 }
 
-function loadRequests() {
-  listen("requests", all => {
-    const entries = [];
+function formatDate(value) {
+  if (!value) return "غير متوفر";
+  return new Date(value).toLocaleString("ar-EG");
+}
 
-    Object.entries(all).forEach(([uid, requests]) => {
-      Object.entries(requests || {}).forEach(([id, request]) => {
-        entries.push({ uid, id, ...request });
-      });
-    });
+async function approveRequest(request, button) {
+  if (!isAdmin || !currentUser || currentUser.uid !== ADMIN_UID) {
+    alert("غير مصرح لك بتنفيذ هذه العملية.");
+    return;
+  }
 
-    $("withdrawCount").textContent = entries.filter(r =>
-      String(r.type || "").includes("withdraw") ||
-      String(r.type || "").includes("سحب")
-    ).length;
+  const amount = Number(request.amount);
+  if (!Number.isFinite(amount) || amount <= 0 || amount > 100000) {
+    alert("المبلغ في الطلب غير صالح.");
+    return;
+  }
 
-    $("requestsList").innerHTML = entries.length
-      ? entries.map(request => `
-          <div class="row">
-            <strong>${safeText(request.type || "طلب")}</strong>
-            <p>المبلغ: ${safeText(request.amount ?? "غير محدد")}</p>
-            <p>الحالة: ${safeText(request.status || "pending")}</p>
-            <p class="muted">المستخدم: ${safeText(request.uid)}</p>
-            ${request.status === "pending" ? `
-              <button data-request="${safeText(request.uid)}|${safeText(request.id)}|approved">
-                اعتماد الطلب
-              </button>
-              <button class="danger" data-request="${safeText(request.uid)}|${safeText(request.id)}|rejected">
-                رفض الطلب
-              </button>
-            ` : ""}
-          </div>
-        `).join("")
-      : "لا توجد طلبات.";
-    $("requestsList").querySelectorAll("[data-request]").forEach(button => {
-      button.onclick = async () => {
-        const [uid, id, status] = button.dataset.request.split("|");
-        if (!confirm("تأكيد تغيير حالة الطلب إلى " + status + "؟")) return;
-        try {
-          await db.ref(`requests/${uid}/${id}/status`).set(status);
-          alert("تم تحديث حالة الطلب فقط. هذا لا يحول الأموال فعليًا.");
-        } catch (error) {
-          alert("تعذر تحديث الطلب: " + error.message);
-        }
+  const key = request.uid + "/" + request.requestId;
+
+  if (busyRequests.has(key)) return;
+
+  const confirmed = confirm(
+    "هل تحققت من وصول التحويل فعلًا؟\n\n" +
+    "المبلغ: " + amount + " جنيه\n\n" +
+    "سيتم إضافة المبلغ إلى محفظة المستخدم داخل الموقع."
+  );
+
+  if (!confirmed) return;
+
+  busyRequests.add(key);
+  button.disabled = true;
+
+  const requestRef = db.ref(
+    "requests/" + request.uid + "/" + request.requestId
+  );
+
+  try {
+    /*
+      أولًا: حجز الطلب مرة واحدة بتغيير pending إلى processing.
+      هذا يمنع النقر المتزامن من اعتماد الطلب مرتين.
+    */
+    const claim = await requestRef.transaction(old => {
+      if (!old || old.status !== "pending") return;
+      return {
+        ...old,
+        status: "processing",
+        processingBy: currentUser.uid
       };
     });
-  }, error => {
-    $("requestsList").textContent = "تعذر تحميل الطلبات: " + error.message;
-  });
-}
 
-function loadCompletions() {
-  listen("taskCompletions", all => {
-    const entries = [];
+    if (!claim.committed) {
+      alert("الطلب لم يعد معلقًا. حدّث الصفحة.");
+      return;
+    }
 
-    Object.entries(all).forEach(([uid, tasks]) => {
-      Object.entries(tasks || {}).forEach(([taskId, completion]) => {
-        entries.push({ uid, taskId, ...completion });
-      });
+    /*
+      ثانيًا: إضافة الرصيد مع تسجيل رقم الطلب داخل نفس معاملة الرصيد.
+      إذا تكررت المحاولة، لا تتم إضافة المبلغ مرة ثانية.
+      تُحفظ الأرصدة الجديدة بالشكل { amount, credits }.
+    */
+    const balanceRef = db.ref("balances/" + request.uid);
+
+    const balanceResult = await balanceRef.transaction(old => {
+      let account;
+
+      if (typeof old === "number") {
+        account = {amount: old, credits: {}};
+      } else if (old && typeof old === "object") {
+        account = {
+          amount: Number(old.amount || 0),
+          credits: old.credits && typeof old.credits === "object"
+            ? old.credits : {}
+        };
+      } else {
+        account = {amount: 0, credits: {}};
+      }
+
+      if (!Number.isFinite(account.amount) || account.amount < 0) {
+        return;
+      }
+
+      if (account.credits[request.requestId]) {
+        return account;
+      }
+
+      account.amount = Math.round((account.amount + amount) * 100) / 100;
+      account.credits[request.requestId] = amount;
+
+      return account;
     });
 
-    $("completionCount").textContent = entries.length;
+    if (!balanceResult.committed) {
+      throw new Error("تعذر تحديث الرصيد.");
+    }
 
-    $("completionsList").innerHTML = entries.length
-      ? entries.map(item => `
-          <div class="row">
-            <strong>إتمام مهمة</strong>
-            <p>المستخدم: ${safeText(item.uid)}</p>
-            <p>المهمة: ${safeText(item.taskId)}</p>
-            <p>الحالة: ${safeText(item.status || "pending")}</p>
-          </div>
-        `).join("")
-      : "لا توجد عمليات إتمام مسجلة.";
-  }, error => {
-    $("completionsList").textContent = "تعذر تحميل الإتمام: " + error.message;
+    /*
+      إذا كانت إضافة الرصيد قد تمت سابقًا ثم انقطع الاتصال،
+      فإن إعادة المحاولة لن تضيف المبلغ ثانية بسبب credits.
+    */
+    await requestRef.update({
+      status: "approved",
+      approvedAt: firebase.database.ServerValue.TIMESTAMP,
+      approvedBy: currentUser.uid
+    });
+
+    alert("تم اعتماد الطلب وتحديث رصيد المستخدم.");
+    await loadProfiles();
+
+  } catch (error) {
+    console.error(error);
+    alert(
+      "تعذر إكمال العملية. لا تكرر إضافة الرصيد يدويًا.\n" +
+      "تحقق من الطلب وسجل الرصيد في Firebase قبل إعادة المحاولة."
+    );
+    await loadProfiles();
+
+  } finally {
+    busyRequests.delete(key);
+    if (button) button.disabled = false;
+  }
+}
+
+async function rejectRequest(request, button) {
+  if (!isAdmin || !currentUser || currentUser.uid !== ADMIN_UID) {
+    alert("غير مصرح لك بتنفيذ هذه العملية.");
+    return;
+  }
+
+  const key = request.uid + "/" + request.requestId;
+  if (busyRequests.has(key)) return;
+
+  if (!confirm("هل تريد رفض طلب الإيداع؟ لن يُضاف أي رصيد.")) return;
+
+  busyRequests.add(key);
+  button.disabled = true;
+
+  const ref = db.ref(
+    "requests/" + request.uid + "/" + request.requestId
+  );
+
+  try {
+    const result = await ref.transaction(old => {
+      if (!old || old.status !== "pending") return;
+      return {
+        ...old,
+        status: "rejected",
+        rejectedAt: firebase.database.ServerValue.TIMESTAMP,
+        rejectedBy: currentUser.uid
+      };
+    });
+
+    if (!result.committed) {
+      alert("الطلب لم يعد معلقًا.");
+    } else {
+      alert("تم رفض الطلب.");
+    }
+
+    await loadProfiles();
+
+  } catch (error) {
+    console.error(error);
+    alert("تعذر رفض الطلب. راجع اتصال Firebase وقواعد البيانات.");
+  } finally {
+    busyRequests.delete(key);
+    if (button) button.disabled = false;
+  }
+}
+
+function renderUsers() {
+  const list = document.getElementById("usersList");
+  list.replaceChildren();
+
+  const entries = Object.entries(profilesCache);
+
+  if (!entries.length) {
+    list.textContent = "لا يوجد مستخدمون مسجلون.";
+    return;
+  }
+
+  entries.forEach(([uid, profile]) => {
+    const card = document.createElement("div");
+    card.className = "request";
+
+    const title = document.createElement("strong");
+    title.textContent = profile.name || "مستخدم";
+
+    const email = document.createElement("p");
+    email.className = "muted";
+    email.textContent = profile.email || "البريد غير متوفر";
+
+    const id = document.createElement("p");
+    id.className = "muted";
+    id.textContent = "UID: " + uid;
+
+    card.append(title, email, id);
+    list.appendChild(card);
   });
 }
 </script>
