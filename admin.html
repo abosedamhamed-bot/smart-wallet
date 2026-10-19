@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Smart Wallet | الإدارة</title>
+  <title>إدارة Smart Wallet</title>
 
   <style>
     * {
@@ -14,332 +14,531 @@
       margin: 0;
       padding: 18px;
       font-family: Arial, sans-serif;
-      background: #f4f0ff;
-      color: #241641;
+      background: #0b1020;
+      color: #fff;
     }
 
     .container {
-      max-width: 650px;
-      margin: 25px auto;
+      max-width: 850px;
+      margin: 0 auto;
+    }
+
+    .header {
       padding: 22px;
-      background: white;
       border-radius: 18px;
-      box-shadow: 0 5px 25px #0001;
+      background: linear-gradient(135deg, #191d3a, #32205a);
+      border: 1px solid #39345f;
+      margin-bottom: 18px;
     }
 
     h1 {
-      color: #7138d8;
-      text-align: center;
+      margin: 0 0 8px;
+      font-size: 25px;
     }
 
-    input, button {
-      display: block;
-      width: 100%;
-      padding: 13px;
-      margin: 10px 0;
-      border-radius: 9px;
-      font-size: 16px;
-    }
-
-    input {
-      border: 1px solid #ddd;
-    }
-
-    button {
-      border: none;
-      background: #7138d8;
-      color: white;
-      cursor: pointer;
-    }
-
-    button:disabled {
-      opacity: .6;
+    .subtitle {
+      color: #c2c5dc;
+      font-size: 14px;
     }
 
     .card {
-      border: 1px solid #e5dcf8;
-      border-radius: 12px;
-      padding: 14px;
-      margin: 12px 0;
+      background: #151b2e;
+      border: 1px solid #29314b;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 7px;
+      color: #d6d9e9;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 13px;
+      background: #0b1020;
+      color: white;
+      border: 1px solid #343d59;
+      border-radius: 10px;
+      font-size: 15px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: #8b5cf6;
+      color: white;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .approve {
+      background: #16865b;
+      color: white;
+    }
+
+    .reject {
+      background: #b9384b;
+      color: white;
+    }
+
+    .pending {
+      background: #343d59;
+      color: white;
+    }
+
+    .refresh {
+      background: #303956;
+      color: white;
+      margin-bottom: 12px;
+    }
+
+    .message {
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 12px;
       overflow-wrap: anywhere;
-    }
-
-    .secondary {
-      background: #eee;
-      color: #241641;
-    }
-
-    #dashboard {
       display: none;
     }
 
-    #message {
-      white-space: pre-wrap;
+    .success {
+      display: block;
+      background: #123c30;
+      color: #a8f0d1;
+    }
+
+    .error {
+      display: block;
+      background: #451e2a;
+      color: #ffc1ca;
+    }
+
+    .request {
+      padding: 16px;
+      background: #0e1426;
+      border: 1px solid #303956;
+      border-radius: 13px;
+      margin-top: 12px;
+    }
+
+    .request p {
+      margin: 8px 0;
       overflow-wrap: anywhere;
+    }
+
+    .request-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 7px;
+      background: #343d59;
+      font-size: 12px;
+    }
+
+    .empty {
+      color: #aeb5cc;
+      padding: 20px 0;
+      text-align: center;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .small {
+      color: #aeb5cc;
+      font-size: 12px;
       line-height: 1.7;
     }
   </style>
 </head>
 
 <body>
-  <main class="container">
-    <h1>Smart Wallet</h1>
-    <h3>لوحة الإدارة</h3>
+<div class="container">
 
-    <section id="login">
-      <p>اكتب كلمة سر الإدارة.</p>
+  <div class="header">
+    <h1>لوحة إدارة Smart Wallet</h1>
+    <div class="subtitle">إدارة طلبات المحفظة ومراجعة العمليات</div>
+  </div>
 
-      <input
-        id="adminPassword"
-        type="password"
-        placeholder="كلمة سر الإدارة"
-        autocomplete="current-password"
-      >
+  <section class="card" id="loginCard">
+    <h2>دخول الإدارة</h2>
 
-      <button id="loginButton">دخول</button>
-    </section>
+    <label for="adminPassword">كلمة مرور الإدارة</label>
+    <input
+      id="adminPassword"
+      type="password"
+      autocomplete="current-password"
+      placeholder="اكتب كلمة مرور الإدارة"
+    >
 
-    <section id="dashboard">
-      <h3>إدارة الطلبات</h3>
-      <button id="refreshButton">عرض الطلبات</button>
+    <button class="primary" id="loginButton">دخول</button>
 
-      <h3>تعديل رصيد مستخدم</h3>
+    <div id="loginMessage" class="message"></div>
 
-      <input
-        id="phone"
-        type="tel"
-        placeholder="رقم موبايل المستخدم"
-      >
+    <p class="small">
+      كلمة المرور تُرسل إلى دالة الخادم للتحقق منها، ولا تُحفظ في هذا الملف.
+    </p>
+  </section>
 
-      <input
-        id="balance"
-        type="number"
-        min="0"
-        step="0.01"
-        placeholder="الرصيد الجديد بالجنيه"
-      >
+  <section class="hidden" id="dashboard">
 
-      <button id="saveBalanceButton">حفظ الرصيد</button>
+    <div class="card">
+      <h2>طلبات المستخدمين</h2>
 
-      <div id="requests"></div>
+      <button class="refresh" id="refreshButton">تحديث الطلبات</button>
 
-      <button class="secondary" id="logoutButton">
-        تسجيل الخروج
-      </button>
-    </section>
+      <label for="filter">تصفية الطلبات</label>
+      <select id="filter">
+        <option value="all">كل الطلبات</option>
+        <option value="pending">طلبات معلقة</option>
+        <option value="approved">طلبات مقبولة</option>
+        <option value="rejected">طلبات مرفوضة</option>
+      </select>
 
-    <p id="message" role="status"></p>
-  </main>
+      <div id="requests">
+        <div class="empty">اضغط تحديث الطلبات لعرض الطلبات.</div>
+      </div>
+
+      <div id="requestsMessage" class="message"></div>
+    </div>
+
+    <div class="card">
+      <h2>تعديل رصيد محفظة</h2>
+
+      <label for="balancePhone">رقم الموبايل</label>
+      <input id="balancePhone" type="tel" placeholder="مثال: 01012345678">
+
+      <label for="balanceAmount">الرصيد بالجنيه المصري</label>
+      <input id="balanceAmount" type="number" min="0" step="0.01" placeholder="مثال: 200">
+
+      <button class="primary" id="saveBalanceButton">حفظ الرصيد</button>
+
+      <div id="balanceMessage" class="message"></div>
+
+      <p class="small">
+        استخدم تعديل الرصيد بعد مراجعة الطلب. لا يُعتبر الرصيد المعروض أموالًا
+        حقيقية إلا إذا كانت هناك عملية فعلية موثقة.
+      </p>
+    </div>
+
+    <button class="refresh" id="logoutButton">تسجيل الخروج</button>
+  </section>
+
+</div>
 
 <script>
 "use strict";
 
-// بيانات مشروع Supabase
-const API_URL =
+const FUNCTION_URL =
   "https://sjhjxbnhhwftwlkshpql.supabase.co/functions/v1/smart-service";
 
-// مفتاح anon عام، وليس مفتاح service_role
-const PUBLIC_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNqaGp4Ym5oaHdmdHdsa3NocHFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzNDY4MDYsImV4cCI6MjEwNzkyMjgwNn0.HhbEFdDqN5IlvjWA5s2B72oj_-pmxDQnLneu8W5OwvA";
+const $ = (id) => document.getElementById(id);
 
 let adminPassword = "";
+let allRequests = [];
+let busy = false;
 
-const $ = id => document.getElementById(id);
-
-function showMessage(text) {
-  $("message").textContent = text;
+function showMessage(id, text, type = "success") {
+  const el = $(id);
+  el.textContent = text;
+  el.className = "message " + type;
 }
 
-async function callApi(actionData) {
-  const response = await fetch(API_URL, {
+function clearMessage(id) {
+  const el = $(id);
+  el.textContent = "";
+  el.className = "message";
+}
+
+async function callService(action, extra = {}, admin = true) {
+  const headers = {
+    "Content-Type": "application/json"
+  };
+
+  if (admin) {
+    headers["x-admin-password"] = adminPassword;
+  }
+
+  const response = await fetch(FUNCTION_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "apikey": PUBLIC_KEY,
-      "Authorization": "Bearer " + PUBLIC_KEY,
-      "x-admin-password": adminPassword
-    },
-    body: JSON.stringify(actionData)
+    headers,
+    body: JSON.stringify({ action, ...extra })
   });
 
-  const raw = await response.text();
-
-  let result;
+  let data;
 
   try {
-    result = JSON.parse(raw);
+    data = await response.json();
   } catch {
-    throw new Error(
-      "استجابة غير مفهومة من الخادم. رمز HTTP: " + response.status
-    );
+    throw new Error("الخادم أعاد استجابة غير مفهومة.");
   }
 
-  if (!response.ok) {
-    throw new Error(
-      (result.error || result.message || "فشل الطلب") +
-      " (HTTP " + response.status + ")"
-    );
+  if (!response.ok || data.success !== true) {
+    throw new Error(data.error || "تعذر تنفيذ الطلب.");
   }
 
-  return result;
+  return data;
 }
 
-$("loginButton").addEventListener("click", async () => {
-  const button = $("loginButton");
-  adminPassword = $("adminPassword").value;
+async function login() {
+  if (busy) return;
 
-  if (!adminPassword) {
-    showMessage("اكتب كلمة سر الإدارة أولاً.");
+  const password = $("adminPassword").value;
+
+  if (!password) {
+    showMessage("loginMessage", "اكتب كلمة مرور الإدارة.", "error");
     return;
   }
 
-  button.disabled = true;
-  showMessage("جارٍ التحقق من الاتصال...");
+  busy = true;
+  $("loginButton").disabled = true;
+  clearMessage("loginMessage");
+
+  adminPassword = password;
 
   try {
-    await callApi({ action: "list_requests" });
+    await callService("list_requests");
 
-    $("login").style.display = "none";
-    $("dashboard").style.display = "block";
-    $("adminPassword").value = "";
+    $("loginCard").classList.add("hidden");
+    $("dashboard").classList.remove("hidden");
 
-    showMessage("تم الاتصال بلوحة الإدارة.");
     await loadRequests();
-
   } catch (error) {
     adminPassword = "";
-    showMessage("تعذر الدخول:\n" + error.message);
+    showMessage("loginMessage", error.message, "error");
   } finally {
-    button.disabled = false;
+    busy = false;
+    $("loginButton").disabled = false;
   }
-});
+}
 
-async function loadRequests() {
-  showMessage("جارٍ تحميل الطلبات...");
+function statusText(status) {
+  if (status === "approved") return "مقبول";
+  if (status === "rejected") return "مرفوض";
+  return "قيد المراجعة";
+}
 
-  try {
-    const result = await callApi({
-      action: "list_requests"
-    });
+function typeText(type) {
+  if (type === "task") return "مهمة ربح";
+  if (type === "deposit") return "إيداع";
+  if (type === "withdraw") return "سحب";
+  return type || "غير محدد";
+}
 
-    const container = $("requests");
-    container.replaceChildren();
+function renderRequests() {
+  const filter = $("filter").value;
 
-    const title = document.createElement("h3");
-    title.textContent = "طلبات الإيداع والسحب";
-    container.appendChild(title);
+  const filtered = allRequests.filter((request) => {
+    return filter === "all" || request.status === filter;
+  });
 
-    const requests = result.requests || [];
+  const container = $("requests");
+  container.replaceChildren();
 
-    if (requests.length === 0) {
-      const empty = document.createElement("p");
-      empty.textContent = "لا توجد طلبات حالياً.";
-      container.appendChild(empty);
+  if (filtered.length === 0) {
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent = "لا توجد طلبات في هذا التصنيف.";
+    container.appendChild(empty);
+    return;
+  }
+
+  for (const request of filtered) {
+    const card = document.createElement("div");
+    card.className = "request";
+
+    const details = [
+      ["رقم الطلب", request.id],
+      ["رقم الموبايل", request.phone_number || "غير متوفر"],
+      ["نوع الطلب", typeText(request.request_type)],
+      ["المبلغ", Number(request.amount || 0).toFixed(2) + " جنيه"],
+      ["طريقة الطلب", request.payment_method || "غير محددة"],
+      ["الحالة", statusText(request.status)],
+      ["التاريخ", request.created_at
+        ? new Date(request.created_at).toLocaleString("ar-EG")
+        : "غير متوفر"]
+    ];
+
+    for (const [label, value] of details) {
+      const p = document.createElement("p");
+      p.textContent = label + ": " + value;
+      card.appendChild(p);
     }
 
-    requests.forEach(request => {
-      const card = document.createElement("div");
-      card.className = "card";
+    const actions = document.createElement("div");
+    actions.className = "request-actions";
 
-      const details = document.createElement("p");
+    if (request.status !== "approved") {
+      const approve = document.createElement("button");
+      approve.className = "approve";
+      approve.textContent = "موافقة";
+      approve.addEventListener("click", () => {
+        updateRequest(request, "approved", approve);
+      });
+      actions.appendChild(approve);
+    }
 
-      details.textContent =
-        "رقم الطلب: " + request.id +
-        "\nرقم الموبايل: " + (request.phone_number || "غير محدد") +
-        "\nالنوع: " + (request.request_type || "غير محدد") +
-        "\nالمبلغ: " + (request.amount ?? 0) + " جنيه" +
-        "\nطريقة الدفع: " + (request.payment_method || "غير محددة") +
-        "\nالحالة: " + (request.status || "غير محددة");
+    if (request.status !== "rejected") {
+      const reject = document.createElement("button");
+      reject.className = "reject";
+      reject.textContent = "رفض";
+      reject.addEventListener("click", () => {
+        updateRequest(request, "rejected", reject);
+      });
+      actions.appendChild(reject);
+    }
 
-      card.appendChild(details);
+    if (request.status !== "pending") {
+      const reset = document.createElement("button");
+      reset.className = "pending";
+      reset.textContent = "إعادة للمراجعة";
+      reset.addEventListener("click", () => {
+        updateRequest(request, "pending", reset);
+      });
+      actions.appendChild(reset);
+    }
 
-      if (request.status === "pending") {
-        const approve = document.createElement("button");
-        approve.textContent = "قبول الطلب";
-
-        approve.onclick = () =>
-          updateRequest(request.id, "approved");
-
-        const reject = document.createElement("button");
-        reject.textContent = "رفض الطلب";
-        reject.className = "secondary";
-
-        reject.onclick = () =>
-          updateRequest(request.id, "rejected");
-
-        card.append(approve, reject);
-      }
-
-      container.appendChild(card);
-    });
-
-    showMessage("تم تحميل " + requests.length + " طلب.");
-
-  } catch (error) {
-    showMessage("تعذر تحميل الطلبات:\n" + error.message);
+    card.appendChild(actions);
+    container.appendChild(card);
   }
 }
 
-async function updateRequest(id, status) {
-  if (!confirm("هل تريد تغيير حالة هذا الطلب؟")) return;
+async function loadRequests() {
+  if (busy) return;
+
+  busy = true;
+  $("refreshButton").disabled = true;
+  clearMessage("requestsMessage");
 
   try {
-    await callApi({
-      action: "update_request",
-      id: id,
-      status: status
-    });
+    const result = await callService("list_requests");
 
-    showMessage("تم تحديث حالة الطلب.");
-    await loadRequests();
+    if (!Array.isArray(result.requests)) {
+      throw new Error("استجابة الطلبات غير صحيحة.");
+    }
 
+    allRequests = result.requests;
+    renderRequests();
   } catch (error) {
-    showMessage("تعذر تحديث الطلب:\n" + error.message);
+    showMessage("requestsMessage", error.message, "error");
+  } finally {
+    busy = false;
+    $("refreshButton").disabled = false;
   }
 }
 
-$("refreshButton").addEventListener("click", loadRequests);
+async function updateRequest(request, status, button) {
+  if (busy) return;
 
-$("saveBalanceButton").addEventListener("click", async () => {
-  const phone = $("phone").value.trim();
-  const balanceText = $("balance").value;
+  const actionText = status === "approved"
+    ? "قبول"
+    : status === "rejected"
+      ? "رفض"
+      : "إعادة للمراجعة";
 
-  if (!phone || balanceText === "") {
-    showMessage("اكتب رقم الموبايل والرصيد.");
+  if (!confirm("هل تريد " + actionText + " الطلب رقم " + request.id + "؟")) {
     return;
   }
 
-  const balance = Number(balanceText);
+  busy = true;
+  button.disabled = true;
+  clearMessage("requestsMessage");
+
+  try {
+    await callService("update_request", {
+      id: request.id,
+      status
+    });
+
+    showMessage(
+      "requestsMessage",
+      "تم تحديث حالة الطلب بنجاح إلى: " + statusText(status)
+    );
+
+    await loadRequests();
+  } catch (error) {
+    showMessage("requestsMessage", error.message, "error");
+  } finally {
+    busy = false;
+    button.disabled = false;
+  }
+}
+
+async function saveBalance() {
+  if (busy) return;
+
+  const phone = $("balancePhone").value.trim();
+  const balance = Number($("balanceAmount").value);
+
+  if (!phone) {
+    showMessage("balanceMessage", "اكتب رقم الموبايل.", "error");
+    return;
+  }
 
   if (!Number.isFinite(balance) || balance < 0) {
-    showMessage("قيمة الرصيد غير صحيحة.");
+    showMessage("balanceMessage", "اكتب رصيدًا صحيحًا.", "error");
     return;
   }
 
-  if (!confirm("هل تريد حفظ الرصيد الجديد؟")) return;
+  if (!confirm("هل تريد حفظ الرصيد المحدد لهذا الرقم؟")) return;
+
+  busy = true;
+  $("saveBalanceButton").disabled = true;
+  clearMessage("balanceMessage");
 
   try {
-    await callApi({
-      action: "set_balance",
+    await callService("set_balance", {
       phone_number: phone,
-      balance: balance
+      balance
     });
 
-    showMessage("تم حفظ الرصيد بنجاح.");
-
+    showMessage("balanceMessage", "تم حفظ الرصيد بنجاح.");
   } catch (error) {
-    showMessage("تعذر حفظ الرصيد:\n" + error.message);
+    showMessage("balanceMessage", error.message, "error");
+  } finally {
+    busy = false;
+    $("saveBalanceButton").disabled = false;
   }
-});
+}
 
-$("logoutButton").addEventListener("click", () => {
+function logout() {
   adminPassword = "";
+  allRequests = [];
 
-  $("dashboard").style.display = "none";
-  $("login").style.display = "block";
+  $("adminPassword").value = "";
+  $("loginCard").classList.remove("hidden");
+  $("dashboard").classList.add("hidden");
+
   $("requests").replaceChildren();
+  clearMessage("loginMessage");
+  clearMessage("requestsMessage");
+  clearMessage("balanceMessage");
+}
 
-  showMessage("تم تسجيل الخروج.");
+$("loginButton").addEventListener("click", login);
+$("refreshButton").addEventListener("click", loadRequests);
+$("filter").addEventListener("change", renderRequests);
+$("saveBalanceButton").addEventListener("click", saveBalance);
+$("logoutButton").addEventListener("click", logout);
+
+$("adminPassword").addEventListener("keydown", (event) => {
+  if (event.key === "Enter") login();
 });
 </script>
 </body>
