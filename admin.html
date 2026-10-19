@@ -1,334 +1,467 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>إدارة منصتي PRO</title>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#0a1023;color:white;font-family:Arial}
-header{padding:20px;text-align:center;background:#151a35}
-h1{color:#31e5ff}
-main{max-width:850px;margin:auto;padding:15px}
-.card,.item{background:#171d38;border:1px solid #353b61;border-radius:13px;padding:15px;margin:12px 0;overflow-wrap:anywhere}
-input,button{width:100%;padding:12px;margin:6px 0;border-radius:9px;font-size:15px}
-input{background:#0a1023;color:white;border:1px solid #454a70}
-button{border:0;background:#27d8ec;color:#081126;font-weight:bold}
-button:disabled{opacity:.5}
-.approve{background:#24c78a}
-.reject{background:#ed5a72;color:white}
-.muted{color:#b8c2df;line-height:1.8;font-size:14px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.hidden{display:none}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>لوحة تحكم المدير</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #f4f7ff;
+      background: linear-gradient(135deg, #081326, #241047);
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 22px 16px;
+      background: #101a32;
+      border-bottom: 1px solid #344366;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 23px;
+    }
+
+    header p {
+      margin: 0;
+      color: #aab8d4;
+      font-size: 14px;
+    }
+
+    main {
+      max-width: 950px;
+      padding: 18px;
+      margin: auto;
+    }
+
+    .card {
+      background: #121e38;
+      border: 1px solid #304363;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    input, button {
+      width: 100%;
+      border-radius: 10px;
+      padding: 13px;
+      font-size: 15px;
+      margin-top: 10px;
+    }
+
+    input {
+      color: white;
+      background: #0a1429;
+      border: 1px solid #405477;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      font-weight: bold;
+    }
+
+    .primary {
+      background: #16d9ee;
+      color: #071326;
+    }
+
+    .approve {
+      background: #16c784;
+      color: #071326;
+    }
+
+    .reject {
+      background: #ff5268;
+      color: white;
+    }
+
+    .secondary {
+      background: #34466a;
+      color: white;
+    }
+
+    .request {
+      background: #0b162d;
+      border: 1px solid #304363;
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .request h3 {
+      margin-top: 0;
+    }
+
+    .muted {
+      color: #aab8d4;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .status {
+      color: #16d9ee;
+      font-weight: bold;
+    }
+
+    #message {
+      white-space: pre-wrap;
+      line-height: 1.8;
+      margin-top: 12px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .actions button {
+      flex: 1;
+    }
+
+    @media (max-width: 450px) {
+      .actions {
+        flex-direction: column;
+        gap: 0;
+      }
+    }
+  </style>
 </head>
+
 <body>
+
 <header>
-<h1>لوحة إدارة منصتي PRO</h1>
-<div class="muted">إدارة ومراجعة الطلبات</div>
+  <h1>لوحة تحكم المدير</h1>
+  <p>إدارة طلبات الإيداع ومراجعة العمليات</p>
 </header>
 
 <main>
-<section id="loginBox" class="card">
-<h3>دخول المدير</h3>
-<input id="email" type="email" placeholder="البريد الإلكتروني للمدير">
-<input id="password" type="password" placeholder="كلمة المرور">
-<button onclick="login()">تسجيل الدخول</button>
-<div id="loginMsg" class="muted"></div>
-</section>
 
-<section id="dashboard" class="hidden">
-<div class="card">
-<h3>طلبات الإيداع والسحب</h3>
-<div class="muted">الطلبات الجديدة تظهر بحالة «قيد المراجعة».</div>
-<button onclick="loadRequests()">تحديث الطلبات</button>
-<button onclick="logout()">تسجيل الخروج</button>
-<div id="status" class="muted"></div>
-</div>
-<div id="requests"></div>
-</section>
+  <section class="card" id="loginCard">
+    <h2>تسجيل دخول المدير</h2>
+
+    <input
+      id="email"
+      type="email"
+      placeholder="البريد الإلكتروني"
+      autocomplete="username"
+    >
+
+    <input
+      id="password"
+      type="password"
+      placeholder="كلمة المرور"
+      autocomplete="current-password"
+    >
+
+    <button class="primary" id="loginBtn">تسجيل الدخول</button>
+
+    <p class="muted">
+      يجب استخدام حساب المدير المصرّح له.
+    </p>
+  </section>
+
+  <section class="card hidden" id="dashboard">
+    <h2>طلبات الإيداع</h2>
+
+    <p id="adminInfo" class="muted"></p>
+
+    <button class="primary" id="refreshBtn">
+      تحديث الطلبات
+    </button>
+
+    <button class="secondary" id="logoutBtn">
+      تسجيل الخروج
+    </button>
+
+    <div id="message" role="status"></div>
+    <div id="requests"></div>
+  </section>
+
 </main>
 
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyA8q6z4McET3_d208PtSnFGEjlAVUezJ8k",
-  authDomain: "mansatipro.firebaseapp.com",
-  databaseURL: "https://mansatipro-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "mansatipro",
-  storageBucket: "mansatipro.firebasestorage.app",
-  messagingSenderId: "114519438941",
-  appId: "1:114519438941:web:8b92991a652bb24150ffb4",
-  measurementId: "G-TMZBN1L9KV"
-};
+<script type="module">
+  import { initializeApp } from
+    "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 
-const app=firebase.apps.find(a=>a.name==='adminSessionApp')||
-  firebase.initializeApp(firebaseConfig,'adminSessionApp');
-const auth=app.auth();
-const db=app.database();
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+  } from
+    "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
-const ADMIN_UID='8aBvh2HxgEXrbeQEZsIvJjPLv6h1';
-const $=id=>document.getElementById(id);
+  import {
+    getDatabase,
+    ref,
+    get
+  } from
+    "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
 
-function safe(text){
-  return String(text??'').replace(/[&<>"']/g,c=>({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-  }[c]));
-}
+  import {
+    getFunctions,
+    httpsCallable
+  } from
+    "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
 
-function money(n){
-  return Number(n||0).toLocaleString('ar-EG',{
-    minimumFractionDigits:2,maximumFractionDigits:2
+  // استبدل القيم التالية بإعدادات مشروع Firebase الخاص بك.
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    databaseURL:
+      "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+    projectId: "YOUR_PROJECT",
+    appId: "YOUR_APP_ID"
+  };
+
+  // ضع UID الحقيقي لحساب المدير.
+  const ADMIN_UID = "PUT_ADMIN_UID_HERE";
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+
+  // غيّر المنطقة إذا نشرت الدالة في منطقة أخرى.
+  const functions = getFunctions(app, "europe-west1");
+  const reviewDeposit = httpsCallable(functions, "reviewDeposit");
+
+  const $ = id => document.getElementById(id);
+
+  let busy = false;
+
+  function showMessage(text, error = false) {
+    $("message").textContent = text;
+    $("message").style.color = error ? "#ff7888" : "#16d9ee";
+  }
+
+  function money(value) {
+    const amount = Number(value);
+
+    if (!Number.isFinite(amount)) {
+      return "غير محدد";
+    }
+
+    return amount.toLocaleString("ar-EG", {
+      maximumFractionDigits: 2
+    }) + " ج.م";
+  }
+
+  function safeText(value) {
+    return String(value ?? "");
+  }
+
+  $("loginBtn").addEventListener("click", async () => {
+    const email = $("email").value.trim();
+    const password = $("password").value;
+
+    if (!email || !password) {
+      alert("اكتب البريد الإلكتروني وكلمة المرور.");
+      return;
+    }
+
+    $("loginBtn").disabled = true;
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      alert("تعذر تسجيل الدخول. راجع بيانات الحساب وإعدادات Firebase.");
+    } finally {
+      $("loginBtn").disabled = false;
+    }
   });
-}
 
-async function login(){
-  try{
-    $('loginMsg').textContent='جارٍ التحقق...';
-    await auth.signInWithEmailAndPassword(
-      $('email').value.trim(),
-      $('password').value
-    );
-  }catch(e){
-    $('loginMsg').textContent='تعذر تسجيل الدخول: '+e.message;
-  }
-}
+  onAuthStateChanged(auth, async user => {
+    const isAdmin = Boolean(user && user.uid === ADMIN_UID);
 
-auth.onAuthStateChanged(async user=>{
-  if(!user){
-    $('loginBox').classList.remove('hidden');
-    $('dashboard').classList.add('hidden');
-    return;
-  }
+    $("loginCard").classList.toggle("hidden", isAdmin);
+    $("dashboard").classList.toggle("hidden", !isAdmin);
 
-  if(user.uid!==ADMIN_UID){
-    $('loginMsg').textContent='هذا الحساب ليس حساب المدير المصرح به.';
-    await auth.signOut();
-    return;
-  }
-
-  try{
-    const snap=await db.ref('adminUids/'+user.uid).once('value');
-    if(snap.val()!==true){
-      $('loginMsg').textContent='حساب المدير غير موجود ضمن صلاحيات قاعدة البيانات.';
-      await auth.signOut();
+    if (!user) {
+      showMessage("");
       return;
     }
 
-    $('loginBox').classList.add('hidden');
-    $('dashboard').classList.remove('hidden');
-    loadRequests();
-  }catch(e){
-    $('loginMsg').textContent='تعذر التحقق من صلاحيات المدير: '+e.message;
-  }
-});
+    if (!isAdmin) {
+      showMessage("هذا الحساب ليس لديه صلاحية المدير.", true);
 
-async function loadRequests(){
-  $('status').textContent='جارٍ تحميل الطلبات...';
-  $('requests').innerHTML='';
+      try {
+        await signOut(auth);
+      } catch (_) {}
 
-  try{
-    const snap=await db.ref('requests').once('value');
-    const users=snap.val()||{};
-    const all=[];
-
-    Object.entries(users).forEach(([uid,userRequests])=>{
-      if(!userRequests||typeof userRequests!=='object')return;
-
-      Object.entries(userRequests).forEach(([id,r])=>{
-        if(!r||typeof r!=='object')return;
-        all.push({uid,id,...r});
-      });
-    });
-
-    all.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-
-    if(!all.length){
-      $('status').textContent='لا توجد طلبات محفوظة في مسار requests.';
       return;
     }
 
-    $('status').textContent='إجمالي الطلبات: '+all.length;
+    $("adminInfo").textContent =
+      "تم تسجيل الدخول بحساب المدير: " + user.email;
 
-    all.forEach(r=>{
-      const type=r.type==='deposit'?'إيداع':
-        r.type==='withdraw'?'سحب':'نوع غير محدد';
-      const status={
-        pending:'قيد المراجعة',
-        approved:'مقبول',
-        rejected:'مرفوض'
-      }[r.status]||'غير معروف';
+    await loadRequests();
+  });
 
-      const card=document.createElement('div');
-      card.className='item';
+  async function loadRequests() {
+    if (!auth.currentUser ||
+        auth.currentUser.uid !== ADMIN_UID) {
+      return;
+    }
 
-      card.innerHTML=
-        '<h3>'+type+'</h3>'+
-        '<p>المبلغ: '+money(r.amount)+' جنيه</p>'+
-        '<p>الحالة: '+safe(status)+'</p>'+
-        '<p>معرّف المستخدم: <br>'+safe(r.uid)+'</p>'+
-        '<p>رقم الطلب: <br>'+safe(r.id)+'</p>'+
-        '<p>مرجع التحويل: '+safe(r.reference||'غير مرفق')+'</p>'+
-        '<p>تاريخ الطلب: '+safe(new Date(r.createdAt||Date.now()).toLocaleString('ar-EG'))+'</p>'+
-        (r.status==='pending'?
-          '<div class="row">'+
-          '<button class="approve" data-action="approved">موافقة</button>'+
-          '<button class="reject" data-action="rejected">رفض</button>'+
-          '</div>':
-          '<p class="muted">تمت مراجعة هذا الطلب أو أن حالته غير معلومة.</p>');
+    const container = $("requests");
+    container.replaceChildren();
 
-      card.querySelectorAll('button[data-action]').forEach(btn=>{
-        btn.addEventListener('click',()=>{
-          reviewRequest(r.uid,r.id,btn.dataset.action,btn);
+    showMessage("جارٍ تحميل الطلبات...");
+
+    try {
+      const snapshot = await get(ref(db, "requests"));
+
+      if (!snapshot.exists()) {
+        showMessage("لا توجد طلبات إيداع.");
+        return;
+      }
+
+      let count = 0;
+
+      snapshot.forEach(userSnapshot => {
+        const uid = userSnapshot.key;
+
+        userSnapshot.forEach(requestSnapshot => {
+          const requestId = requestSnapshot.key;
+          const item = requestSnapshot.val();
+
+          if (!item || item.type !== "deposit") {
+            return;
+          }
+
+          count++;
+
+          const card = document.createElement("article");
+          card.className = "request";
+
+          const title = document.createElement("h3");
+          title.textContent = "طلب إيداع";
+
+          const details = document.createElement("p");
+          details.className = "muted";
+          details.textContent =
+            "رقم المستخدم: " + uid +
+            "\nرقم الطلب: " + requestId +
+            "\nالمبلغ: " + money(item.amount) +
+            "\nالحالة: " + safeText(item.status);
+
+          card.append(title, details);
+
+          if (item.status === "pending") {
+            const actions = document.createElement("div");
+            actions.className = "actions";
+
+            const approve = document.createElement("button");
+            approve.className = "approve";
+            approve.textContent = "موافقة وإضافة الرصيد";
+
+            approve.addEventListener("click", () => {
+              review(uid, requestId, "approved", approve, reject);
+            });
+
+            const reject = document.createElement("button");
+            reject.className = "reject";
+            reject.textContent = "رفض الطلب";
+
+            reject.addEventListener("click", () => {
+              review(uid, requestId, "rejected", approve, reject);
+            });
+
+            actions.append(approve, reject);
+            card.append(actions);
+          } else {
+            const status = document.createElement("p");
+            status.className = "status";
+            status.textContent = "تمت مراجعة الطلب.";
+            card.append(status);
+          }
+
+          container.append(card);
         });
       });
 
-      $('requests').appendChild(card);
-    });
-  }catch(e){
-    $('status').textContent='تعذر تحميل الطلبات: '+e.message+
-      ' — تحقق من قواعد Firebase.';
-  }
-}
+      showMessage(
+        count ? "عدد طلبات الإيداع: " + count : "لا توجد طلبات إيداع."
+      );
 
-async function reviewRequest(uid,id,newStatus,button){
-  if(!['approved','rejected'].includes(newStatus))return;
-
-  const label=newStatus==='approved'?'الموافقة':'الرفض';
-  if(!confirm('هل تريد تأكيد '+label+' على هذا الطلب؟'))return;
-
-  button.disabled=true;
-
-  try{
-    const ref=db.ref('requests/'+uid+'/'+id);
-    const snap=await ref.once('value');
-    const request=snap.val();
-
-    if(!request){
-      throw new Error('الطلب غير موجود.');
+    } catch (error) {
+      showMessage(
+        "تعذر تحميل الطلبات. تحقق من اتصال Firebase وقواعد القراءة.",
+        true
+      );
     }
-    if(request.status!=='pending'){
-      throw new Error('تمت مراجعة الطلب بالفعل.');
+  }
+
+  async function review(uid, requestId, action, approve, reject) {
+    if (busy) return;
+
+    if (!auth.currentUser ||
+        auth.currentUser.uid !== ADMIN_UID) {
+      showMessage("ليس لديك صلاحية تنفيذ هذه العملية.", true);
+      return;
     }
 
-    await ref.update({
-      status:newStatus,
-      reviewedAt:Date.now(),
-      reviewedBy:auth.currentUser.uid
-    });
+    const promptText = action === "approved"
+      ? "هل تريد الموافقة على الطلب وإضافة المبلغ إلى رصيد المستخدم؟"
+      : "هل تريد رفض طلب الإيداع؟";
 
-    alert('تم تحديث حالة الطلب.');
-    loadRequests();
-  }catch(e){
-    alert('تعذر تحديث الطلب: '+e.message);
-    button.disabled=false;
+    if (!confirm(promptText)) return;
+
+    busy = true;
+    approve.disabled = true;
+    reject.disabled = true;
+
+    showMessage("جارٍ معالجة الطلب...");
+
+    try {
+      const result = await reviewDeposit({
+        uid,
+        requestId,
+        action
+      });
+
+      showMessage(
+        result.data?.message || "تمت معالجة الطلب."
+      );
+
+      await loadRequests();
+
+    } catch (error) {
+      showMessage(
+        "تعذر تنفيذ العملية: " +
+        (error.message || "خطأ غير معروف") +
+        "\nحدّث الطلب وتحقق من حالة الرصيد قبل إعادة المحاولة.",
+        true
+      );
+
+      approve.disabled = false;
+      reject.disabled = false;
+
+    } finally {
+      busy = false;
+    }
   }
-}
 
-async function logout(){
-  await auth.signOut();
-}
+  $("refreshBtn").addEventListener("click", loadRequests);
+
+  $("logoutBtn").addEventListener("click", async () => {
+    await signOut(auth);
+  });
 </script>
+
 </body>
 </html>
-const { onCall, HttpsError } = require("firebase-functions/v2/https");
-const { initializeApp } = require("firebase-admin/app");
-const { getDatabase } = require("firebase-admin/database");
-
-initializeApp();
-
-const db = getDatabase();
-
-const ADMIN_UID = "8aBvh2HxgEXrbeQEZsIvJjPLv6h1";
-
-exports.reviewDeposit = onCall(async (request) => {
-  if (!request.auth || request.auth.uid !== ADMIN_UID) {
-    throw new HttpsError(
-      "permission-denied",
-      "غير مسموح إلا للمدير."
-    );
-  }
-
-  const { uid, requestId, action } = request.data || {};
-
-  if (
-    typeof uid !== "string" ||
-    typeof requestId !== "string" ||
-    !["approved", "rejected"].includes(action)
-  ) {
-    throw new HttpsError("invalid-argument", "بيانات الطلب غير صحيحة.");
-  }
-
-  const requestRef = db.ref(`requests/${uid}/${requestId}`);
-
-  const result = await requestRef.transaction((item) => {
-    if (!item || item.status !== "pending") return;
-
-    if (item.type !== "deposit") {
-      throw new Error("NOT_DEPOSIT");
-    }
-
-    const amount = Number(item.amount);
-
-    if (!Number.isFinite(amount) || amount <= 0) {
-      throw new Error("INVALID_AMOUNT");
-    }
-
-    return {
-      ...item,
-      status: action,
-      reviewedAt: Date.now(),
-      reviewedBy: request.auth.uid
-    };
-  });
-
-  if (!result.committed) {
-    throw new HttpsError(
-      "failed-precondition",
-      "الطلب تمت مراجعته بالفعل أو لم يعد موجودًا."
-    );
-  }
-
-  if (action === "rejected") {
-    return { success: true, message: "تم رفض الطلب." };
-  }
-
-  const amount = Number(result.snapshot.val().amount);
-  const balanceRef = db.ref(`balances/${uid}`);
-
-  try {
-    await balanceRef.transaction((current) => {
-      const currentAmount =
-        current && typeof current === "object"
-          ? Number(current.amount || 0)
-          : Number(current || 0);
-
-      if (!Number.isFinite(currentAmount) || currentAmount < 0) {
-        throw new Error("INVALID_BALANCE");
-      }
-
-      return {
-        amount: currentAmount + amount
-      };
-    });
-
-    await requestRef.update({
-      credited: true,
-      creditedAt: Date.now()
-    });
-
-    return { success: true, message: "تمت إضافة الرصيد." };
-  } catch (error) {
-    await requestRef.update({
-      status: "approved",
-      creditError: true
-    });
-
-    throw new HttpsError(
-      "internal",
-      "تم قبول الطلب لكن تعذرت إضافة الرصيد. يلزم فحص الطلب قبل إعادة المحاولة."
-    );
-  }
-});
