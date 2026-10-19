@@ -6,53 +6,43 @@
 <title>منصتي PRO</title>
 
 <style>
-* {
-  box-sizing: border-box;
-}
-
 :root {
   --cyan: #19d6e8;
   --navy: #080d20;
-  --panel: #15213b;
   --text: #f7f8ff;
   --muted: #9da9c4;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(ellipse at 50% 15%,
-      rgba(80, 45, 135, .42), transparent 52%),
+    radial-gradient(ellipse at 50% 15%, rgba(80,45,135,.42), transparent 52%),
     var(--navy);
   color: var(--text);
   font-family: Tahoma, Arial, sans-serif;
 }
 
-* {
-  -webkit-tap-highlight-color: transparent;
-}
-
-button, input {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
+button, input { font: inherit; }
+button { cursor: pointer; }
 
 .wrapper {
   width: 100%;
   max-width: 600px;
   margin: auto;
-  padding: 55px 16px 40px;
+  padding: 45px 16px;
 }
 
 .brand {
   text-align: center;
   font-size: 30px;
   font-weight: bold;
-  margin-bottom: 25px;
+  margin-bottom: 12px;
 }
 
 .brand span {
@@ -64,133 +54,97 @@ button {
 .tagline {
   text-align: center;
   color: var(--muted);
-  font-size: 14px;
-  margin: 0 0 40px;
+  margin: 0 0 32px;
 }
 
-.auth-card {
-  background: linear-gradient(
-    140deg,
-    rgba(24, 38, 65, .98),
-    rgba(17, 26, 48, .98)
-  );
-  border: 1px solid rgba(150, 170, 220, .14);
+.card {
+  background: linear-gradient(140deg, #182641, #111a30);
+  border: 1px solid rgba(150,170,220,.14);
   border-radius: 25px;
-  padding: 25px 24px;
-  box-shadow: 0 18px 55px rgba(0, 0, 0, .15);
+  padding: 25px 22px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.15);
 }
 
-h2 {
-  font-size: 21px;
-  margin: 0 0 30px;
-}
+h2 { font-size: 21px; margin: 0 0 25px; }
 
 label {
   display: block;
   color: #bac5dc;
   font-size: 14px;
-  margin: 0 0 13px;
+  margin-bottom: 10px;
 }
 
 input {
   display: block;
   width: 100%;
-  height: 58px;
-  padding: 0 16px;
+  height: 55px;
+  padding: 0 15px;
   background: #080f23;
   border: 1px solid #283657;
-  border-radius: 15px;
+  border-radius: 14px;
   color: white;
   outline: none;
-  margin-bottom: 22px;
+  margin-bottom: 20px;
   direction: ltr;
-  text-align: right;
-}
-
-input:focus {
-  border-color: var(--cyan);
-  box-shadow: 0 0 0 2px rgba(25, 214, 232, .08);
-}
-
-input[type="tel"] {
   text-align: left;
 }
 
+input:focus { border-color: var(--cyan); }
+
 .primary {
-  display: block;
   width: 100%;
-  height: 66px;
+  min-height: 58px;
   border: none;
   border-radius: 15px;
   color: #061a29;
   background: linear-gradient(90deg, #19cfe4, #50eee0);
-  font-size: 19px;
+  font-size: 18px;
   font-weight: bold;
-  margin-top: 4px;
 }
 
-.primary:active {
-  transform: scale(.99);
-}
+.primary:disabled { opacity: .6; }
 
 .switch {
   text-align: center;
   font-size: 13px;
   color: var(--muted);
-  margin: 26px 0 0;
+  margin-top: 23px;
 }
 
-.switch button {
+.switch button, .text-button {
   color: var(--cyan);
   background: transparent;
   border: none;
   padding: 0;
 }
 
+.text-button {
+  display: block;
+  margin: 18px auto 0;
+  font-size: 13px;
+}
+
 .message {
   display: none;
-  margin-top: 20px;
+  margin-top: 18px;
+  padding: 12px;
+  border-radius: 12px;
   font-size: 13px;
-  line-height: 1.8;
+  line-height: 1.9;
   overflow-wrap: anywhere;
 }
 
-.message.show {
-  display: block;
-}
+.message.show { display: block; }
+.error { color: #ffb0b0; background: rgba(255,70,70,.08); }
+.success { color: #6df0bd; background: rgba(60,230,160,.08); }
+.hidden { display: none !important; }
 
-.message.error {
-  color: #ff9999;
-}
-
-.message.success {
-  color: #6df0bd;
-}
-
-.disclaimer {
+.note {
   text-align: center;
+  color: var(--muted);
   font-size: 12px;
   line-height: 2;
-  color: var(--muted);
-  margin: 20px 5px 0;
-}
-
-.hidden {
-  display: none !important;
-}
-
-@media (max-width: 400px) {
-  .wrapper {
-    padding-top: 38px;
-  }
-
-  .auth-card {
-    padding: 22px 17px;
-  }
-
-  .brand {
-    font-size: 27px;
-  }
+  margin-top: 20px;
 }
 </style>
 </head>
@@ -198,163 +152,288 @@ input[type="tel"] {
 <body>
 <main class="wrapper">
 
-  <header>
-    <div class="brand">منصتي <span>PRO</span></div>
-    <p class="tagline">المهام والعمولات في مكان واحد</p>
-  </header>
+<header>
+  <div class="brand">منصتي <span>PRO</span></div>
+  <p class="tagline">المهام والعمولات في مكان واحد</p>
+</header>
 
-  <section class="auth-card">
+<section class="card">
 
-    <form id="loginForm">
-      <h2>تسجيل الدخول 👋</h2>
+  <form id="loginForm">
+    <h2>تسجيل الدخول 👋</h2>
 
-      <label for="loginPhone">رقم الهاتف</label>
-      <input
-        id="loginPhone"
-        type="tel"
-        inputmode="tel"
-        autocomplete="tel"
-        placeholder="أدخل رقم الهاتف"
-        required
-      >
+    <label for="loginEmail">البريد الإلكتروني</label>
+    <input id="loginEmail" type="email"
+      autocomplete="email" placeholder="example@email.com" required>
 
-      <label for="loginPassword">كلمة المرور</label>
-      <input
-        id="loginPassword"
-        type="password"
-        autocomplete="current-password"
-        placeholder="أدخل كلمة المرور"
-        required
-      >
+    <label for="loginPassword">كلمة المرور</label>
+    <input id="loginPassword" type="password"
+      autocomplete="current-password" placeholder="كلمة المرور" required>
 
-      <button class="primary" type="submit">
-        تسجيل الدخول
-      </button>
+    <button class="primary" id="loginButton" type="submit">
+      تسجيل الدخول
+    </button>
 
-      <p class="switch">
-        ليس لديك حساب؟
-        <button type="button" id="showRegister">
-          إنشاء حساب جديد
-        </button>
-      </p>
+    <button class="text-button" id="forgotPassword" type="button">
+      نسيت كلمة المرور؟
+    </button>
 
-      <div id="loginMessage" class="message"></div>
-    </form>
+    <p class="switch">
+      ليس لديك حساب؟
+      <button type="button" id="showRegister">إنشاء حساب جديد</button>
+    </p>
 
-    <form id="registerForm" class="hidden">
-      <h2>إنشاء حساب جديد ✨</h2>
+    <div id="loginMessage" class="message" role="status"></div>
+  </form>
 
-      <label for="registerName">الاسم</label>
-      <input
-        id="registerName"
-        type="text"
-        autocomplete="name"
-        placeholder="اكتب اسمك"
-        required
-      >
+  <form id="registerForm" class="hidden">
+    <h2>إنشاء حساب جديد ✨</h2>
 
-      <label for="registerPhone">رقم الهاتف</label>
-      <input
-        id="registerPhone"
-        type="tel"
-        inputmode="tel"
-        autocomplete="tel"
-        placeholder="أدخل رقم الهاتف"
-        required
-      >
+    <label for="registerName">الاسم</label>
+    <input id="registerName" type="text"
+      autocomplete="name" maxlength="80" placeholder="اكتب اسمك" required>
 
-      <label for="registerPassword">كلمة المرور</label>
-      <input
-        id="registerPassword"
-        type="password"
-        autocomplete="new-password"
-        minlength="8"
-        placeholder="8 أحرف على الأقل"
-        required
-      >
+    <label for="registerEmail">البريد الإلكتروني</label>
+    <input id="registerEmail" type="email"
+      autocomplete="email" placeholder="example@email.com" required>
 
-      <button class="primary" type="submit">
-        إنشاء حساب
-      </button>
+    <label for="registerPassword">كلمة المرور</label>
+    <input id="registerPassword" type="password"
+      autocomplete="new-password" minlength="8"
+      placeholder="8 أحرف على الأقل" required>
 
-      <p class="switch">
-        لديك حساب بالفعل؟
-        <button type="button" id="showLogin">
-          تسجيل الدخول
-        </button>
-      </p>
+    <label for="confirmPassword">تأكيد كلمة المرور</label>
+    <input id="confirmPassword" type="password"
+      autocomplete="new-password" minlength="8"
+      placeholder="أعد كتابة كلمة المرور" required>
 
-      <div id="registerMessage" class="message"></div>
-    </form>
+    <button class="primary" id="registerButton" type="submit">
+      إنشاء حساب
+    </button>
 
+    <p class="switch">
+      لديك حساب بالفعل؟
+      <button type="button" id="showLogin">تسجيل الدخول</button>
+    </p>
+
+    <div id="registerMessage" class="message" role="status"></div>
+  </form>
+
+  <section id="accountPanel" class="hidden">
+    <h2>أهلًا بك في منصتي PRO 🎉</h2>
+    <p id="accountEmail" style="overflow-wrap:anywhere;line-height:2"></p>
+    <p style="line-height:1.9;font-size:14px">
+      تم تسجيل الدخول. لوحة المهام والمحفظة تحتاج إلى إعداد منفصل.
+    </p>
+    <button class="primary" id="logoutButton" type="button">
+      تسجيل الخروج
+    </button>
   </section>
 
-  <p class="disclaimer">
-    هذه واجهة تسجيل الدخول الأولية. يلزم ربط قاعدة بيانات
-    لتسجيل الحسابات وحفظها بشكل آمن.
-  </p>
+</section>
+
+<p class="note">
+  تسجيل الحسابات عبر Firebase Authentication.
+  المحفظة والعمولات غير مفعّلتين في هذه النسخة.
+</p>
 
 </main>
 
-<script>
-const loginForm = document.getElementById("loginForm");
-const registerForm = document.getElementById("registerForm");
+<script type="module">
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
 
-document.getElementById("showRegister").onclick = () => {
-  loginForm.classList.add("hidden");
-  registerForm.classList.remove("hidden");
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  signOut,
+  onAuthStateChanged,
+  updateProfile
+} from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+
+/* إعدادات مشروع Firebase */
+const firebaseConfig = {
+  apiKey: "AIzaSyA8q6z4McET3_d208PtSnFGEjlAVUezJ8k",
+  authDomain: "mansatipro.firebaseapp.com",
+  databaseURL: "https://mansatipro-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "mansatipro",
+  storageBucket: "mansatipro.firebasestorage.app",
+  messagingSenderId: "114519438941",
+  appId: "1:114519438941:web:8b92991a652bb24150ffb4",
+  measurementId: "G-TMZBN1L9KV"
 };
 
-document.getElementById("showLogin").onclick = () => {
-  registerForm.classList.add("hidden");
-  loginForm.classList.remove("hidden");
-};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-function showMessage(id, text, type) {
-  const el = document.getElementById(id);
+const $ = id => document.getElementById(id);
+const loginForm = $("loginForm");
+const registerForm = $("registerForm");
+const accountPanel = $("accountPanel");
+
+function message(id, text, type = "error") {
+  const el = $(id);
   el.textContent = text;
   el.className = "message show " + type;
 }
 
-loginForm.addEventListener("submit", event => {
+function clearMessage(id) {
+  $(id).textContent = "";
+  $(id).className = "message";
+}
+
+function errorText(error) {
+  const errors = {
+    "auth/email-already-in-use": "هذا البريد مسجل بالفعل. جرّب تسجيل الدخول.",
+    "auth/invalid-email": "البريد الإلكتروني غير صحيح.",
+    "auth/weak-password": "كلمة المرور ضعيفة. استخدم 8 أحرف على الأقل.",
+    "auth/invalid-credential": "البريد أو كلمة المرور غير صحيحة.",
+    "auth/user-not-found": "لا يوجد حساب بهذا البريد.",
+    "auth/wrong-password": "كلمة المرور غير صحيحة.",
+    "auth/too-many-requests": "محاولات كثيرة. انتظر قليلًا ثم حاول.",
+    "auth/network-request-failed": "تعذر الاتصال. تحقق من الإنترنت.",
+    "auth/operation-not-allowed": "فعّل Email/Password في Firebase Authentication.",
+    "auth/unauthorized-domain": "عنوان الموقع غير مسموح به في إعدادات Firebase.",
+    "auth/invalid-api-key": "مفتاح Firebase غير صحيح."
+  };
+  return errors[error.code] ||
+    "حدث خطأ. رمز الخطأ: " + (error.code || "غير معروف");
+}
+
+function showLogin() {
+  registerForm.classList.add("hidden");
+  accountPanel.classList.add("hidden");
+  loginForm.classList.remove("hidden");
+  clearMessage("loginMessage");
+  clearMessage("registerMessage");
+}
+
+function showRegister() {
+  loginForm.classList.add("hidden");
+  accountPanel.classList.add("hidden");
+  registerForm.classList.remove("hidden");
+  clearMessage("loginMessage");
+  clearMessage("registerMessage");
+}
+
+$("showRegister").addEventListener("click", showRegister);
+$("showLogin").addEventListener("click", showLogin);
+
+registerForm.addEventListener("submit", async event => {
   event.preventDefault();
+  clearMessage("registerMessage");
 
-  showMessage(
-    "loginMessage",
-    "لم يتم ربط قاعدة البيانات بعد. سنفعّل تسجيل الدخول بعد إعداد PocketBase.",
-    "error"
-  );
-});
+  const name = $("registerName").value.trim();
+  const email = $("registerEmail").value.trim();
+  const password = $("registerPassword").value;
+  const confirm = $("confirmPassword").value;
 
-registerForm.addEventListener("submit", event => {
-  event.preventDefault();
-
-  const phone = document.getElementById("registerPhone").value.trim();
-  const password = document.getElementById("registerPassword").value;
-
-  if (!/^\+?[0-9]{8,15}$/.test(phone.replace(/[\s()-]/g, ""))) {
-    showMessage(
-      "registerMessage",
-      "يرجى إدخال رقم هاتف صحيح.",
-      "error"
-    );
+  if (!name) {
+    message("registerMessage", "اكتب اسمك أولًا.");
     return;
   }
 
   if (password.length < 8) {
-    showMessage(
-      "registerMessage",
-      "كلمة المرور يجب أن تكون 8 أحرف على الأقل.",
-      "error"
-    );
+    message("registerMessage", "كلمة المرور يجب أن تكون 8 أحرف على الأقل.");
     return;
   }
 
-  showMessage(
-    "registerMessage",
-    "الواجهة جاهزة، لكن إنشاء الحساب لن يعمل قبل ربط PocketBase.",
-    "error"
-  );
+  if (password !== confirm) {
+    message("registerMessage", "كلمتا المرور غير متطابقتين.");
+    return;
+  }
+
+  $("registerButton").disabled = true;
+  $("registerButton").textContent = "جارٍ إنشاء الحساب...";
+
+  try {
+    const result = await createUserWithEmailAndPassword(
+      auth, email, password
+    );
+
+    await updateProfile(result.user, { displayName: name });
+
+    message(
+      "registerMessage",
+      "تم إنشاء الحساب بنجاح! يمكنك الآن تسجيل الدخول.",
+      "success"
+    );
+  } catch (error) {
+    message("registerMessage", errorText(error));
+  } finally {
+    $("registerButton").disabled = false;
+    $("registerButton").textContent = "إنشاء حساب";
+  }
+});
+
+loginForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  clearMessage("loginMessage");
+
+  $("loginButton").disabled = true;
+  $("loginButton").textContent = "جارٍ تسجيل الدخول...";
+
+  try {
+    await signInWithEmailAndPassword(
+      auth,
+      $("loginEmail").value.trim(),
+      $("loginPassword").value
+    );
+  } catch (error) {
+    message("loginMessage", errorText(error));
+  } finally {
+    $("loginButton").disabled = false;
+    $("loginButton").textContent = "تسجيل الدخول";
+  }
+});
+
+$("forgotPassword").addEventListener("click", async () => {
+  clearMessage("loginMessage");
+
+  const email = $("loginEmail").value.trim();
+
+  if (!email) {
+    message("loginMessage", "اكتب بريدك الإلكتروني أولًا.");
+    return;
+  }
+
+  try {
+    await sendPasswordResetEmail(auth, email);
+    message(
+      "loginMessage",
+      "إذا كان البريد مسجلًا، فستصلك رسالة لاستعادة كلمة المرور. تحقق من البريد الوارد والرسائل غير المرغوب فيها.",
+      "success"
+    );
+  } catch (error) {
+    message("loginMessage", errorText(error));
+  }
+});
+
+onAuthStateChanged(auth, user => {
+  if (user) {
+    loginForm.classList.add("hidden");
+    registerForm.classList.add("hidden");
+    accountPanel.classList.remove("hidden");
+    $("accountEmail").textContent = "البريد الإلكتروني: " + (user.email || "");
+  } else {
+    accountPanel.classList.add("hidden");
+    if (loginForm.classList.contains("hidden") &&
+        registerForm.classList.contains("hidden")) {
+      showLogin();
+    }
+  }
+});
+
+$("logoutButton").addEventListener("click", async () => {
+  try {
+    await signOut(auth);
+    showLogin();
+    message("loginMessage", "تم تسجيل الخروج بنجاح.", "success");
+  } catch (error) {
+    alert(errorText(error));
+  }
 });
 </script>
 </body>
