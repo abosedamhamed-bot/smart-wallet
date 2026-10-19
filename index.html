@@ -1,426 +1,896 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Smart Wallet - محفظتي</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منصتي | المهام والعمولات</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #101827;
-      color: #fff;
-    }
+:root {
+  --bg: #080d20;
+  --panel: #111a32;
+  --panel2: #182443;
+  --cyan: #19d9ed;
+  --purple: #8154ff;
+  --text: #ffffff;
+  --muted: #9ba9c7;
+  --border: rgba(255,255,255,.09);
+}
 
-    button, input, select {
-      font: inherit;
-    }
+body {
+  background: radial-gradient(ellipse at top, #25204f 0%, var(--bg) 55%);
+  color: var(--text);
+  font-family: Tahoma, Arial, sans-serif;
+  min-height: 100vh;
+}
 
-    button {
-      cursor: pointer;
-    }
+button, input {
+  font: inherit;
+}
 
-    .container {
-      width: min(100% - 28px, 520px);
-      margin: auto;
-      padding: 22px 0 40px;
-    }
+button {
+  cursor: pointer;
+}
 
-    .brand {
-      text-align: center;
-      margin: 12px 0 28px;
-    }
+.hidden {
+  display: none !important;
+}
 
-    .brand h1 {
-      color: #48dfb0;
-      margin-bottom: 8px;
-    }
+.container {
+  width: min(100%, 480px);
+  min-height: 100vh;
+  margin: auto;
+  padding: 20px 16px 100px;
+}
 
-    .card {
-      background: #1b2638;
-      border: 1px solid #2d3a50;
-      border-radius: 18px;
-      padding: 22px;
-      margin-bottom: 18px;
-    }
+.logo {
+  text-align: center;
+  font-size: 27px;
+  font-weight: bold;
+  margin: 15px 0 8px;
+}
 
-    h2, h3 {
-      margin-top: 0;
-    }
+.logo span {
+  color: var(--cyan);
+}
 
-    label {
-      display: block;
-      margin: 14px 0 8px;
-      color: #d8e1ee;
-    }
+.subtitle {
+  color: var(--muted);
+  text-align: center;
+  font-size: 13px;
+  margin-bottom: 28px;
+}
 
-    input, select {
-      width: 100%;
-      padding: 13px;
-      border: 1px solid #3a4960;
-      border-radius: 10px;
-      background: #101827;
-      color: #fff;
-      outline: none;
-    }
+.card {
+  background: linear-gradient(145deg, #172442, #10172d);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 12px 35px #0002;
+}
 
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 13px;
-      border: 0;
-      border-radius: 10px;
-      background: #38d9a9;
-      color: #09251d;
-      font-weight: bold;
-      margin-top: 16px;
-    }
+h2 {
+  font-size: 19px;
+  margin-bottom: 18px;
+}
 
-    .btn.secondary {
-      background: #2b3a50;
-      color: white;
-    }
+h3 {
+  font-size: 15px;
+  margin-bottom: 12px;
+}
 
-    .btn.danger {
-      background: #c84e5d;
-      color: white;
-    }
+label {
+  display: block;
+  color: #c6d0e8;
+  font-size: 13px;
+  margin: 15px 0 8px;
+}
 
-    .hidden {
-      display: none !important;
-    }
+input {
+  width: 100%;
+  padding: 14px;
+  color: white;
+  background: #080f23;
+  border: 1px solid #293758;
+  border-radius: 12px;
+  outline: none;
+}
 
-    .balance {
-      text-align: center;
-      padding: 28px 10px;
-    }
+input:focus {
+  border-color: var(--cyan);
+}
 
-    .balance small {
-      color: #bdc9d9;
-    }
+.btn {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 15px;
+  font-weight: bold;
+}
 
-    .balance strong {
-      display: block;
-      font-size: 35px;
-      margin-top: 12px;
-      color: #48dfb0;
-      overflow-wrap: anywhere;
-    }
+.btn-primary {
+  color: #061320;
+  background: linear-gradient(90deg, var(--cyan), #5cf3e5);
+}
 
-    .menu {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
+.btn-secondary {
+  color: white;
+  background: #273251;
+  border: 1px solid #39496c;
+}
 
-    .menu button {
-      padding: 16px 8px;
-      background: #27354a;
-      color: white;
-      border: 1px solid #35455e;
-      border-radius: 12px;
-    }
+.switch {
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 18px;
+}
 
-    .notice {
-      padding: 12px;
-      border-radius: 10px;
-      background: #26364c;
-      color: #dce7f5;
-      line-height: 1.7;
-      margin-top: 12px;
-    }
+.switch button {
+  background: none;
+  color: var(--cyan);
+  border: 0;
+  font-weight: bold;
+}
 
-    .status {
-      margin-top: 14px;
-      line-height: 1.7;
-      overflow-wrap: anywhere;
-    }
+.message {
+  font-size: 13px;
+  margin-top: 12px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
 
-    .item {
-      padding: 13px 0;
-      border-bottom: 1px solid #344258;
-      line-height: 1.8;
-    }
+.error {
+  color: #ff9292;
+}
 
-    .item:last-child {
-      border-bottom: 0;
-    }
+.success {
+  color: #6cf5c2;
+}
 
-    .muted {
-      color: #b8c5d8;
-      font-size: 13px;
-    }
-  </style>
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 5px 0 20px;
+}
+
+.header .brand {
+  font-size: 21px;
+  font-weight: bold;
+}
+
+.header .brand span {
+  color: var(--cyan);
+}
+
+.avatar {
+  width: 43px;
+  height: 43px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--purple), var(--cyan));
+  display: grid;
+  place-items: center;
+  color: #081025;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.welcome {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 7px;
+}
+
+.balance {
+  font-size: 32px;
+  font-weight: bold;
+  margin: 12px 0;
+  direction: rtl;
+}
+
+.balance small {
+  font-size: 13px;
+  color: var(--cyan);
+}
+
+.demo {
+  color: #ffd27c;
+  font-size: 11px;
+  margin-top: 12px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.stat {
+  padding: 17px 12px;
+  border-radius: 17px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+}
+
+.stat .icon {
+  font-size: 23px;
+  margin-bottom: 12px;
+}
+
+.stat .value {
+  font-weight: bold;
+  font-size: 19px;
+  margin-top: 8px;
+}
+
+.stat .label {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.action {
+  border: 1px solid var(--border);
+  background: #131d37;
+  color: white;
+  border-radius: 14px;
+  padding: 15px 5px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.action span {
+  display: block;
+  font-size: 23px;
+  margin-bottom: 8px;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.task {
+  padding: 15px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.task:last-child {
+  border-bottom: 0;
+}
+
+.task-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.reward {
+  color: var(--cyan);
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.task p {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.7;
+}
+
+.task .btn {
+  padding: 10px;
+  margin-top: 12px;
+}
+
+.vip {
+  border: 1px solid #5947a4;
+  background: linear-gradient(135deg, #30205f, #111a32);
+}
+
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.profile-row span:first-child {
+  color: var(--muted);
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100%, 480px);
+  background: #0b1227f5;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-around;
+  padding: 11px 3px calc(11px + env(safe-area-inset-bottom));
+  backdrop-filter: blur(16px);
+  z-index: 5;
+}
+
+.nav-btn {
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 10px;
+  padding: 3px;
+  min-width: 55px;
+}
+
+.nav-btn span {
+  display: block;
+  font-size: 21px;
+  margin-bottom: 5px;
+}
+
+.nav-btn.active {
+  color: var(--cyan);
+}
+
+.notice {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+  margin-top: 12px;
+}
+
+@media (min-width: 600px) {
+  .container {
+    padding-top: 30px;
+  }
+}
+</style>
 </head>
 
 <body>
-  <main class="container">
 
-    <header class="brand">
-      <h1>Smart Wallet</h1>
-      <p>محفظتك الإلكترونية</p>
+<div class="container">
+
+  <!-- تسجيل الدخول -->
+  <section id="authScreen">
+
+    <div class="logo">منصتي <span>PRO</span></div>
+    <p class="subtitle">المهام والعمولات في مكان واحد</p>
+
+    <div class="card">
+      <div id="loginForm">
+        <h2>تسجيل الدخول 👋</h2>
+
+        <label for="loginPhone">رقم الهاتف</label>
+        <input id="loginPhone" type="tel"
+          inputmode="tel" autocomplete="username"
+          placeholder="أدخل رقم الهاتف">
+
+        <label for="loginPassword">كلمة المرور</label>
+        <input id="loginPassword" type="password"
+          autocomplete="current-password"
+          placeholder="أدخل كلمة المرور">
+
+        <button class="btn btn-primary" onclick="login()">
+          تسجيل الدخول
+        </button>
+
+        <p class="switch">
+          ليس لديك حساب؟
+          <button onclick="showRegister()">إنشاء حساب جديد</button>
+        </p>
+
+        <div id="loginMessage" class="message"></div>
+      </div>
+
+      <div id="registerForm" class="hidden">
+        <h2>إنشاء حساب جديد ✨</h2>
+
+        <label for="registerName">الاسم</label>
+        <input id="registerName" autocomplete="name"
+          placeholder="اكتب اسمك">
+
+        <label for="registerPhone">رقم الهاتف</label>
+        <input id="registerPhone" type="tel"
+          inputmode="tel" autocomplete="username"
+          placeholder="أدخل رقم الهاتف">
+
+        <label for="registerPassword">كلمة المرور</label>
+        <input id="registerPassword" type="password"
+          autocomplete="new-password"
+          placeholder="8 أحرف على الأقل">
+
+        <button class="btn btn-primary" onclick="register()">
+          إنشاء الحساب
+        </button>
+
+        <p class="switch">
+          لديك حساب بالفعل؟
+          <button onclick="showLogin()">تسجيل الدخول</button>
+        </p>
+
+        <div id="registerMessage" class="message"></div>
+      </div>
+    </div>
+
+    <p class="notice">
+      هذه واجهة أولية. التسجيل في هذه النسخة تجريبي ومحلي،
+      وليس حسابًا محفوظًا في قاعدة بيانات.
+    </p>
+  </section>
+
+  <!-- واجهة الموقع -->
+  <section id="appScreen" class="hidden">
+
+    <header class="header">
+      <div class="brand">منصتي <span>PRO</span></div>
+      <div class="avatar">م</div>
     </header>
 
-    <!-- تسجيل الدخول -->
-    <section id="loginPage" class="card">
-      <h2>تسجيل الدخول</h2>
-      <p class="muted">أدخل رقم الموبايل للمتابعة.</p>
+    <!-- الرئيسية -->
+    <div id="homePage" class="page active">
 
-      <form id="loginForm">
-        <label for="phone">رقم الموبايل المصري</label>
-        <input
-          id="phone"
-          type="tel"
-          inputmode="numeric"
-          autocomplete="tel"
-          placeholder="01xxxxxxxxx"
-          maxlength="11"
-          required
-        >
+      <p class="welcome">أهلًا بك، <span id="welcomeName">مستخدمنا</span> 👋</p>
 
-        <button class="btn" type="submit">دخول</button>
-      </form>
+      <div class="card">
+        <p class="welcome">رصيد المحفظة التجريبي</p>
+        <div class="balance">
+          <span id="balanceValue">0.00</span>
+          <small>ج.م</small>
+        </div>
 
-      <div id="loginMessage" class="status" role="status"></div>
+        <p class="welcome">إجمالي العمولات التجريبية</p>
+        <strong id="commissionValue">0.00 ج.م</strong>
 
-      <div class="notice">
-        الدخول بالرقم وحده لا يثبت ملكية الحساب. هذه الواجهة لا تسمح
-        باستخدامها لإثبات ملكية رصيد مالي أو إجراء سحب حقيقي.
+        <p class="demo">⚠️ رصيد تجريبي، لا يمثل أموالًا حقيقية.</p>
       </div>
-    </section>
 
-    <!-- الصفحة الرئيسية -->
-    <section id="homePage" class="hidden">
+      <div class="stats">
+        <div class="stat">
+          <div class="icon">📋</div>
+          <div class="label">المهام المكتملة</div>
+          <div class="value" id="completedCount">0</div>
+        </div>
 
-      <div class="card balance">
-        <small>الرصيد المسجل في هذه الجلسة</small>
-        <strong id="balance">0.00 ج.م</strong>
-        <p id="userPhone" class="muted"></p>
+        <div class="stat">
+          <div class="icon">👑</div>
+          <div class="label">مستوى العضوية</div>
+          <div class="value">VIP 0</div>
+        </div>
+      </div>
+
+      <h3>الخدمات السريعة</h3>
+
+      <div class="quick-actions">
+        <button class="action" onclick="openPage('walletPage')">
+          <span>💰</span>المحفظة
+        </button>
+
+        <button class="action" onclick="openPage('tasksPage')">
+          <span>📋</span>المهام
+        </button>
+
+        <button class="action" onclick="openPage('vipPage')">
+          <span>👑</span>العضوية
+        </button>
       </div>
 
       <div class="card">
-        <h3>الخدمات</h3>
+        <h3>مرحبًا بك في منصتي</h3>
+        <p class="notice">
+          ستظهر هنا المهام والخدمات المتاحة بعد ربط الموقع
+          بقاعدة البيانات وتجهيز لوحة الإدارة.
+        </p>
+      </div>
+    </div>
 
-        <div class="menu">
-          <button type="button" data-page="depositPage">
-            طلب إيداع
-          </button>
+    <!-- المهام -->
+    <div id="tasksPage" class="page">
+      <h2>المهام والعمولات 📋</h2>
 
-          <button type="button" data-page="withdrawPage">
-            طلب سحب
-          </button>
-
-          <button type="button" data-page="historyPage">
-            سجل العمليات
-          </button>
-
-          <button type="button" id="refreshButton">
-            تحديث البيانات
+      <div class="card">
+        <div class="task">
+          <div class="task-row">
+            <strong>المهمة التجريبية الأولى</strong>
+            <span class="reward">+5 ج.م</span>
+          </div>
+          <p>مثال توضيحي لمهمة يمكن للإدارة إضافتها لاحقًا.</p>
+          <button class="btn btn-secondary"
+            onclick="demoTask('task1', 5, this)">
+            تجربة المهمة
           </button>
         </div>
 
-        <button class="btn secondary" id="logoutButton" type="button">
+        <div class="task">
+          <div class="task-row">
+            <strong>المهمة التجريبية الثانية</strong>
+            <span class="reward">+10 ج.م</span>
+          </div>
+          <p>مهمة تجريبية أخرى لعرض شكل قائمة المهام.</p>
+          <button class="btn btn-secondary"
+            onclick="demoTask('task2', 10, this)">
+            تجربة المهمة
+          </button>
+        </div>
+
+        <p class="notice">
+          المهام هنا تجريبية فقط. لن تُصرف عمولات حقيقية.
+        </p>
+      </div>
+    </div>
+
+    <!-- المحفظة -->
+    <div id="walletPage" class="page">
+      <h2>المحفظة 💰</h2>
+
+      <div class="card">
+        <p class="welcome">الرصيد التجريبي</p>
+        <div class="balance">
+          <span id="walletBalance">0.00</span>
+          <small>ج.م</small>
+        </div>
+
+        <button class="btn btn-primary" onclick="showDemoNotice()">
+          طلب إيداع
+        </button>
+
+        <button class="btn btn-secondary" onclick="showDemoNotice()">
+          طلب سحب
+        </button>
+
+        <p id="walletNotice" class="notice">
+          الإيداع والسحب غير مفعّلين في النسخة التجريبية.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>آخر العمليات</h3>
+        <div id="transactions">
+          <p class="notice">لا توجد عمليات مسجلة.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIP -->
+    <div id="vipPage" class="page">
+      <h2>مستويات VIP 👑</h2>
+
+      <div class="card vip">
+        <h3>VIP 0 — العضوية الأساسية</h3>
+        <p class="notice">
+          المستوى الافتراضي في الواجهة التجريبية.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>VIP 1</h3>
+        <p class="notice">تفاصيل المستوى يحددها مدير الموقع لاحقًا.</p>
+      </div>
+
+      <div class="card">
+        <h3>VIP 2</h3>
+        <p class="notice">تفاصيل المستوى يحددها مدير الموقع لاحقًا.</p>
+      </div>
+    </div>
+
+    <!-- الملف الشخصي -->
+    <div id="profilePage" class="page">
+      <h2>الملف الشخصي 👤</h2>
+
+      <div class="card">
+        <div class="profile-row">
+          <span>الاسم</span>
+          <strong id="profileName">—</strong>
+        </div>
+
+        <div class="profile-row">
+          <span>رقم الهاتف</span>
+          <strong id="profilePhone">—</strong>
+        </div>
+
+        <div class="profile-row">
+          <span>نوع الحساب</span>
+          <strong>مستخدم</strong>
+        </div>
+
+        <div class="profile-row">
+          <span>حالة الحساب</span>
+          <strong>تجريبي</strong>
+        </div>
+
+        <button class="btn btn-secondary" onclick="logout()">
           تسجيل الخروج
         </button>
       </div>
-    </section>
 
-    <!-- الإيداع -->
-    <section id="depositPage" class="card hidden">
-      <h2>طلب إيداع</h2>
-
-      <form id="depositForm">
-        <label for="depositAmount">المبلغ بالجنيه المصري</label>
-        <input
-          id="depositAmount"
-          type="number"
-          min="1"
-          step="0.01"
-          required
-        >
-
-        <label for="depositMethod">طريقة الإيداع</label>
-        <select id="depositMethod" required>
-          <option value="">اختر الطريقة</option>
-          <option value="vodafone_cash">فودافون كاش</option>
-          <option value="orange_cash">أورنج كاش</option>
-          <option value="etisalat_cash">اتصالات كاش</option>
-          <option value="instapay">إنستا باي</option>
-          <option value="visa">بطاقة بنكية</option>
-        </select>
-
-        <button class="btn" type="submit">إرسال طلب الإيداع</button>
-      </form>
-
-      <div id="depositMessage" class="status" role="status"></div>
-      <button class="btn secondary backButton" type="button">رجوع</button>
-    </section>
-
-    <!-- السحب -->
-    <section id="withdrawPage" class="card hidden">
-      <h2>طلب سحب</h2>
-
-      <form id="withdrawForm">
-        <label for="withdrawAmount">المبلغ بالجنيه المصري</label>
-        <input
-          id="withdrawAmount"
-          type="number"
-          min="1"
-          step="0.01"
-          required
-        >
-
-        <label for="withdrawMethod">طريقة استلام المبلغ</label>
-        <select id="withdrawMethod" required>
-          <option value="">اختر الطريقة</option>
-          <option value="vodafone_cash">فودافون كاش</option>
-          <option value="orange_cash">أورنج كاش</option>
-          <option value="etisalat_cash">اتصالات كاش</option>
-          <option value="instapay">إنستا باي</option>
-          <option value="visa">بطاقة بنكية</option>
-        </select>
-
-        <label for="destination">رقم أو بيانات الاستلام</label>
-        <input id="destination" type="text" maxlength="100" required>
-
-        <button class="btn" type="submit">إرسال طلب السحب</button>
-      </form>
-
-      <div id="withdrawMessage" class="status" role="status"></div>
-      <button class="btn secondary backButton" type="button">رجوع</button>
-    </section>
-
-    <!-- سجل العمليات -->
-    <section id="historyPage" class="card hidden">
-      <h2>سجل العمليات</h2>
-
-      <div id="historyList">
-        <p class="muted">لا توجد بيانات محمّلة.</p>
+      <div class="card">
+        <h3>خدمة العملاء</h3>
+        <p class="notice">
+          سيتم إضافة وسائل التواصل عند تجهيز الموقع.
+        </p>
       </div>
+    </div>
 
-      <button class="btn secondary backButton" type="button">رجوع</button>
-    </section>
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-page="homePage"
+        onclick="openPage('homePage')">
+        <span>🏠</span>الرئيسية
+      </button>
 
-  </main>
+      <button class="nav-btn" data-page="tasksPage"
+        onclick="openPage('tasksPage')">
+        <span>📋</span>المهام
+      </button>
 
-  <script>
-    "use strict";
+      <button class="nav-btn" data-page="walletPage"
+        onclick="openPage('walletPage')">
+        <span>💰</span>المحفظة
+      </button>
 
-    /*
-      هذه واجهة فقط في الوقت الحالي.
-      لا يوجد اتصال بخادم المستخدمين في هذا الملف.
-      لا يتم حفظ أرصدة مالية أو اعتماد طلبات حقيقية في المتصفح.
-    */
+      <button class="nav-btn" data-page="vipPage"
+        onclick="openPage('vipPage')">
+        <span>👑</span>VIP
+      </button>
 
-    const $ = (id) => document.getElementById(id);
+      <button class="nav-btn" data-page="profilePage"
+        onclick="openPage('profilePage')">
+        <span>👤</span>حسابي
+      </button>
+    </nav>
 
-    let currentPhone = "";
+  </section>
+</div>
 
-    const pageIds = [
-      "loginPage",
-      "homePage",
-      "depositPage",
-      "withdrawPage",
-      "historyPage"
-    ];
+<script>
+const $ = id => document.getElementById(id);
 
-    function showPage(pageId) {
-      for (const id of pageIds) {
-        $(id).classList.toggle("hidden", id !== pageId);
-      }
-    }
+let currentUser = null;
+let demoBalance = 0;
+let demoCommission = 0;
+let completedTasks = [];
+let transactions = [];
 
-    function normalizePhone(value) {
-      return value.replace(/\D/g, "");
-    }
+function showLogin() {
+  $('registerForm').classList.add('hidden');
+  $('loginForm').classList.remove('hidden');
+  $('loginMessage').textContent = '';
+}
 
-    function validEgyptianPhone(value) {
-      return /^01[0125][0-9]{8}$/.test(value);
-    }
+function showRegister() {
+  $('loginForm').classList.add('hidden');
+  $('registerForm').classList.remove('hidden');
+  $('registerMessage').textContent = '';
+}
 
-    function formatMoney(value) {
-      return Number(value).toLocaleString("ar-EG", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }) + " ج.م";
-    }
+function setMessage(id, text, type) {
+  const el = $(id);
+  el.textContent = text;
+  el.className = 'message ' + type;
+}
 
-    function showMessage(elementId, message) {
-      $(elementId).textContent = message;
-    }
+function normalizePhone(value) {
+  return value.trim().replace(/[\s()-]/g, '');
+}
 
-    $("loginForm").addEventListener("submit", (event) => {
-      event.preventDefault();
+function getDemoUsers() {
+  try {
+    return JSON.parse(localStorage.getItem('demoUsers') || '{}');
+  } catch {
+    return {};
+  }
+}
 
-      const phone = normalizePhone($("phone").value);
+function register() {
+  const name = $('registerName').value.trim();
+  const phone = normalizePhone($('registerPhone').value);
+  const password = $('registerPassword').value;
 
-      if (!validEgyptianPhone(phone)) {
-        showMessage(
-          "loginMessage",
-          "أدخل رقم موبايل مصري صحيحًا مكوّنًا من 11 رقمًا."
-        );
-        return;
-      }
+  if (!name || !phone || !password) {
+    return setMessage(
+      'registerMessage',
+      'اكتب الاسم ورقم الهاتف وكلمة المرور.',
+      'error'
+    );
+  }
 
-      /*
-        لا ننشئ حسابًا ماليًا ولا نعرض رصيدًا بمجرد كتابة الرقم.
-        يجب ربط هذا الجزء بخادم يتحقق من صلاحية الوصول للحساب.
-      */
-      showMessage(
-        "loginMessage",
-        "تم التحقق من شكل الرقم فقط. تسجيل الدخول الفعلي يحتاج إلى ربط آمن بالخادم."
-      );
-    });
+  if (!/^\+?[0-9]{8,15}$/.test(phone)) {
+    return setMessage(
+      'registerMessage',
+      'تأكد من كتابة رقم هاتف صحيح.',
+      'error'
+    );
+  }
 
-    document.querySelectorAll("[data-page]").forEach((button) => {
-      button.addEventListener("click", () => {
-        showPage(button.dataset.page);
-      });
-    });
+  if (password.length < 8) {
+    return setMessage(
+      'registerMessage',
+      'كلمة المرور يجب أن تكون 8 أحرف على الأقل.',
+      'error'
+    );
+  }
 
-    document.querySelectorAll(".backButton").forEach((button) => {
-      button.addEventListener("click", () => {
-        showPage("homePage");
-      });
-    });
+  const users = getDemoUsers();
 
-    $("depositForm").addEventListener("submit", (event) => {
-      event.preventDefault();
+  if (users[phone]) {
+    return setMessage(
+      'registerMessage',
+      'رقم الهاتف مسجل بالفعل. سجل الدخول.',
+      'error'
+    );
+  }
 
-      showMessage(
-        "depositMessage",
-        "لم يُرسل الطلب: ربط الخادم لم يُستكمل بعد."
-      );
-    });
+  /*
+    تسجيل تجريبي محلي فقط.
+    لا تستخدم هذه الطريقة لحسابات حقيقية؛
+    سيتم استبدالها بمصادقة PocketBase.
+  */
+  users[phone] = { name, password };
+  localStorage.setItem('demoUsers', JSON.stringify(users));
 
-    $("withdrawForm").addEventListener("submit", (event) => {
-      event.preventDefault();
+  setMessage(
+    'registerMessage',
+    'تم إنشاء حساب تجريبي. يمكنك تسجيل الدخول الآن.',
+    'success'
+  );
 
-      showMessage(
-        "withdrawMessage",
-        "لم يُرسل الطلب: ربط الخادم لم يُستكمل بعد."
-      );
-    });
+  $('loginPhone').value = phone;
+  showLogin();
+}
 
-    $("refreshButton").addEventListener("click", () => {
-      showMessage(
-        "loginMessage",
-        "لم يتم ربط جلب الرصيد بالخادم بعد."
-      );
+function login() {
+  const phone = normalizePhone($('loginPhone').value);
+  const password = $('loginPassword').value;
+  const users = getDemoUsers();
 
-      showPage("loginPage");
-    });
+  if (!phone || !password) {
+    return setMessage(
+      'loginMessage',
+      'اكتب رقم الهاتف وكلمة المرور.',
+      'error'
+    );
+  }
 
-    $("logoutButton").addEventListener("click", () => {
-      currentPhone = "";
-      $("phone").value = "";
-      showPage("loginPage");
-    });
-  </script>
+  const user = users[phone];
+
+  if (!user || user.password !== password) {
+    return setMessage(
+      'loginMessage',
+      'بيانات الدخول غير صحيحة، أو لا يوجد حساب تجريبي.',
+      'error'
+    );
+  }
+
+  currentUser = { phone, name: user.name };
+  demoBalance = 0;
+  demoCommission = 0;
+  completedTasks = [];
+  transactions = [];
+
+  $('authScreen').classList.add('hidden');
+  $('appScreen').classList.remove('hidden');
+
+  $('welcomeName').textContent = currentUser.name;
+  $('profileName').textContent = currentUser.name;
+  $('profilePhone').textContent = currentUser.phone;
+
+  updateBalances();
+  renderTransactions();
+  openPage('homePage');
+}
+
+function logout() {
+  currentUser = null;
+  $('appScreen').classList.add('hidden');
+  $('authScreen').classList.remove('hidden');
+  $('loginPassword').value = '';
+  showLogin();
+}
+
+function openPage(pageId) {
+  document.querySelectorAll('.page').forEach(page => {
+    page.classList.toggle('active', page.id === pageId);
+  });
+
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.page === pageId);
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateBalances() {
+  $('balanceValue').textContent = demoBalance.toFixed(2);
+  $('walletBalance').textContent = demoBalance.toFixed(2);
+  $('commissionValue').textContent =
+    demoCommission.toFixed(2) + ' ج.م';
+
+  $('completedCount').textContent = completedTasks.length;
+}
+
+function demoTask(taskId, reward, button) {
+  if (completedTasks.includes(taskId)) {
+    return;
+  }
+
+  completedTasks.push(taskId);
+  demoBalance += reward;
+  demoCommission += reward;
+
+  transactions.unshift({
+    title: 'مكافأة تجريبية',
+    amount: reward,
+    time: new Date().toLocaleString('ar-EG')
+  });
+
+  button.textContent = 'تمت التجربة';
+  button.disabled = true;
+  button.style.opacity = '.55';
+
+  updateBalances();
+  renderTransactions();
+
+  alert(
+    'تم تحديث الرصيد التجريبي بمقدار ' +
+    reward +
+    ' جنيه. هذا ليس رصيدًا حقيقيًا.'
+  );
+}
+
+function renderTransactions() {
+  const container = $('transactions');
+
+  if (!transactions.length) {
+    container.innerHTML =
+      '<p class="notice">لا توجد عمليات مسجلة.</p>';
+    return;
+  }
+
+  container.innerHTML = '';
+
+  transactions.forEach(tx => {
+    const row = document.createElement('div');
+    row.className = 'profile-row';
+
+    const title = document.createElement('span');
+    title.textContent = tx.title + ' — ' + tx.time;
+
+    const amount = document.createElement('strong');
+    amount.style.color = 'var(--cyan)';
+    amount.textContent = '+' + tx.amount.toFixed(2) + ' ج.م';
+
+    row.append(title, amount);
+    container.appendChild(row);
+  });
+}
+
+function showDemoNotice() {
+  $('walletNotice').textContent =
+    'هذه الخدمة غير مفعّلة. سنربطها بقاعدة البيانات بعد إعداد الموقع.';
+}
+</script>
+
 </body>
-</html>
+  </html>
