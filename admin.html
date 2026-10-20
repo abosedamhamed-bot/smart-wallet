@@ -1,467 +1,299 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>لوحة تحكم المدير</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      color: #f4f7ff;
-      background: linear-gradient(135deg, #081326, #241047);
-      min-height: 100vh;
-    }
-
-    header {
-      padding: 22px 16px;
-      background: #101a32;
-      border-bottom: 1px solid #344366;
-    }
-
-    header h1 {
-      margin: 0 0 8px;
-      font-size: 23px;
-    }
-
-    header p {
-      margin: 0;
-      color: #aab8d4;
-      font-size: 14px;
-    }
-
-    main {
-      max-width: 950px;
-      padding: 18px;
-      margin: auto;
-    }
-
-    .card {
-      background: #121e38;
-      border: 1px solid #304363;
-      border-radius: 16px;
-      padding: 18px;
-      margin-bottom: 18px;
-    }
-
-    input, button {
-      width: 100%;
-      border-radius: 10px;
-      padding: 13px;
-      font-size: 15px;
-      margin-top: 10px;
-    }
-
-    input {
-      color: white;
-      background: #0a1429;
-      border: 1px solid #405477;
-    }
-
-    button {
-      cursor: pointer;
-      border: none;
-      font-weight: bold;
-    }
-
-    .primary {
-      background: #16d9ee;
-      color: #071326;
-    }
-
-    .approve {
-      background: #16c784;
-      color: #071326;
-    }
-
-    .reject {
-      background: #ff5268;
-      color: white;
-    }
-
-    .secondary {
-      background: #34466a;
-      color: white;
-    }
-
-    .request {
-      background: #0b162d;
-      border: 1px solid #304363;
-      border-radius: 12px;
-      padding: 15px;
-      margin-top: 12px;
-      overflow-wrap: anywhere;
-    }
-
-    .request h3 {
-      margin-top: 0;
-    }
-
-    .muted {
-      color: #aab8d4;
-      font-size: 14px;
-      line-height: 1.8;
-    }
-
-    .status {
-      color: #16d9ee;
-      font-weight: bold;
-    }
-
-    #message {
-      white-space: pre-wrap;
-      line-height: 1.8;
-      margin-top: 12px;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .actions {
-      display: flex;
-      gap: 10px;
-    }
-
-    .actions button {
-      flex: 1;
-    }
-
-    @media (max-width: 450px) {
-      .actions {
-        flex-direction: column;
-        gap: 0;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10051e">
+<title>FOOX Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#10051e;--panel:#171a2d;--cyan:#38f5e8;--pink:#ff397b;--text:#f5f6ff;--muted:#9da7c0;--line:#34334d}
+*{box-sizing:border-box}
+body{margin:0;color:var(--text);font-family:Tahoma,Arial,sans-serif;background:radial-gradient(ellipse at top,#25304c,#10051e 65%);min-height:100vh}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{max-width:1000px;margin:auto;padding:18px 14px 50px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}
+.brand{font-size:25px;font-weight:1000;letter-spacing:2px}
+.brand span{color:var(--cyan)}
+.subtitle{font-size:11px;color:var(--muted);margin-top:5px}
+.admin-badge{font-size:11px;border:1px solid #3a6570;border-radius:30px;padding:8px 11px;color:var(--cyan)}
+.panel{background:linear-gradient(145deg,#191d32,#111322);border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:15px}
+h2{font-size:17px;margin:0 0 14px}
+h3{font-size:14px}
+label{display:block;font-size:12px;margin:13px 0 7px;color:#d5deef}
+input{width:100%;padding:13px;border-radius:12px;border:1px solid #41445f;background:#0b1020;color:white}
+button{border:0;border-radius:12px;padding:12px;background:linear-gradient(100deg,var(--cyan),#a0f5d9);font-weight:bold;color:#09151c}
+button:disabled{opacity:.55}
+.btn{width:100%;margin-top:12px}
+.secondary{background:#262a42;border:1px solid #414762;color:white}
+.danger{background:#50243d;color:#ffdbe9}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.metric{padding:15px;border-radius:15px;background:#0e1424;border:1px solid #30364d}
+.metric small{color:var(--muted);font-size:11px}
+.metric strong{display:block;font-size:22px;color:var(--cyan);margin-top:9px;overflow-wrap:anywhere}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:15px}
+.tabs button{flex:1;min-width:110px}
+.tabs button.active{background:linear-gradient(100deg,var(--pink),#a5a4ff);color:white}
+.muted{color:var(--muted);font-size:12px;line-height:1.8}
+.hidden{display:none!important}
+#message{display:none;padding:12px;border-radius:12px;margin-bottom:14px;line-height:1.7;overflow-wrap:anywhere}
+#message.show{display:block}
+#message.ok{background:#12372f;color:#a7f4d5}
+#message.error{background:#482039;color:#ffc2dc}
+.item{padding:15px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+.item-head{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.amount{direction:ltr;color:var(--cyan);font-weight:bold}
+.status{display:inline-block;padding:5px 9px;border-radius:30px;font-size:10px;margin-top:8px;background:#30364d}
+.status.approved{background:#153a34;color:#a4f5d4}
+.status.rejected{background:#48243a;color:#ffc3db}
+.actions{display:flex;gap:8px;margin-top:12px}
+.actions button{flex:1}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th,td{text-align:right;padding:12px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--cyan)}
+.table-wrap{overflow-x:auto}
+footer{text-align:center;color:#737e9c;font-size:11px;padding:20px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}.metric{display:flex;align-items:center;justify-content:space-between}.metric strong{font-size:18px}.panel{padding:14px}header{align-items:flex-start}.brand{font-size:22px}}
+</style>
 </head>
-
 <body>
-
+<div class="app">
 <header>
-  <h1>لوحة تحكم المدير</h1>
-  <p>إدارة طلبات الإيداع ومراجعة العمليات</p>
+  <div>
+    <div class="brand"><span>F</span>OOX <span>ADMIN</span></div>
+    <div class="subtitle">NEON WALLET CONTROL CENTER</div>
+  </div>
+  <div class="admin-badge">ADMIN PANEL</div>
 </header>
 
-<main>
+<div id="message" role="status" aria-live="polite"></div>
 
-  <section class="card" id="loginCard">
-    <h2>تسجيل دخول المدير</h2>
+<section id="loginPanel" class="panel">
+  <h2>دخول الإدارة</h2>
+  <p class="muted">استخدم حساب الإدارة الذي تم تفعيله من قاعدة البيانات.</p>
+  <label for="phone">رقم الموبايل</label>
+  <input id="phone" type="tel" autocomplete="tel" placeholder="01012345678">
+  <label for="password">كلمة المرور</label>
+  <input id="password" type="password" autocomplete="current-password" placeholder="كلمة مرور حسابك">
+  <button id="loginBtn" class="btn">تسجيل الدخول</button>
+</section>
 
-    <input
-      id="email"
-      type="email"
-      placeholder="البريد الإلكتروني"
-      autocomplete="username"
-    >
+<div id="dashboard" class="hidden">
+  <div class="grid">
+    <div class="metric"><small>إجمالي الحسابات</small><strong id="usersCount">—</strong></div>
+    <div class="metric"><small>طلبات معلّقة</small><strong id="pendingCount">—</strong></div>
+    <div class="metric"><small>إجمالي الأرصدة (ج.م)</small><strong id="totalBalance">—</strong></div>
+  </div>
 
-    <input
-      id="password"
-      type="password"
-      placeholder="كلمة المرور"
-      autocomplete="current-password"
-    >
+  <div class="panel" style="margin-top:15px">
+    <div class="tabs">
+      <button class="active" data-tab="requests">الطلبات</button>
+      <button class="secondary" data-tab="users">المستخدمون</button>
+    </div>
 
-    <button class="primary" id="loginBtn">تسجيل الدخول</button>
+    <section id="requestsTab">
+      <h2>طلبات الإيداع والسحب</h2>
+      <button id="refreshRequests" class="secondary">تحديث الطلبات</button>
+      <div id="requestsList" style="margin-top:10px" class="muted">جارٍ التحميل...</div>
+    </section>
 
-    <p class="muted">
-      يجب استخدام حساب المدير المصرّح له.
-    </p>
-  </section>
+    <section id="usersTab" class="hidden">
+      <h2>حسابات المستخدمين</h2>
+      <button id="refreshUsers" class="secondary">تحديث المستخدمين</button>
+      <div class="table-wrap" style="margin-top:12px">
+        <table>
+          <thead><tr><th>رقم الهاتف</th><th>الرصيد</th><th>النوع</th><th>تاريخ التسجيل</th></tr></thead>
+          <tbody id="usersList"><tr><td colspan="4">جارٍ التحميل...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+  <button id="logoutBtn" class="btn danger">تسجيل الخروج</button>
+</div>
+<footer>FOOX ADMIN © 2026</footer>
+</div>
 
-  <section class="card hidden" id="dashboard">
-    <h2>طلبات الإيداع</h2>
+<script>
+(() => {
+"use strict";
+const URL = "https://sjhjxbnhhwftwlkshpql.supabase.co";
+const KEY = "sb_publishable_6880OlVMXwIDPJfqwFS5TA_m7FCMQZK";
+const db = window.supabase.createClient(URL, KEY);
+const $ = id => document.getElementById(id);
+let user = null;
 
-    <p id="adminInfo" class="muted"></p>
-
-    <button class="primary" id="refreshBtn">
-      تحديث الطلبات
-    </button>
-
-    <button class="secondary" id="logoutBtn">
-      تسجيل الخروج
-    </button>
-
-    <div id="message" role="status"></div>
-    <div id="requests"></div>
-  </section>
-
-</main>
-
-<script type="module">
-  import { initializeApp } from
-    "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-
-  import {
-    getAuth,
-    signInWithEmailAndPassword,
-    onAuthStateChanged,
-    signOut
-  } from
-    "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-
-  import {
-    getDatabase,
-    ref,
-    get
-  } from
-    "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
-
-  import {
-    getFunctions,
-    httpsCallable
-  } from
-    "https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js";
-
-  // استبدل القيم التالية بإعدادات مشروع Firebase الخاص بك.
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    databaseURL:
-      "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-    projectId: "YOUR_PROJECT",
-    appId: "YOUR_APP_ID"
-  };
-
-  // ضع UID الحقيقي لحساب المدير.
-  const ADMIN_UID = "PUT_ADMIN_UID_HERE";
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getDatabase(app);
-
-  // غيّر المنطقة إذا نشرت الدالة في منطقة أخرى.
-  const functions = getFunctions(app, "europe-west1");
-  const reviewDeposit = httpsCallable(functions, "reviewDeposit");
-
-  const $ = id => document.getElementById(id);
-
-  let busy = false;
-
-  function showMessage(text, error = false) {
-    $("message").textContent = text;
-    $("message").style.color = error ? "#ff7888" : "#16d9ee";
-  }
-
-  function money(value) {
-    const amount = Number(value);
-
-    if (!Number.isFinite(amount)) {
-      return "غير محدد";
-    }
-
-    return amount.toLocaleString("ar-EG", {
-      maximumFractionDigits: 2
-    }) + " ج.م";
-  }
-
-  function safeText(value) {
-    return String(value ?? "");
-  }
-
-  $("loginBtn").addEventListener("click", async () => {
-    const email = $("email").value.trim();
-    const password = $("password").value;
-
-    if (!email || !password) {
-      alert("اكتب البريد الإلكتروني وكلمة المرور.");
-      return;
-    }
-
-    $("loginBtn").disabled = true;
-
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-      alert("تعذر تسجيل الدخول. راجع بيانات الحساب وإعدادات Firebase.");
-    } finally {
-      $("loginBtn").disabled = false;
-    }
+function say(text,type="ok"){
+  const m=$("message");m.textContent=text;m.className="show "+type;
+}
+function clear(){ $("message").textContent="";$("message").className=""; }
+function normalizePhone(raw){
+  let p=String(raw||"").trim().replace(/[\s()-]/g,"");
+  if(p.startsWith("01"))p="+20"+p.slice(1);
+  else if(p.startsWith("0020"))p="+"+p.slice(2);
+  else if(p.startsWith("20"))p="+"+p;
+  if(!/^\+201[0125]\d{8}$/.test(p))throw Error("اكتب رقم موبايل مصري صحيحًا.");
+  return p;
+}
+function money(v){
+  return Number(v||0).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function date(v){
+  const d=new Date(v);return isNaN(d.getTime())?"—":d.toLocaleString("ar-EG");
+}
+function el(tag,cls,text){
+  const n=document.createElement(tag);
+  if(cls)n.className=cls;
+  if(text!==undefined)n.textContent=text;
+  return n;
+}
+function statusText(s){
+  return s==="approved"?"مقبول":s==="rejected"?"مرفوض":"قيد المراجعة";
+}
+function setTab(tab){
+  $("requestsTab").classList.toggle("hidden",tab!=="requests");
+  $("usersTab").classList.toggle("hidden",tab!=="users");
+  document.querySelectorAll("[data-tab]").forEach(b=>{
+    b.classList.toggle("active",b.dataset.tab===tab);
+    b.classList.toggle("secondary",b.dataset.tab!==tab);
   });
-
-  onAuthStateChanged(auth, async user => {
-    const isAdmin = Boolean(user && user.uid === ADMIN_UID);
-
-    $("loginCard").classList.toggle("hidden", isAdmin);
-    $("dashboard").classList.toggle("hidden", !isAdmin);
-
-    if (!user) {
-      showMessage("");
+}
+async function verifyAdmin(){
+  const {data,error}=await db.from("smart_wallet_profiles")
+    .select("is_admin").eq("user_id",user.id).maybeSingle();
+  if(error)throw error;
+  if(!data||data.is_admin!==true){
+    await db.auth.signOut();user=null;
+    $("dashboard").classList.add("hidden");
+    $("loginPanel").classList.remove("hidden");
+    throw Error("هذا الحساب ليس حساب إدارة. فعّل is_admin من SQL Editor.");
+  }
+}
+async function loadRequests(){
+  clear();
+  const list=$("requestsList");
+  list.replaceChildren(el("p","muted","جارٍ تحميل الطلبات..."));
+  try{
+    const {data,error}=await db.from("smart_wallet_requests")
+      .select("id,user_id,request_type,amount,payment_method,reference,status,created_at")
+      .order("created_at",{ascending:false}).limit(200);
+    if(error)throw error;
+    list.replaceChildren();
+    $("pendingCount").textContent=String((data||[]).filter(x=>x.status==="pending").length);
+    if(!data||!data.length){
+      list.appendChild(el("p","muted","لا توجد طلبات حتى الآن."));
       return;
     }
+    for(const r of data){
+      const box=el("div","item");
+      const top=el("div","item-head");
+      top.append(
+        el("strong","",r.request_type==="deposit"?"طلب إيداع":"طلب سحب"),
+        el("span","amount",money(r.amount)+" ج.م")
+      );
+      const detail=el("div","muted",
+        "رقم المستخدم: "+r.user_id+" · الوسيلة: "+r.payment_method);
+      const stat=el("span","status "+r.status,statusText(r.status));
+      const when=el("div","muted",date(r.created_at));
+      box.append(top,detail,stat,when);
+      if(r.reference)box.appendChild(el("div","muted","المرجع: "+r.reference));
 
-    if (!isAdmin) {
-      showMessage("هذا الحساب ليس لديه صلاحية المدير.", true);
-
-      try {
-        await signOut(auth);
-      } catch (_) {}
-
-      return;
-    }
-
-    $("adminInfo").textContent =
-      "تم تسجيل الدخول بحساب المدير: " + user.email;
-
-    await loadRequests();
-  });
-
-  async function loadRequests() {
-    if (!auth.currentUser ||
-        auth.currentUser.uid !== ADMIN_UID) {
-      return;
-    }
-
-    const container = $("requests");
-    container.replaceChildren();
-
-    showMessage("جارٍ تحميل الطلبات...");
-
-    try {
-      const snapshot = await get(ref(db, "requests"));
-
-      if (!snapshot.exists()) {
-        showMessage("لا توجد طلبات إيداع.");
-        return;
+      if(r.status==="pending"){
+        const actions=el("div","actions");
+        const approve=el("button","","اعتماد الطلب");
+        const reject=el("button","danger","رفض الطلب");
+        approve.addEventListener("click",()=>review(r.id,"smart_wallet_admin_approve",approve));
+        reject.addEventListener("click",()=>review(r.id,"smart_wallet_admin_reject",reject));
+        actions.append(approve,reject);box.appendChild(actions);
       }
-
-      let count = 0;
-
-      snapshot.forEach(userSnapshot => {
-        const uid = userSnapshot.key;
-
-        userSnapshot.forEach(requestSnapshot => {
-          const requestId = requestSnapshot.key;
-          const item = requestSnapshot.val();
-
-          if (!item || item.type !== "deposit") {
-            return;
-          }
-
-          count++;
-
-          const card = document.createElement("article");
-          card.className = "request";
-
-          const title = document.createElement("h3");
-          title.textContent = "طلب إيداع";
-
-          const details = document.createElement("p");
-          details.className = "muted";
-          details.textContent =
-            "رقم المستخدم: " + uid +
-            "\nرقم الطلب: " + requestId +
-            "\nالمبلغ: " + money(item.amount) +
-            "\nالحالة: " + safeText(item.status);
-
-          card.append(title, details);
-
-          if (item.status === "pending") {
-            const actions = document.createElement("div");
-            actions.className = "actions";
-
-            const approve = document.createElement("button");
-            approve.className = "approve";
-            approve.textContent = "موافقة وإضافة الرصيد";
-
-            approve.addEventListener("click", () => {
-              review(uid, requestId, "approved", approve, reject);
-            });
-
-            const reject = document.createElement("button");
-            reject.className = "reject";
-            reject.textContent = "رفض الطلب";
-
-            reject.addEventListener("click", () => {
-              review(uid, requestId, "rejected", approve, reject);
-            });
-
-            actions.append(approve, reject);
-            card.append(actions);
-          } else {
-            const status = document.createElement("p");
-            status.className = "status";
-            status.textContent = "تمت مراجعة الطلب.";
-            card.append(status);
-          }
-
-          container.append(card);
-        });
-      });
-
-      showMessage(
-        count ? "عدد طلبات الإيداع: " + count : "لا توجد طلبات إيداع."
-      );
-
-    } catch (error) {
-      showMessage(
-        "تعذر تحميل الطلبات. تحقق من اتصال Firebase وقواعد القراءة.",
-        true
-      );
+      list.appendChild(box);
     }
+  }catch(e){say(e.message||"تعذر تحميل الطلبات.","error");}
+}
+async function review(id,fn,button){
+  const action=fn.endsWith("approve")?"اعتماد":"رفض";
+  if(!confirm("هل تريد "+action+" هذا الطلب؟"))return;
+  button.disabled=true;clear();
+  try{
+    const {error}=await db.rpc(fn,{p_request_id:id});
+    if(error)throw error;
+    say(action+" الطلب بنجاح.");
+    await Promise.all([loadRequests(),loadUsers()]);
+  }catch(e){
+    say(e.message||"تعذر تنفيذ العملية.","error");
+  }finally{button.disabled=false;}
+}
+async function loadUsers(){
+  clear();
+  const tbody=$("usersList");
+  tbody.replaceChildren();
+  try{
+    const {data,error}=await db.from("smart_wallet_profiles")
+      .select("user_id,phone,balance,is_admin,created_at")
+      .order("created_at",{ascending:false}).limit(500);
+    if(error)throw error;
+    $("usersCount").textContent=String((data||[]).length);
+    const total=(data||[]).reduce((sum,u)=>sum+Number(u.balance||0),0);
+    $("totalBalance").textContent=money(total);
+    if(!data||!data.length){
+      const tr=el("tr");tr.appendChild(el("td","","لا توجد حسابات"));
+      tr.firstChild.colSpan=4;tbody.appendChild(tr);return;
+    }
+    data.forEach(u=>{
+      const tr=el("tr");
+      tr.append(
+        el("td","",u.phone||"—"),
+        el("td","",money(u.balance)+" ج.م"),
+        el("td","",u.is_admin?"إدارة":"مستخدم"),
+        el("td","",date(u.created_at))
+      );
+      tbody.appendChild(tr);
+    });
+  }catch(e){say(e.message||"تعذر تحميل المستخدمين.","error");}
+}
+async function enter(session){
+  user=session?.user||null;
+  if(!user){
+    $("dashboard").classList.add("hidden");
+    $("loginPanel").classList.remove("hidden");
+    return;
   }
-
-  async function review(uid, requestId, action, approve, reject) {
-    if (busy) return;
-
-    if (!auth.currentUser ||
-        auth.currentUser.uid !== ADMIN_UID) {
-      showMessage("ليس لديك صلاحية تنفيذ هذه العملية.", true);
-      return;
-    }
-
-    const promptText = action === "approved"
-      ? "هل تريد الموافقة على الطلب وإضافة المبلغ إلى رصيد المستخدم؟"
-      : "هل تريد رفض طلب الإيداع؟";
-
-    if (!confirm(promptText)) return;
-
-    busy = true;
-    approve.disabled = true;
-    reject.disabled = true;
-
-    showMessage("جارٍ معالجة الطلب...");
-
-    try {
-      const result = await reviewDeposit({
-        uid,
-        requestId,
-        action
-      });
-
-      showMessage(
-        result.data?.message || "تمت معالجة الطلب."
-      );
-
-      await loadRequests();
-
-    } catch (error) {
-      showMessage(
-        "تعذر تنفيذ العملية: " +
-        (error.message || "خطأ غير معروف") +
-        "\nحدّث الطلب وتحقق من حالة الرصيد قبل إعادة المحاولة.",
-        true
-      );
-
-      approve.disabled = false;
-      reject.disabled = false;
-
-    } finally {
-      busy = false;
-    }
-  }
-
-  $("refreshBtn").addEventListener("click", loadRequests);
-
-  $("logoutBtn").addEventListener("click", async () => {
-    await signOut(auth);
-  });
+  try{
+    await verifyAdmin();
+    $("loginPanel").classList.add("hidden");
+    $("dashboard").classList.remove("hidden");
+    await Promise.all([loadRequests(),loadUsers()]);
+  }catch(e){say(e.message||"تعذر التحقق من صلاحيات الإدارة.","error");}
+}
+$("loginBtn").addEventListener("click",async()=>{
+  clear();const b=$("loginBtn");b.disabled=true;
+  try{
+    const phone=normalizePhone($("phone").value);
+    const password=$("password").value;
+    if(!password)throw Error("اكتب كلمة المرور.");
+    const {data,error}=await db.auth.signInWithPassword({phone,password});
+    if(error)throw error;
+    await enter(data.session);
+  }catch(e){say(e.message||"فشل تسجيل الدخول.","error");}
+  finally{b.disabled=false;}
+});
+$("refreshRequests").addEventListener("click",loadRequests);
+$("refreshUsers").addEventListener("click",loadUsers);
+$("logoutBtn").addEventListener("click",async()=>{
+  const {error}=await db.auth.signOut();
+  if(error){say(error.message,"error");return;}
+  user=null;enter(null);say("تم تسجيل الخروج.");
+});
+document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));
+db.auth.onAuthStateChange((_event,session)=>{
+  Promise.resolve().then(()=>enter(session));
+});
+db.auth.getSession().then(({data,error})=>{
+  if(error)say(error.message,"error");else enter(data.session);
+});
+})();
 </script>
-
 </body>
 </html>
