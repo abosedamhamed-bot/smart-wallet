@@ -3,776 +3,350 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#130824">
-<title>FOOX — Neon Wallet</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smart Wallet - المحفظة الذكية</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{
-  --bg:#10051e;
-  --panel:#111426;
-  --panel2:#191d32;
-  --cyan:#38f5e8;
-  --pink:#ff397b;
-  --text:#f5f6ff;
-  --muted:#9da7c0;
-  --line:#30304b;
-}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:20px}
-body{
-  margin:0;color:var(--text);
-  font-family:Inter,Tahoma,Arial,sans-serif;
-  background:
-    radial-gradient(ellipse at 5% 15%,#093e4a70,transparent 34%),
-    radial-gradient(ellipse at 95% 28%,#4b0c5260,transparent 34%),
-    linear-gradient(155deg,#180726,#0c1020 60%,#1b0629);
-  min-height:100vh;
-}
-button,input,select{font:inherit}
-button{cursor:pointer}
-button:disabled{opacity:.55;cursor:wait}
-.app{max-width:590px;margin:auto;padding:16px 15px 100px}
-.topbar{display:flex;align-items:center;justify-content:space-between;margin:3px 0 17px}
-.brand{display:flex;align-items:center;gap:10px}
-.brand-icon{
-  width:43px;height:43px;border-radius:15px;
-  display:grid;place-items:center;
-  color:#061522;font-size:23px;font-weight:1000;
-  background:linear-gradient(135deg,var(--cyan),#8aa4ff 55%,var(--pink));
-  box-shadow:0 0 22px #37f5e833;
-}
-.brand-name{font-size:24px;font-weight:950;letter-spacing:2px}
-.brand-sub{font-size:9px;letter-spacing:2px;color:#aeb9d1;margin-top:3px}
-.top-actions{display:flex;gap:8px}
-.circle-btn{
-  width:40px;height:40px;border-radius:50%;
-  border:1px solid #41435f;background:#1a1d32;color:white;
-  display:grid;place-items:center;font-size:18px;
-}
-.section-label{
-  display:flex;align-items:center;justify-content:space-between;
-  margin:23px 0 12px;font-size:14px;font-weight:800;
-}
-.section-label small{font-weight:500;color:var(--muted)}
-.panel{
-  background:linear-gradient(145deg,#171a2deF,#101322F5);
-  border:1px solid #34334d;border-radius:24px;
-  padding:17px;box-shadow:0 14px 40px #0002;
-}
-.hero{
-  border-radius:24px;padding:21px 19px;overflow:hidden;position:relative;
-  min-height:158px;
-  background:
-    radial-gradient(circle at 85% 10%,#ff397b7a,transparent 34%),
-    radial-gradient(circle at 15% 100%,#25e7e77a,transparent 38%),
-    linear-gradient(120deg,#142b49,#20113e 58%,#3a103c);
-  border:1px solid #46506b;
-}
-.hero:after{
-  content:"";position:absolute;width:155px;height:155px;
-  border:1px solid #ffffff18;border-radius:50%;
-  right:-30px;top:22px;box-shadow:0 0 0 18px #ffffff06,0 0 0 37px #ffffff04;
-}
-.hero-tag{
-  position:relative;z-index:1;color:#a8fff5;font-size:10px;
-  letter-spacing:2px;font-weight:900;
-}
-.hero h2{position:relative;z-index:1;font-size:23px;line-height:1.5;margin:12px 0 4px}
-.hero p{position:relative;z-index:1;font-size:12px;color:#d4deef;margin:0}
-.hero-shape{
-  position:absolute;left:23px;top:29px;font-size:66px;
-  font-weight:1000;color:#ffffff13;transform:rotate(-12deg);
-}
-.dots{display:flex;gap:6px;justify-content:center;margin-top:12px}
-.dots i{height:6px;width:6px;border-radius:10px;background:#4b4c65}
-.dots i:first-child{width:22px;background:var(--cyan)}
-.balance-card{
-  margin-top:18px;
-  background:linear-gradient(145deg,#151b2c,#0d1322);
-  border:1px solid #36384e;border-radius:26px;padding:20px;
-  box-shadow:0 0 25px #25e9e911;
-}
-.balance-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.eyebrow{font-size:10px;color:#bac5d9;letter-spacing:1.6px;font-weight:800}
-.vip{
-  text-align:center;border-radius:17px;padding:10px 13px;
-  min-width:80px;background:linear-gradient(145deg,#282d43,#171b2b);
-  border:1px solid #41455d;
-}
-.vip small{display:block;font-size:10px;color:#aab4ca;margin-bottom:5px}
-.vip strong{font-size:15px;color:#fff}
-.balance{
-  direction:ltr;text-align:left;font-size:clamp(29px,8vw,43px);
-  font-weight:900;letter-spacing:-1.5px;margin:18px 0 5px;
-  overflow-wrap:anywhere;
-}
-.balance-caption{font-size:12px;color:#aeb7cc}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:20px}
-.stat{
-  padding:12px 10px;border-radius:16px;
-  background:linear-gradient(145deg,#20253a,#151a2b);
-  border:1px solid #30364b;min-width:0;
-}
-.stat small{display:block;color:#aab4ca;font-size:10px;line-height:1.6}
-.stat strong{display:block;font-size:14px;margin-top:9px;overflow-wrap:anywhere}
-.action-row{display:grid;grid-template-columns:1.15fr 1fr;gap:10px;margin-top:15px}
-.action{
-  border:1px solid #3b4760;border-radius:18px;padding:14px;
-  display:flex;align-items:center;gap:10px;text-align:right;
-  background:linear-gradient(135deg,#222840,#17192d);color:white;
-}
-.action.primary{
-  color:#072025;border:0;
-  background:linear-gradient(110deg,#35f4e4,#8bf3d7);
-}
-.action .ico{
-  display:grid;place-items:center;min-width:38px;height:38px;
-  border-radius:13px;background:#ffffff19;font-size:20px;
-}
-.action small{display:block;font-size:9px;opacity:.8;letter-spacing:1px;margin-bottom:5px}
-.action strong{font-size:14px}
-.quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.quick{
-  border:1px solid #30364d;background:linear-gradient(145deg,#191d32,#111424);
-  color:white;border-radius:19px;padding:15px 7px;text-align:center;
-}
-.quick .ico{
-  margin:0 auto 10px;width:49px;height:49px;border-radius:16px;
-  display:grid;place-items:center;font-size:22px;
-  background:linear-gradient(145deg,#24434f,#35233f);
-  border:1px solid #48506a;
-}
-.quick strong{font-size:12px}
-.form-label{display:block;font-size:12px;color:#d6dced;margin:14px 0 7px}
-input,select{
-  width:100%;padding:13px;border-radius:13px;
-  background:#0b1020;color:white;border:1px solid #373d56;outline:none;
-}
-input:focus,select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #38f5e81c}
-select option{background:#111426;color:white}
-.btn{
-  width:100%;border:0;border-radius:14px;padding:14px;
-  margin-top:12px;font-weight:850;color:#07151b;
-  background:linear-gradient(100deg,var(--cyan),#8debdc);
-}
-.btn.pink{background:linear-gradient(100deg,#38e9e2,#ff4785);color:#130d22}
-.btn.ghost{background:#252a40;color:white;border:1px solid #414762}
-.btn.red{background:#50253c;color:#ffdce9;border:1px solid #7e3857}
-.muted{font-size:12px;line-height:1.8;color:var(--muted)}
-.notice{
-  border:1px solid #344158;background:#141b2b;border-radius:14px;
-  padding:12px;color:#c2cee2;font-size:11px;line-height:1.9;margin-top:14px;
-}
+body{margin:0;background:#f1f5f9;color:#172033;font-family:Arial,sans-serif}
+header{background:#123b75;color:white;padding:20px}
+main{max-width:850px;margin:20px auto;padding:0 12px}
+.card{background:white;padding:20px;margin-bottom:16px;border-radius:14px;box-shadow:0 3px 12px #0000000a}
+h1,h2{margin-top:0}
+input,select{width:100%;padding:13px;margin:8px 0;border:1px solid #cbd5e1;border-radius:8px;font-size:16px;background:white}
+button{padding:12px 16px;border:0;border-radius:8px;font-size:15px;cursor:pointer;margin:4px 0}
+.primary{background:#155eef;color:white}
+.green{background:#15803d;color:white}
+.red{background:#b91c1c;color:white}
+.gray{background:#e2e8f0;color:#172033}
+.full{width:100%}
 .hidden{display:none!important}
-#message{
-  display:none;padding:12px 14px;border-radius:13px;
-  font-size:13px;line-height:1.7;margin:12px 0;
-  overflow-wrap:anywhere;
-}
-#message.show{display:block}
-#message.ok{background:#12372f;color:#a7f4d5;border:1px solid #28654e}
-#message.error{background:#452037;color:#ffc0d7;border:1px solid #7b355b}
-.request{
-  border-bottom:1px solid #30354a;padding:14px 0;
-}
-.request:last-child{border-bottom:0}
-.request-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
-.amount{direction:ltr;color:#a8fff5;font-weight:900}
-.status{
-  display:inline-block;padding:5px 9px;border-radius:30px;
-  font-size:10px;background:#293148;color:#e2e9fa;margin-top:8px;
-}
-.status.approved{background:#153a34;color:#a4f5d4}
-.status.rejected{background:#48243a;color:#ffc3db}
-.bottom-nav{
-  position:fixed;z-index:20;bottom:9px;left:50%;transform:translateX(-50%);
-  width:min(560px,calc(100% - 22px));padding:9px;
-  display:grid;grid-template-columns:repeat(4,1fr);gap:4px;
-  background:#171a2beF;border:1px solid #45415d;border-radius:22px;
-  backdrop-filter:blur(20px);box-shadow:0 10px 40px #0008;
-}
-.nav-item{
-  color:#aab3ca;background:transparent;border:0;border-radius:15px;
-  padding:8px 2px;margin:0;font-size:10px;
-}
-.nav-item span{display:block;font-size:19px;margin-bottom:5px}
-.nav-item.active{color:#a9fff5;background:linear-gradient(145deg,#23424c,#252039)}
-.auth-wrap{max-width:430px;margin:22px auto}
-.auth-logo{
-  width:76px;height:76px;border-radius:25px;margin:0 auto 14px;
-  display:grid;place-items:center;font-size:37px;font-weight:1000;color:#101224;
-  background:linear-gradient(140deg,var(--cyan),#91a1ff 50%,var(--pink));
-  box-shadow:0 0 30px #38f5e826;
-}
-.auth-title{text-align:center;font-size:29px;margin:12px 0 6px}
-.auth-sub{text-align:center;color:var(--muted);font-size:12px;margin:0 0 22px}
-.phone-field{display:flex;gap:8px}
-.country-code{
-  flex:0 0 73px;display:grid;place-items:center;border-radius:13px;
-  background:linear-gradient(120deg,#35e9e1,#ff5284);color:#121323;font-weight:900;
-}
-footer{text-align:center;font-size:10px;color:#737e9c;padding:22px 0}
-@media(max-width:390px){
-  .app{padding-inline:11px}
-  .panel,.balance-card{padding:14px}
-  .stats{gap:6px}
-  .stat{padding:10px 7px}
-  .stat strong{font-size:12px}
-  .action{padding:11px 8px;gap:7px}
-  .action strong{font-size:12px}
-}
+.balance{font-size:30px;font-weight:bold;color:#155eef}
+.muted{color:#64748b;font-size:13px}
+#message{white-space:pre-wrap;overflow-wrap:anywhere;margin:10px 0}
+.error{color:#b91c1c}
+.success{color:#15803d}
+.item{border:1px solid #e2e8f0;border-radius:10px;padding:13px;margin:10px 0;overflow-wrap:anywhere}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row>*{flex:1;min-width:180px}
+table{width:100%;border-collapse:collapse}
+td,th{text-align:right;padding:10px;border-bottom:1px solid #e2e8f0}
+.tablewrap{overflow-x:auto}
 </style>
 </head>
 <body>
-<div class="app">
+<header>
+  <h1>Smart Wallet</h1>
+  <div>المحفظة الذكية</div>
+</header>
 
-  <div class="topbar">
-    <div class="brand">
-      <div class="brand-icon">F</div>
-      <div>
-        <div class="brand-name">FOOX</div>
-        <div class="brand-sub">NEON DIGITAL WALLET</div>
-      </div>
-    </div>
-    <div class="top-actions">
-      <button class="circle-btn" type="button" aria-label="الرئيسية" onclick="go('home')">⌂</button>
-      <button class="circle-btn" type="button" aria-label="الحساب" onclick="go('account')">♙</button>
-    </div>
+<main>
+  <div class="card">
+    <div id="message" role="status"></div>
   </div>
 
-  <div id="message" role="status" aria-live="polite"></div>
-
-  <section id="authSection" class="auth-wrap panel">
-    <div class="auth-logo">F</div>
-    <h1 class="auth-title">تسجيل الدخول</h1>
-    <p class="auth-sub">مرحبًا بك في محفظة FOOX الرقمية</p>
-
-    <div class="form-label">رقم الهاتف</div>
-    <div class="phone-field">
-      <div class="country-code">+20</div>
-      <input id="phone" type="tel" inputmode="tel" autocomplete="tel"
-        placeholder="01012345678" aria-label="رقم الموبايل المصري">
-    </div>
-
-    <label class="form-label" for="password">كلمة المرور</label>
-    <input id="password" type="password" minlength="8"
-      autocomplete="current-password" placeholder="أدخل كلمة المرور">
-
-    <button class="btn pink" id="loginBtn" type="button">تسجيل الدخول</button>
-    <button class="btn ghost" id="registerBtn" type="button">إنشاء حساب جديد</button>
-
-    <div id="otpArea" class="hidden">
-      <label class="form-label" for="otp">كود التحقق SMS</label>
-      <input id="otp" inputmode="numeric" autocomplete="one-time-code"
-        placeholder="أدخل كود التحقق">
-      <button class="btn" id="verifyBtn" type="button">تأكيد رقم الهاتف</button>
-    </div>
-
-    <div class="notice">قد يحتاج إنشاء الحساب إلى تأكيد رقم الموبايل برسالة SMS. لا تشارك كلمة المرور أو كود التحقق مع أي شخص.</div>
+  <section class="card" id="loginCard">
+    <h2>تسجيل الدخول</h2>
+    <p class="muted">ادخل بيانات حسابك المسجل بالفعل.</p>
+    <input id="phone" type="tel" autocomplete="username" placeholder="رقم الهاتف">
+    <input id="password" type="password" autocomplete="current-password" placeholder="كلمة المرور">
+    <button class="primary full" id="loginButton" onclick="signIn()">دخول</button>
   </section>
 
-  <section id="walletSection" class="hidden">
-    <div id="home">
-      <div class="hero">
-        <div class="hero-tag">WELCOME TO FOOX</div>
-        <h2>محفظتك، عالمك<br>بطريقتك الخاصة</h2>
-        <p>إدارة رصيدك وطلباتك في مكان واحد</p>
-        <div class="hero-shape">F</div>
-      </div>
-      <div class="dots"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-
-      <div class="balance-card">
-        <div class="balance-head">
-          <div>
-            <div class="eyebrow">NEON ACCOUNT</div>
-            <div class="muted" style="margin-top:7px">رصيد محفظتك</div>
-          </div>
-          <div class="vip">
-            <small>حالة الحساب</small>
-            <strong>FOOX</strong>
-          </div>
-        </div>
-        <div id="balance" class="balance">EGP 0.00</div>
-        <div id="accountPhone" class="balance-caption">رصيدي المتاح</div>
-        <div class="stats">
-          <div class="stat"><small>العملة</small><strong>EGP</strong></div>
-          <div class="stat"><small>طلبات معلقة</small><strong id="pendingCount">0</strong></div>
-          <div class="stat"><small>المعاملات</small><strong id="transactionCount">0</strong></div>
-        </div>
-      </div>
-
-      <div class="action-row">
-        <button class="action primary" type="button" onclick="go('request', 'deposit')">
-          <span class="ico">ϟ</span>
-          <span><small>WALLET</small><strong>إيداع</strong></span>
-        </button>
-        <button class="action" type="button" onclick="go('request', 'withdraw')">
-          <span class="ico">▣</span>
-          <span><small>WALLET</small><strong>سحب</strong></span>
-        </button>
-      </div>
-
-      <div class="section-label"><span>Quick Access</span><small>الوصول السريع</small></div>
-      <div class="quick-grid">
-        <button class="quick" type="button" onclick="go('request','deposit')">
-          <span class="ico">＄</span><strong>إيداع</strong>
-        </button>
-        <button class="quick" type="button" onclick="go('request','withdraw')">
-          <span class="ico">⇧</span><strong>سحب</strong>
-        </button>
-        <button class="quick" type="button" onclick="go('requests')">
-          <span class="ico">▤</span><strong>طلباتي</strong>
-        </button>
-      </div>
-
-      <div class="section-label"><span>Live Stats</span><small>ملخص الحساب</small></div>
-      <div class="stats">
-        <div class="stat"><small>الرصيد الحالي</small><strong id="smallBalance">EGP 0.00</strong></div>
-        <div class="stat"><small>الطلبات</small><strong id="allRequestCount">0</strong></div>
-        <div class="stat"><small>حالة الجلسة</small><strong style="color:#8bf5d5">نشطة</strong></div>
-      </div>
+  <section id="app" class="hidden">
+    <div class="card">
+      <h2>محفظتي</h2>
+      <div id="userPhone" class="muted"></div>
+      <p>الرصيد الحالي</p>
+      <div class="balance" id="balance">0.00 ج.م</div>
+      <button class="primary" onclick="refreshData()">تحديث البيانات</button>
+      <button class="gray" onclick="signOut()">تسجيل الخروج</button>
     </div>
 
-    <section id="request" class="panel hidden" style="margin-top:18px">
-      <div class="section-label" style="margin-top:0">
-        <span>WALLET REQUEST</span><small>طلب مالي</small>
-      </div>
-      <h2 id="requestHeading">طلب إيداع أو سحب</h2>
-      <p class="muted">اختر نوع الطلب والمبلغ والوسيلة المناسبة.</p>
-
-      <label class="form-label" for="requestType">نوع الطلب</label>
-      <select id="requestType">
-        <option value="deposit">إيداع</option>
-        <option value="withdraw">سحب</option>
-      </select>
-
-      <label class="form-label" for="amount">المبلغ بالجنيه المصري</label>
-      <input id="amount" type="number" min="1" max="1000000" step="0.01" placeholder="100">
-
-      <label class="form-label" for="paymentMethod">وسيلة الدفع</label>
-      <select id="paymentMethod">
+    <div class="card">
+      <h2>طلب إيداع</h2>
+      <p class="muted">قدّم طلبك بعد إجراء الدفع بالطريقة المتفق عليها. تقديم الطلب وحده لا يضيف أموالًا إلى الرصيد.</p>
+      <input id="depositAmount" type="number" min="0.01" step="0.01" placeholder="مبلغ الإيداع بالجنيه">
+      <select id="depositMethod">
+        <option value="">اختر طريقة الإيداع</option>
         <option value="Vodafone Cash">فودافون كاش</option>
         <option value="Orange Cash">أورنج كاش</option>
         <option value="Etisalat Cash">اتصالات كاش</option>
-        <option value="InstaPay">إنستا باي</option>
+        <option value="InstaPay">إنستاباي</option>
         <option value="Bank Transfer">تحويل بنكي</option>
-        <option value="Other">أخرى</option>
+        <option value="Other">طريقة أخرى</option>
       </select>
+      <input id="depositReference" type="text" maxlength="120" placeholder="رقم العملية أو المرجع (إن وجد)">
+      <button class="green full" onclick="createRequest('deposit')">إرسال طلب الإيداع</button>
+    </div>
 
-      <label class="form-label" for="reference">رقم العملية أو ملاحظة (اختياري)</label>
-      <input id="reference" type="text" maxlength="150" placeholder="رقم مرجعي إن وجد">
+    <div class="card">
+      <h2>طلب سحب</h2>
+      <p class="muted">تتم مراجعة طلب السحب من الإدارة. الموافقة على الطلب لا تعني تنفيذ تحويل مالي خارجي تلقائيًا.</p>
+      <input id="withdrawAmount" type="number" min="0.01" step="0.01" placeholder="مبلغ السحب بالجنيه">
+      <select id="withdrawMethod">
+        <option value="">اختر طريقة استلام السحب</option>
+        <option value="Vodafone Cash">فودافون كاش</option>
+        <option value="Orange Cash">أورنج كاش</option>
+        <option value="Etisalat Cash">اتصالات كاش</option>
+        <option value="InstaPay">إنستاباي</option>
+        <option value="Bank Transfer">تحويل بنكي</option>
+        <option value="Other">طريقة أخرى</option>
+      </select>
+      <input id="withdrawReference" type="text" maxlength="120" placeholder="رقم المحفظة أو بيانات الاستلام المطلوبة">
+      <button class="primary full" onclick="createRequest('withdraw')">إرسال طلب السحب</button>
+    </div>
 
-      <button class="btn pink" id="submitRequestBtn" type="button">إرسال الطلب</button>
-      <div class="notice">هذا طلب للمراجعة فقط. لا يتم تحويل الأموال أو تعديل الرصيد تلقائيًا عند الإرسال.</div>
-    </section>
-
-    <section id="requests" class="panel hidden" style="margin-top:18px">
-      <div class="section-label" style="margin-top:0">
-        <span>MY REQUESTS</span><small>طلباتي</small>
-      </div>
-      <button class="btn ghost" id="refreshBtn" type="button">تحديث البيانات</button>
-      <div id="requestsList"><p class="muted">لا توجد طلبات معروضة.</p></div>
-    </section>
-
-    <section id="account" class="panel hidden" style="margin-top:18px">
-      <div class="section-label" style="margin-top:0">
-        <span>MY ACCOUNT</span><small>حسابي</small>
-      </div>
-      <p id="accountDetails" class="muted">بيانات الحساب</p>
-      <h3>سجل المعاملات</h3>
-      <div id="transactionsList"><p class="muted">لا توجد معاملات مكتملة.</p></div>
-      <button class="btn red" id="logoutBtn" type="button">تسجيل الخروج</button>
-    </section>
+    <div class="card">
+      <h2>طلباتي السابقة</h2>
+      <div id="myRequests"><p class="muted">لم يتم تحميل الطلبات بعد.</p></div>
+    </div>
   </section>
-
-  <footer>FOOX © 2026 — NEON DIGITAL WALLET</footer>
-</div>
-
-<nav id="bottomNav" class="bottom-nav hidden" aria-label="التنقل الرئيسي">
-  <button class="nav-item active" data-page="home" onclick="go('home')"><span>⌂</span>الرئيسية</button>
-  <button class="nav-item" data-page="request" onclick="go('request')"><span>⇧</span>المحفظة</button>
-  <button class="nav-item" data-page="requests" onclick="go('requests')"><span>▤</span>الطلبات</button>
-  <button class="nav-item" data-page="account" onclick="go('account')"><span>♙</span>حسابي</button>
-</nav>
+</main>
 
 <script>
-(() => {
-  "use strict";
+const SUPABASE_URL = "https://sjhjxbnhhwftwlkshpql.supabase.co";
+const SUPABASE_KEY = "sb_publishable_6880OlVMxWIDPJfqwFS5TA_m7FCMQZK";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const SUPABASE_URL = "https://sjhjxbnhhwftwlkshpql.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_6880OlVMXwIDPJfqwFS5TA_m7FCMQZK";
-  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  const $ = id => document.getElementById(id);
+let currentUser = null;
+let currentProfile = null;
+let busy = false;
 
-  let currentUser = null;
-  let pendingPhone = "";
+function showMessage(text, type="") {
+  const el = document.getElementById("message");
+  el.textContent = text;
+  el.className = type;
+}
 
-  function message(text, type="ok") {
-    const box = $("message");
-    box.textContent = text;
-    box.className = "show " + type;
-    box.scrollIntoView({behavior:"smooth", block:"nearest"});
+function normalizedPhone(value) {
+  return String(value || "").replace(/\D/g, "");
+}
+
+// يجب أن تطابق صيغة البريد المستعار المستخدمة في الحسابات الحالية
+function phoneToEmail(phone) {
+  return normalizedPhone(phone) + "@phone.smartwallet.invalid";
+}
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  }[ch]));
+}
+
+function money(value) {
+  return Number(value || 0).toLocaleString("ar-EG", {
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
+  }) + " ج.م";
+}
+
+function statusLabel(status) {
+  if (status === "pending") return "قيد المراجعة";
+  if (status === "approved") return "مقبول";
+  if (status === "rejected") return "مرفوض";
+  return status || "غير معروف";
+}
+
+async function signIn() {
+  if (busy) return;
+
+  const phone = normalizedPhone(document.getElementById("phone").value);
+  const password = document.getElementById("password").value;
+
+  if (!phone || !password) {
+    showMessage("اكتب رقم الهاتف وكلمة المرور.", "error");
+    return;
   }
 
-  function clearMessage() {
-    $("message").textContent = "";
-    $("message").className = "";
-  }
+  busy = true;
+  document.getElementById("loginButton").disabled = true;
+  showMessage("جارٍ تسجيل الدخول...");
 
-  function busy(button, state, original) {
-    button.disabled = state;
-    if (state) {
-      button.dataset.original = button.textContent;
-      button.textContent = "جارٍ التنفيذ...";
-    } else {
-      button.textContent = button.dataset.original || original;
-    }
-  }
-
-  function normalizePhone(value) {
-    let phone = String(value || "").trim().replace(/[\s()-]/g, "");
-    if (phone.startsWith("01")) phone = "+20" + phone.slice(1);
-    else if (phone.startsWith("0020")) phone = "+" + phone.slice(2);
-    else if (phone.startsWith("20")) phone = "+" + phone;
-    if (!/^\+201[0125]\d{8}$/.test(phone)) {
-      throw new Error("اكتب رقم موبايل مصري صحيحًا مثل 01012345678.");
-    }
-    return phone;
-  }
-
-  function money(value) {
-    return "EGP " + Number(value || 0).toLocaleString("en-US", {
-      minimumFractionDigits:2, maximumFractionDigits:2
+  try {
+    const {data, error} = await sb.auth.signInWithPassword({
+      email: phoneToEmail(phone),
+      password
     });
+    if (error) throw error;
+
+    currentUser = data.user;
+    await loadApp();
+  } catch (error) {
+    showMessage("تعذر تسجيل الدخول: " + error.message, "error");
+  } finally {
+    busy = false;
+    document.getElementById("loginButton").disabled = false;
   }
+}
 
-  function statusName(status) {
-    if (status === "approved") return "مقبول";
-    if (status === "rejected") return "مرفوض";
-    return "قيد المراجعة";
-  }
+async function loadApp() {
+  const {data: profile, error} = await sb
+    .from("profiles")
+    .select("id,phone,balance,is_admin")
+    .eq("id", currentUser.id)
+    .maybeSingle();
 
-  function dateText(value) {
-    const d = new Date(value);
-    return Number.isNaN(d.getTime()) ? "" : d.toLocaleString("ar-EG");
-  }
+  if (error) throw new Error("تعذر قراءة ملف المستخدم: " + error.message);
+  if (!profile) throw new Error("ملف المستخدم غير موجود في جدول profiles.");
 
-  window.go = function(page, type) {
-    clearMessage();
-    ["home","request","requests","account"].forEach(id => {
-      $(id).classList.toggle("hidden", id !== page);
-    });
-    document.querySelectorAll(".nav-item").forEach(button => {
-      button.classList.toggle("active", button.dataset.page === page);
-    });
-    if (type) {
-      $("requestType").value = type;
-      $("requestHeading").textContent = type === "deposit" ? "طلب إيداع" : "طلب سحب";
-    }
-    window.scrollTo({top:0, behavior:"smooth"});
-  };
+  currentProfile = profile;
+  document.getElementById("loginCard").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+  document.getElementById("userPhone").textContent =
+    "الحساب: " + (profile.phone || document.getElementById("phone").value);
 
-  function showAuth() {
-    $("authSection").classList.remove("hidden");
-    $("walletSection").classList.add("hidden");
-    $("bottomNav").classList.add("hidden");
-  }
+  await refreshData();
+}
 
-  function showWallet() {
-    $("authSection").classList.add("hidden");
-    $("walletSection").classList.remove("hidden");
-    $("bottomNav").classList.remove("hidden");
-    window.go("home");
-  }
+async function refreshData() {
+  if (!currentUser) return;
 
-  async function loadWallet() {
-    if (!currentUser) return;
-    const {data, error} = await db
-      .from("smart_wallet_profiles")
-      .select("phone,balance")
-      .eq("user_id", currentUser.id)
+  try {
+    const {data: profile, error: profileError} = await sb
+      .from("profiles")
+      .select("id,phone,balance,is_admin")
+      .eq("id", currentUser.id)
       .maybeSingle();
 
-    if (error) throw error;
-    if (!data) {
-      $("balance").textContent = "غير متاح";
-      message("لم يتم العثور على ملف المحفظة. راجع Trigger إنشاء المستخدم في Supabase.", "error");
-      return;
-    }
+    if (profileError) throw profileError;
+    if (!profile) throw new Error("ملف المستخدم غير موجود.");
 
-    const value = money(data.balance);
-    $("balance").textContent = value;
-    $("smallBalance").textContent = value;
-    $("accountPhone").textContent = data.phone || currentUser.phone || "حساب موثّق";
-    $("accountDetails").textContent = "رقم الحساب: " + (data.phone || currentUser.phone || "غير متاح");
+    currentProfile = profile;
+    document.getElementById("balance").textContent = money(profile.balance);
+    await loadMyRequests();
+    showMessage("تم تحديث بيانات المحفظة.", "success");
+  } catch (error) {
+    showMessage("تعذر تحديث البيانات: " + error.message, "error");
+  }
+}
+
+async function createRequest(type) {
+  if (!currentUser || busy) return;
+
+  const isDeposit = type === "deposit";
+  const amountInput = document.getElementById(isDeposit ? "depositAmount" : "withdrawAmount");
+  const methodInput = document.getElementById(isDeposit ? "depositMethod" : "withdrawMethod");
+  const referenceInput = document.getElementById(isDeposit ? "depositReference" : "withdrawReference");
+
+  const amount = Number(amountInput.value);
+  const method = methodInput.value;
+  const reference = referenceInput.value.trim();
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    showMessage("اكتب مبلغًا صحيحًا أكبر من صفر.", "error");
+    return;
   }
 
-  async function loadRequests() {
-    if (!currentUser) return;
-    const list = $("requestsList");
-    list.textContent = "جارٍ تحميل الطلبات...";
+  if (!method) {
+    showMessage("اختر طريقة الإيداع أو السحب.", "error");
+    return;
+  }
 
-    const {data, error} = await db
-      .from("smart_wallet_requests")
-      .select("id,request_type,amount,payment_method,reference,status,created_at")
-      .eq("user_id", currentUser.id)
-      .order("created_at", {ascending:false})
-      .limit(50);
+  if (!isDeposit && amount > Number(currentProfile?.balance || 0)) {
+    showMessage("المبلغ أكبر من رصيدك الحالي.", "error");
+    return;
+  }
 
-    if (error) throw error;
-    list.replaceChildren();
-    const pending = (data || []).filter(x => x.status === "pending").length;
-    $("pendingCount").textContent = String(pending);
-    $("allRequestCount").textContent = String((data || []).length);
+  if (!window.confirm(isDeposit
+    ? "هل تريد إرسال طلب الإيداع للمراجعة؟"
+    : "هل تريد إرسال طلب السحب للمراجعة؟")) return;
 
-    if (!data || !data.length) {
-      const p = document.createElement("p");
-      p.className = "muted";
-      p.textContent = "لا توجد طلبات حتى الآن.";
-      list.appendChild(p);
-      return;
-    }
+  busy = true;
+  showMessage("جارٍ إرسال الطلب...");
 
-    data.forEach(item => {
-      const box = document.createElement("div");
-      box.className = "request";
-      const top = document.createElement("div");
-      top.className = "request-top";
-
-      const title = document.createElement("strong");
-      title.textContent = item.request_type === "deposit" ? "طلب إيداع" : "طلب سحب";
-
-      const amount = document.createElement("span");
-      amount.className = "amount";
-      amount.textContent = money(item.amount);
-
-      const method = document.createElement("div");
-      method.className = "muted";
-      method.textContent = "وسيلة الدفع: " + item.payment_method;
-
-      const status = document.createElement("span");
-      status.className = "status " + item.status;
-      status.textContent = statusName(item.status);
-
-      const date = document.createElement("div");
-      date.className = "muted";
-      date.textContent = dateText(item.created_at);
-
-      top.append(title, amount);
-      box.append(top, method, status, date);
-
-      if (item.reference) {
-        const ref = document.createElement("div");
-        ref.className = "muted";
-        ref.textContent = "المرجع: " + item.reference;
-        box.appendChild(ref);
-      }
-      list.appendChild(box);
+  try {
+    // استخدام الجدول الصحيح: wallet_requests
+    const {error} = await sb.from("wallet_requests").insert({
+      user_id: currentUser.id,
+      request_type: type,
+      amount: amount,
+      method: method,
+      reference: reference || null,
+      status: "pending"
     });
-  }
-
-  async function loadTransactions() {
-    if (!currentUser) return;
-    const list = $("transactionsList");
-    list.textContent = "جارٍ تحميل المعاملات...";
-
-    const {data, error} = await db
-      .from("smart_wallet_transactions")
-      .select("transaction_type,amount,created_at")
-      .eq("user_id", currentUser.id)
-      .order("created_at", {ascending:false})
-      .limit(50);
 
     if (error) throw error;
-    list.replaceChildren();
-    $("transactionCount").textContent = String((data || []).length);
 
-    if (!data || !data.length) {
-      const p = document.createElement("p");
-      p.className = "muted";
-      p.textContent = "لا توجد معاملات مكتملة حتى الآن.";
-      list.appendChild(p);
-      return;
-    }
+    amountInput.value = "";
+    methodInput.value = "";
+    referenceInput.value = "";
 
-    data.forEach(item => {
-      const box = document.createElement("div");
-      box.className = "request";
-      const top = document.createElement("div");
-      top.className = "request-top";
-      const name = document.createElement("strong");
-      name.textContent = item.transaction_type === "deposit" ? "إيداع مكتمل" : "سحب مكتمل";
-      const amount = document.createElement("span");
-      amount.className = "amount";
-      amount.textContent = money(item.amount);
-      const date = document.createElement("div");
-      date.className = "muted";
-      date.textContent = dateText(item.created_at);
-      top.append(name, amount);
-      box.append(top, date);
-      list.appendChild(box);
-    });
+    showMessage("تم إرسال الطلب بنجاح، وهو الآن قيد المراجعة.", "success");
+    await refreshData();
+  } catch (error) {
+    showMessage(
+      "تعذر إرسال الطلب: " + error.message +
+      "\nتأكد من صلاحيات INSERT وسياسات RLS لجدول wallet_requests.",
+      "error"
+    );
+  } finally {
+    busy = false;
+  }
+}
+
+async function loadMyRequests() {
+  const target = document.getElementById("myRequests");
+  target.textContent = "جارٍ تحميل الطلبات...";
+
+  const {data, error} = await sb
+    .from("wallet_requests")
+    .select("id,request_type,amount,method,reference,status,created_at,admin_note")
+    .eq("user_id", currentUser.id)
+    .order("created_at", {ascending:false})
+    .limit(50);
+
+  if (error) {
+    target.textContent = "تعذر تحميل الطلبات: " + error.message;
+    return;
   }
 
-  async function refreshAll() {
-    if (!currentUser) return;
-    try {
-      await Promise.all([loadWallet(), loadRequests(), loadTransactions()]);
-    } catch (error) {
-      message(error.message || "تعذر تحميل بيانات الحساب.", "error");
-    }
+  if (!data || data.length === 0) {
+    target.textContent = "لا توجد طلبات سابقة.";
+    return;
   }
 
-  async function login() {
-    clearMessage();
-    const button = $("loginBtn");
-    try {
-      busy(button, true);
-      const phone = normalizePhone($("phone").value);
-      const password = $("password").value;
-      if (!password) throw new Error("اكتب كلمة المرور.");
+  target.innerHTML = data.map(req => {
+    const type = req.request_type === "deposit" ? "إيداع" :
+      req.request_type === "withdraw" ? "سحب" : req.request_type;
+    const date = req.created_at
+      ? new Date(req.created_at).toLocaleString("ar-EG") : "—";
 
-      const {error} = await db.auth.signInWithPassword({phone, password});
-      if (error) throw error;
-      message("تم تسجيل الدخول.");
-    } catch (error) {
-      message(error.message || "تعذر تسجيل الدخول.", "error");
-    } finally {
-      busy(button, false, "تسجيل الدخول");
-    }
+    return '<div class="item">' +
+      '<strong>' + escapeHtml(type) + '</strong>' +
+      '<p>المبلغ: ' + escapeHtml(money(req.amount)) + '</p>' +
+      '<p>الطريقة: ' + escapeHtml(req.method || "—") + '</p>' +
+      '<p>الحالة: ' + escapeHtml(statusLabel(req.status)) + '</p>' +
+      '<p class="muted">التاريخ: ' + escapeHtml(date) + '</p>' +
+      (req.admin_note ? '<p>ملاحظة الإدارة: ' + escapeHtml(req.admin_note) + '</p>' : '') +
+      '</div>';
+  }).join("");
+}
+
+async function signOut() {
+  await sb.auth.signOut();
+  currentUser = null;
+  currentProfile = null;
+  document.getElementById("app").classList.add("hidden");
+  document.getElementById("loginCard").classList.remove("hidden");
+  document.getElementById("password").value = "";
+  showMessage("تم تسجيل الخروج.");
+}
+
+async function restoreSession() {
+  const {data, error} = await sb.auth.getSession();
+  if (error || !data.session) return;
+
+  currentUser = data.session.user;
+
+  try {
+    await loadApp();
+  } catch (error) {
+    showMessage("تعذر فتح المحفظة: " + error.message, "error");
   }
+}
 
-  async function register() {
-    clearMessage();
-    const button = $("registerBtn");
-    try {
-      busy(button, true);
-      const phone = normalizePhone($("phone").value);
-      const password = $("password").value;
-      if (password.length < 8) throw new Error("كلمة المرور يجب ألا تقل عن 8 أحرف.");
-
-      const {data, error} = await db.auth.signUp({phone, password});
-      if (error) throw error;
-
-      if (data.session) {
-        message("تم إنشاء الحساب.");
-      } else {
-        pendingPhone = phone;
-        $("otpArea").classList.remove("hidden");
-        message("إذا كان مزوّد SMS مضبوطًا، أدخل كود التحقق الذي وصلك.");
-      }
-    } catch (error) {
-      message(error.message || "تعذر إنشاء الحساب.", "error");
-    } finally {
-      busy(button, false, "إنشاء حساب جديد");
-    }
-  }
-
-  async function verifyPhone() {
-    clearMessage();
-    const button = $("verifyBtn");
-    try {
-      busy(button, true);
-      const phone = pendingPhone || normalizePhone($("phone").value);
-      const token = $("otp").value.trim();
-      if (!token) throw new Error("أدخل كود التحقق.");
-
-      const {error} = await db.auth.verifyOtp({phone, token, type:"sms"});
-      if (error) throw error;
-
-      $("otpArea").classList.add("hidden");
-      $("otp").value = "";
-      message("تم تأكيد رقم الهاتف.");
-    } catch (error) {
-      message(error.message || "تعذر تأكيد الرقم.", "error");
-    } finally {
-      busy(button, false, "تأكيد رقم الهاتف");
-    }
-  }
-
-  async function submitRequest() {
-    clearMessage();
-    const button = $("submitRequestBtn");
-    try {
-      if (!currentUser) throw new Error("سجّل الدخول أولًا.");
-      busy(button, true);
-
-      const type = $("requestType").value;
-      const amount = Number($("amount").value);
-      const method = $("paymentMethod").value;
-      const reference = $("reference").value.trim();
-
-      if (!Number.isFinite(amount) || amount <= 0 || amount > 1000000) {
-        throw new Error("أدخل مبلغًا صحيحًا أكبر من صفر.");
-      }
-
-      const {error} = await db.from("smart_wallet_requests").insert({
-        user_id: currentUser.id,
-        request_type: type,
-        amount,
-        payment_method: method,
-        reference: reference || null,
-        status: "pending"
-      });
-
-      if (error) throw error;
-      $("amount").value = "";
-      $("reference").value = "";
-      message("تم إرسال الطلب للمراجعة.");
-      await Promise.all([loadRequests(), loadWallet()]);
-      window.go("requests");
-    } catch (error) {
-      message(error.message || "تعذر إرسال الطلب.", "error");
-    } finally {
-      busy(button, false, "إرسال الطلب");
-    }
-  }
-
-  async function logout() {
-    const {error} = await db.auth.signOut();
-    if (error) {
-      message(error.message, "error");
-      return;
-    }
-    currentUser = null;
-    showAuth();
-    message("تم تسجيل الخروج.");
-  }
-
-  async function syncSession(session) {
-    currentUser = session ? session.user : null;
-    if (currentUser) {
-      showWallet();
-      await refreshAll();
-    } else {
-      showAuth();
-    }
-  }
-
-  $("loginBtn").addEventListener("click", login);
-  $("registerBtn").addEventListener("click", register);
-  $("verifyBtn").addEventListener("click", verifyPhone);
-  $("submitRequestBtn").addEventListener("click", submitRequest);
-  $("refreshBtn").addEventListener("click", refreshAll);
-  $("logoutBtn").addEventListener("click", logout);
-  $("requestType").addEventListener("change", () => {
-    $("requestHeading").textContent =
-      $("requestType").value === "deposit" ? "طلب إيداع" : "طلب سحب";
-  });
-
-  db.auth.onAuthStateChange((_event, session) => {
-    Promise.resolve().then(() => syncSession(session));
-  });
-
-  db.auth.getSession().then(({data, error}) => {
-    if (error) {
-      message(error.message, "error");
-      return;
-    }
-    syncSession(data.session);
-  });
-})();
+restoreSession();
 </script>
 </body>
 </html>
