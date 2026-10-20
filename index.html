@@ -1,632 +1,617 @@
-
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Smart Wallet</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>FOX | المهام اليومية</title>
 
 <style>
-:root{
-  --bg:#0c1020;
-  --panel:#151b31;
-  --panel2:#1c2440;
-  --text:#f5f6ff;
-  --muted:#aab2d0;
-  --accent:#8b5cf6;
-  --accent2:#6d4aff;
-  --line:#2b3454;
-  --green:#2dd4a7;
-  --red:#fb7185
-}
+:root{--ink:#f1f5fb;--muted:#aab8cc;--aqua:#3b82f6;--pink:#fb923c;--panel:rgba(12,19,31,.91);--bg:#080d16}
 *{box-sizing:border-box}
-body{
-  margin:0;
-  background:radial-gradient(circle at top,#1b2450 0,#0c1020 48%);
-  color:var(--text);
-  font-family:Tahoma,Arial,sans-serif;
-  min-height:100vh
-}
-.wrap{max-width:980px;margin:auto;padding:20px}
-.brand{display:flex;align-items:center;gap:12px;margin:8px 0 24px}
-.logo{
-  width:54px;height:54px;border-radius:17px;
-  background:linear-gradient(135deg,#a78bfa,#6d4aff);
-  display:grid;place-items:center;
-  font-size:35px;
-  box-shadow:0 8px 25px #6d4aff55;
-  overflow:hidden
-}
-.brand h1{font-size:22px;margin:0}
-.brand p{margin:4px 0 0;color:var(--muted);font-size:13px}
-.card{
-  background:#151b31ef;
-  border:1px solid var(--line);
-  border-radius:20px;
-  padding:20px;
-  margin:14px 0;
-  box-shadow:0 15px 40px #0002
-}
+html{min-height:100%;background:#080d16}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:Tahoma,Arial,sans-serif;background:linear-gradient(180deg,#101d31,#080d16 75%);background-color:#080d16}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0}
+.wrap{max-width:1120px;margin:auto;padding:24px}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px;padding:14px 18px;border:1px solid rgba(255,255,255,.12);border-radius:20px;background:rgba(5,10,18,.72);box-shadow:0 12px 36px #0005}
+.logo{font-weight:1000;font-size:clamp(34px,5vw,54px);font-style:italic;letter-spacing:3px;line-height:1;background:linear-gradient(180deg,#fffbd1,#ffd34d 18%,#ff8a18 42%,#ff3d12 66%,#a80f16);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 8px #ff9d2444,0 0 22px #ff4b1766;filter:drop-shadow(0 2px 0 #68130b);animation:foxFlame 2.4s ease-in-out infinite alternate}
+.brandmark{display:flex;align-items:center;gap:10px}
+.fox-mini{width:43px;height:43px;display:grid;place-items:center;font-size:29px;border-radius:50%;border:2px solid #ff7a24;box-shadow:0 0 13px #ff4b17aa;background:#24170f}
+@keyframes foxFlame{from{filter:drop-shadow(0 2px 0 #68130b) drop-shadow(0 0 7px #ff5a1a77)}to{filter:drop-shadow(0 2px 0 #68130b) drop-shadow(0 0 17px #ff5a1acc)}}
+.welcome-title{color:#fff7ed;text-shadow:0 0 10px #ff6a1b88,0 0 24px #ff4b1755;letter-spacing:1px}
+.panel{background:linear-gradient(145deg,rgba(15,24,39,.95),rgba(8,13,23,.94));border:1px solid rgba(148,174,210,.22);border-radius:24px;padding:24px;box-shadow:0 18px 55px rgba(0,0,0,.30)}
+.login{max-width:460px;margin:6vh auto;border-color:rgba(249,115,22,.3)}
+h1{font-size:clamp(24px,3vw,32px);letter-spacing:.1px}
+h2{font-size:19px;color:#f8fafc}
+.sub,.tile small,.balance small{color:#aebbd0;line-height:1.8}
+.field{display:block;width:100%;color:#f8fafc;background:rgba(4,9,17,.86);border:1px solid #334155;border-radius:14px;padding:14px;outline-color:#60a5fa;margin:10px 0 14px}
+.field::placeholder{color:#8190a7}
+label{color:#dbe5f4;font-size:14px}
+.primary{width:100%;color:white;background:linear-gradient(110deg,#2563eb,#3b82f6 55%,#60a5fa);border:1px solid #60a5fa55;border-radius:14px;padding:14px 18px;box-shadow:0 8px 24px #2563eb30;transition:transform .15s,filter .15s}
+.primary:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.secondary,.pill{color:#e2e8f0;background:rgba(30,41,59,.88);border:1px solid #475569;border-radius:13px;padding:11px 15px}
+.pill{border-radius:999px;font-size:13px}
 .hidden{display:none!important}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-.field{margin:12px 0}
-label{display:block;font-size:13px;color:var(--muted);margin:0 0 7px}
-input,select,textarea{
-  width:100%;border:1px solid var(--line);
-  background:#0e1428;color:var(--text);
-  padding:13px;border-radius:12px;font:inherit;outline:none
-}
-input:focus,select:focus,textarea:focus{border-color:var(--accent)}
-button{
-  border:0;border-radius:12px;padding:13px 16px;
-  font:inherit;font-weight:bold;cursor:pointer;
-  background:var(--accent);color:white
-}
-button:hover{filter:brightness(1.08)}
-button.secondary{background:#283250}
-button.danger{background:#a8324a}
-button:disabled{opacity:.55;cursor:not-allowed}
-.actions{display:flex;gap:9px;flex-wrap:wrap}
-.actions button{flex:1}
-.muted{color:var(--muted);font-size:13px;line-height:1.7}
-.notice{
-  padding:12px;border-radius:12px;background:#282449;
-  border:1px solid #4d3c8e;margin:12px 0;line-height:1.7
-}
-.error{background:#3a1e2c;border-color:#81344c}
-.success{background:#12352f;border-color:#1b705d}
-.balance{font-size:30px;font-weight:bold;margin:8px 0}
-.balance small{font-size:14px;color:var(--muted);font-weight:normal}
-.stat{background:var(--panel2);padding:16px;border-radius:16px}
-.stat span{color:var(--muted);font-size:13px}
-.stat strong{display:block;font-size:22px;margin-top:8px}
-.section-title{margin:0 0 12px;font-size:18px}
-.rowitem{padding:13px 0;border-bottom:1px solid var(--line)}
-.rowitem:last-child{border-bottom:0}
-.rowtop{display:flex;justify-content:space-between;gap:10px;align-items:center}
-.pill{display:inline-block;border-radius:999px;padding:4px 9px;font-size:12px;background:#303957;color:#e1e7ff}
-.pill.pending{background:#57421a;color:#ffe6a6}
-.pill.approved{background:#124b3d;color:#a4f5d9}
-.pill.rejected{background:#582536;color:#ffb6c4}
-.small{font-size:12px;color:var(--muted)}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}
-.tabs button{background:#202a49}
-.tabs button.active{background:var(--accent)}
-.tablewrap{overflow:auto}
-table{width:100%;border-collapse:collapse;min-width:600px}
-td,th{text-align:right;padding:11px;border-bottom:1px solid var(--line);font-size:13px}
-th{color:var(--muted);font-weight:normal}
-.request-actions{display:flex;gap:6px;margin-top:10px}
-.request-actions button{padding:8px 10px;font-size:12px}
-.foot{text-align:center;color:#7f89aa;font-size:12px;padding:20px}
-@media(max-width:650px){
-  .wrap{padding:12px}
-  .grid{grid-template-columns:1fr}
-  .card{padding:16px}
-  .balance{font-size:26px}
-  .brand h1{font-size:19px}
-}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.balance{background:linear-gradient(120deg,rgba(15,36,67,.98),rgba(29,78,145,.92));border-color:#60a5fa55;position:relative;overflow:hidden}
+.balance .amount{font-size:clamp(34px,5vw,44px);color:#fff;text-shadow:0 3px 20px #0003;margin:12px 0}
+.balance .stat{color:#bfdbfe}
+.tile{min-height:145px;text-align:right;color:#f1f5f9;background:linear-gradient(145deg,rgba(20,31,49,.96),rgba(10,17,29,.96));border:1px solid rgba(148,174,210,.22);border-radius:20px;padding:21px;box-shadow:0 10px 28px #0002;transition:transform .18s,border-color .18s,background .18s}
+.tile:hover{transform:translateY(-3px);border-color:#60a5fa;background:linear-gradient(145deg,rgba(26,48,78,.98),rgba(10,17,29,.98))}
+.emoji{font-size:30px;display:block;margin-bottom:12px;filter:drop-shadow(0 3px 8px #0004)}
+.tile strong{font-size:16px;display:block;margin-bottom:6px}
+.taskrow{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px;border:1px solid #334155;border-radius:16px;margin:10px 0;background:rgba(8,15,26,.8);color:#f1f5f9}
+.taskrow p{margin:5px 0 0;color:#aab8cc;font-size:13px;line-height:1.7}
+.section{margin-top:18px}
+.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.pageactions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.pageactions button{width:auto}
+.notice{background:rgba(120,75,17,.22);border:1px solid #b7791f66;color:#fde7b0;border-radius:14px;padding:12px 14px;font-size:13px;line-height:1.7;margin-top:14px}
+.adminrow{display:flex;gap:8px;flex-wrap:wrap}
+.adminrow input{flex:1;min-width:140px;margin:0}
+.table{width:100%;border-collapse:collapse;font-size:13px}
+.table td,.table th{text-align:right;padding:11px;border-bottom:1px solid #334155}
+.table-wrap{overflow-x:auto}
+.footer{font-size:12px;color:#aab8cc;text-align:center;padding:24px}
+#appView>.sectionhead{padding:4px 2px 14px}
+button:focus-visible{outline:2px solid #93c5fd;outline-offset:3px}
+@media(max-width:700px){.wrap{padding:12px}.brand{padding:12px 15px}.panel{padding:17px;border-radius:19px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.tile{padding:15px;min-height:125px}.balance{grid-column:span 2}.login{margin:4vh auto}.logo{font-size:38px}}
+@media(max-width:420px){.grid{gap:8px}.tile{padding:12px;min-height:116px}.tile strong{font-size:14px}.emoji{font-size:25px}}
 </style>
 </head>
 
 <body>
 <div class="wrap">
 
-  <header class="brand">
-    <div class="logo" aria-label="الثعلب">🦊</div>
+<header class="brand">
+  <div class="brandmark">
+    <span class="logo">FOX</span>
+    <span class="fox-mini" aria-label="الثعلب">🦊</span>
+  </div>
+  <div id="topActions" class="hidden">
+    <button class="pill" id="logout">تسجيل الخروج</button>
+  </div>
+</header>
+
+<section id="loginView" class="panel login">
+  <div style="font-size:38px">✦</div>
+  <h1 class="welcome-title">Welcome</h1>
+  <p class="sub">سجّل برقم الموبايل لمتابعة حسابك والرجوع إلى المكان الذي توقفت عنده.</p>
+
+  <form id="loginForm" novalidate>
+    <label for="phone">رقم الموبايل</label>
+    <input class="field" id="phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" style="text-align:left" placeholder="01xxxxxxxxx" required maxlength="20">
+    <button class="primary" type="submit">دخول إلى حسابك</button>
+    <div id="loginMessage" class="notice hidden" role="alert"></div>
+  </form>
+
+  <div class="pageactions" style="margin-top:14px">
+    <button class="secondary" id="openAdminLogin">دخول الإدارة</button>
+  </div>
+</section>
+
+<section id="appView" class="hidden">
+  <div class="sectionhead">
     <div>
-      <h1>Smart Wallet</h1>
-      <p>محفظتك — طلبات الإيداع والسحب تحت مراجعة الإدارة</p>
+      <h1 id="hello">أهلاً بيك</h1>
+      <div class="sub" id="phoneLabel"></div>
     </div>
-  </header>
+    <span class="pill">حساب المستخدم</span>
+  </div>
 
-  <div id="configNotice" class="notice hidden"></div>
-  <div id="message" class="notice hidden" role="status"></div>
-
-  <section id="authCard" class="card">
-    <h2 class="section-title">تسجيل الدخول أو إنشاء حساب</h2>
-    <p class="muted">
-      استخدم رقم هاتفك وكلمة مرور. هذا النموذج لا يرسل رسالة SMS؛
-      الحسابات تُنشأ عبر Supabase باستخدام معرّف داخلي مشتق من رقم الهاتف.
-      لا تستخدم كلمة مرور تستعملها في مواقع أخرى.
-    </p>
-
-    <div class="field">
-      <label for="phone">رقم الهاتف</label>
-      <input id="phone" inputmode="tel" autocomplete="tel" placeholder="مثال: 01012345678">
+  <div class="grid">
+    <div class="panel balance" style="grid-column:span 2">
+      <div class="stat">إجمالي الرصيد</div>
+      <div class="amount"><span id="balance">300</span> <span style="font-size:17px">جنيه</span></div>
+      <small>رصيد مضاف عند إنشاء الحساب</small>
     </div>
+    <button class="tile" data-static="true">
+      <span class="emoji">💎</span>
+      <strong>VIP</strong>
+      <small>عرض التفاصيل</small>
+    </button>
+  </div>
 
-    <div class="field">
-      <label for="password">كلمة المرور (8 أحرف على الأقل)</label>
-      <input id="password" type="password" autocomplete="current-password" minlength="8" placeholder="كلمة مرور قوية">
+  <div class="section">
+    <div class="sectionhead">
+      <h2>الخدمات</h2>
+      <span class="sub">اختر أحد الأقسام</span>
     </div>
-
-    <div class="actions">
-      <button id="loginBtn">دخول</button>
-      <button id="signupBtn" class="secondary">إنشاء حساب</button>
+    <div class="grid" id="tiles">
+      <button class="tile" id="openTasks"><span class="emoji">📅</span><strong>المهام اليومية</strong><small>استكشف المهام</small></button>
+      <button class="tile" id="openEarnings"><span class="emoji">💰</span><strong>الأرباح</strong><small>عرض المبالغ المضافة من الإدارة</small></button>
+      <button class="tile" id="openRecharge"><span class="emoji">⬆️</span><strong>إيداع الأموال</strong><small>طلب إيداع الأموال</small></button>
+      <button class="tile" id="openWithdraw"><span class="emoji">⬇️</span><strong>سحب الرصيد</strong><small>إدارة السحب</small></button>
+      <button class="tile" id="openRewards"><span class="emoji">🎁</span><strong>المكافآت</strong><small>اشحن 200 جنيه وخد 100 جنيه مكافأة</small></button>
+      <button class="tile" id="openAccount"><span class="emoji">👤</span><strong>حسابي</strong><small>عرض رقم التسجيل</small></button>
     </div>
+  </div>
 
-    <p class="muted">لأمان الحسابات، لا يمكن الدخول بمجرد كتابة رقم الهاتف بدون كلمة مرور.</p>
+  <section id="earningsPage" class="hidden section panel">
+    <div class="pageactions"><button class="secondary" id="backFromEarnings">← رجوع للرئيسية</button></div>
+    <h2>الأرباح</h2>
+    <p class="sub">إجمالي المبالغ التي أضافتها الإدارة إلى حسابك.</p>
+    <div class="panel balance">
+      <div class="stat">إجمالي الأرباح المضافة من الإدارة</div>
+      <div class="amount"><span id="earningsAmount">0</span> <span style="font-size:17px">جنيه</span></div>
+    </div>
+    <div id="earningsHistory" class="section"></div>
   </section>
 
-  <main id="app" class="hidden">
-    <section class="card">
-      <div class="topbar">
-        <div>
-          <div class="muted">الرصيد الحالي</div>
-          <div class="balance"><span id="balance">0.00</span> <small>جنيه مصري</small></div>
-          <div id="userPhone" class="muted"></div>
-        </div>
-        <button id="logoutBtn" class="secondary">تسجيل الخروج</button>
+  <section id="rewardsPage" class="hidden section panel">
+    <div class="pageactions"><button class="secondary" id="backFromRewards">← رجوع للرئيسية</button></div>
+    <h2>🎁 المكافآت</h2>
+    <div class="panel balance">
+      <div class="stat">إجمالي المكافآت المستلمة</div>
+      <div class="amount"><span id="rewardsAmount">0</span> <span style="font-size:17px">جنيه</span></div>
+    </div>
+    <p>اشحن 200 جنيه أو أكثر، وبعد موافقة الإدارة على طلب الشحن هتضاف لك مكافأة 100 جنيه تلقائيًا في رصيدك وخانة المكافآت.</p>
+    <div id="rewardsHistory" class="section"></div>
+  </section>
+
+  <section id="accountPage" class="hidden section panel">
+    <div class="pageactions"><button class="secondary" id="backFromAccount">← رجوع للرئيسية</button></div>
+    <h2>👤 حسابي</h2>
+    <p class="sub">رقم الموبايل اللي سجلت بيه:</p>
+    <div class="panel"><h3 id="accountPhone" dir="ltr"></h3></div>
+  </section>
+
+  <section id="tasksPage" class="hidden section panel">
+    <div class="pageactions"><button class="secondary" id="backFromTasks">← رجوع للرئيسية</button></div>
+    <div class="sectionhead"><h2>المهام اليومية</h2><span class="pill" id="taskDate"></span></div>
+    <p class="sub">تتجدد قائمة المهام تلقائيًا كل يوم. يمكنك تحديد المهام التي أنهيتها.</p>
+    <div id="dailyTasks"></div>
+  </section>
+
+  <section id="rechargePage" class="hidden section panel">
+    <div class="pageactions"><button class="secondary" id="backFromRecharge">← رجوع للرئيسية</button></div>
+    <h2>طلب إيداع الأموال</h2>
+    <p class="sub">اكتب المبلغ، واختر طريقة الإيداع، ثم اكتب الرقم. سيظهر الطلب في لوحة الإدارة للمراجعة.</p>
+    <label for="rechargeAmount">مبلغ الإيداع بالجنيه</label>
+    <input class="field" id="rechargeAmount" type="number" min="1" step="0.01" placeholder="اكتب المبلغ">
+    <label for="rechargeMethod">طريقة الإيداع</label>
+    <select class="field" id="rechargeMethod">
+      <option value="">اختر طريقة الإيداع</option>
+      <option>فودافون كاش</option>
+      <option>اورانج كاش</option>
+      <option>اتصالات كاش</option>
+      <option>انستا باي</option>
+      <option>فوري</option>
+    </select>
+    <label for="rechargeNumber">الرقم</label>
+    <input class="field" id="rechargeNumber" inputmode="numeric" placeholder="اكتب الرقم">
+    <button class="primary" id="submitRecharge">إرسال طلب الإيداع</button>
+    <div id="rechargeMessage" class="notice hidden"></div>
+    <p class="sub">إرسال الطلب لا يضيف الرصيد تلقائيًا حتى تتم مراجعته من الإدارة.</p>
+  </section>
+
+  <section id="withdrawPage" class="hidden section panel">
+    <div class="pageactions"><button class="secondary" id="backFromWithdraw">← رجوع للرئيسية</button></div>
+    <h2>سحب الرصيد</h2>
+    <p class="sub">رصيدك الحالي: <strong><span id="withdrawBalance">0</span> جنيه</strong></p>
+    <label for="withdrawAmount">مبلغ السحب بالجنيه</label>
+    <input class="field" id="withdrawAmount" type="number" min="1" step="0.01" placeholder="اكتب المبلغ">
+    <label for="withdrawMethod">طريقة السحب</label>
+    <select class="field" id="withdrawMethod">
+      <option value="">اختر طريقة السحب</option>
+      <option>فودافون كاش</option>
+      <option>اورانج كاش</option>
+      <option>اتصالات كاش</option>
+      <option>إنستا باي</option>
+      <option>فوري</option>
+    </select>
+    <label for="withdrawNumber">الرقم</label>
+    <input class="field" id="withdrawNumber" inputmode="numeric" placeholder="اكتب الرقم">
+    <button class="primary" id="confirmWithdraw">تأكيد السحب</button>
+    <div id="withdrawMessage" class="notice hidden"></div>
+    <p class="sub">في هذه النسخة يتم تسجيل الخصم داخل الموقع فقط؛ لا يتم تحويل أموال فعلية.</p>
+  </section>
+
+  <div class="section panel">
+    <div class="sectionhead"><h2>آخر نشاط</h2><span class="pill">محفوظ</span></div>
+    <p class="sub" id="progressText">تم حفظ حالة العرض على هذا الجهاز.</p>
+    <button class="secondary" id="markProgress">حفظ مكان التوقف</button>
+  </div>
+
+  <section id="adminLoginPage" class="hidden panel section">
+    <div class="pageactions"><button class="secondary" id="backFromAdminLogin">← رجوع</button></div>
+    <h2>دخول الإدارة</h2>
+    <p class="sub">أدخل رمز الإدارة لفتح لوحة التحكم.</p>
+    <input class="field" id="adminPin" placeholder="رمز الإدارة" type="password">
+    <button class="primary" id="adminLogin">فتح لوحة الإدارة</button>
+    <div id="adminLoginMsg" class="notice hidden"></div>
+  </section>
+
+  <section id="adminDashboard" class="hidden section">
+    <div class="panel">
+      <div class="sectionhead"><h2>لوحة الإدارة</h2><span class="pill" id="adminNotifCount">0 إشعار</span></div>
+      <p class="sub">إدارة الحسابات وطلبات الإيداع والسحب والمهام اليومية.</p>
+      <div class="pageactions">
+        <button class="secondary" id="adminLogout">إغلاق لوحة الإدارة</button>
+        <button class="secondary" id="refreshAdmin">تحديث البيانات</button>
       </div>
-    </section>
-
-    <div class="grid">
-      <section class="card">
-        <h2 class="section-title">طلب إيداع</h2>
-        <p class="muted">إرسال الطلب لا يضيف رصيدًا تلقائيًا. الإدارة توافق فقط بعد التحقق من وصول المبلغ فعليًا.</p>
-
-        <div class="field">
-          <label for="depositAmount">المبلغ بالجنيه</label>
-          <input id="depositAmount" type="number" min="1" max="100000" step="0.01" placeholder="100">
-        </div>
-
-        <div class="field">
-          <label for="depositMethod">طريقة الإيداع</label>
-          <select id="depositMethod">
-            <option>Vodafone Cash</option>
-            <option>Orange Cash</option>
-            <option>Etisalat Cash</option>
-            <option>InstaPay</option>
-            <option>تحويل بنكي</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label for="depositRef">رقم العملية أو ملاحظة</label>
-          <input id="depositRef" maxlength="120" placeholder="رقم العملية إن وجد">
-        </div>
-
-        <button id="depositBtn" style="width:100%">إرسال طلب الإيداع</button>
-      </section>
-
-      <section class="card">
-        <h2 class="section-title">طلب سحب</h2>
-        <p class="muted">طلب السحب يخضع لمراجعة الإدارة، ويجب أن يكون الرصيد كافيًا.</p>
-
-        <div class="field">
-          <label for="withdrawAmount">المبلغ بالجنيه</label>
-          <input id="withdrawAmount" type="number" min="1" max="100000" step="0.01" placeholder="50">
-        </div>
-
-        <div class="field">
-          <label for="withdrawMethod">طريقة الاستلام</label>
-          <select id="withdrawMethod">
-            <option>Vodafone Cash</option>
-            <option>Orange Cash</option>
-            <option>Etisalat Cash</option>
-            <option>InstaPay</option>
-            <option>تحويل بنكي</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label for="withdrawDestination">رقم المحفظة/معرّف التحويل</label>
-          <input id="withdrawDestination" maxlength="120" placeholder="رقم الاستلام فقط">
-        </div>
-
-        <button id="withdrawBtn" style="width:100%">إرسال طلب السحب</button>
-      </section>
     </div>
 
-    <section class="card">
-      <h2 class="section-title">طلباتي السابقة</h2>
-      <div id="myRequests" class="muted">جارٍ تحميل الطلبات...</div>
-    </section>
+    <div class="panel section">
+      <h2>تغيير الرقم السري للإدارة</h2>
+      <label for="currentAdminPassword">الرقم السري الحالي</label>
+      <input class="field" id="currentAdminPassword" type="password" autocomplete="current-password" placeholder="الرقم السري الحالي">
+      <label for="newAdminPassword">الرقم السري الجديد</label>
+      <input class="field" id="newAdminPassword" type="password" autocomplete="new-password" placeholder="اكتب رقمًا سريًا جديدًا (4 أحرف/أرقام على الأقل)">
+      <label for="confirmAdminPassword">تأكيد الرقم السري الجديد</label>
+      <input class="field" id="confirmAdminPassword" type="password" autocomplete="new-password" placeholder="أعد كتابة الرقم السري الجديد">
+      <button class="primary" id="changeAdminPassword">حفظ الرقم السري الجديد</button>
+      <div id="adminPasswordMessage" class="notice hidden"></div>
+    </div>
 
-    <section id="adminPanel" class="card hidden">
-      <div class="topbar">
-        <div>
-          <h2 class="section-title">لوحة الإدارة</h2>
-          <p class="muted">تظهر فقط للحساب الذي يحدد له is_admin=true من قاعدة البيانات بطريقة آمنة.</p>
-        </div>
-        <button id="refreshAdminBtn" class="secondary">تحديث</button>
+    <div class="panel section">
+      <h2>إضافة مهام اليوم</h2>
+      <label for="taskTitle">عنوان المهمة</label>
+      <input class="field" id="taskTitle" placeholder="عنوان المهمة">
+      <label for="taskDesc">تفاصيل المهمة</label>
+      <input class="field" id="taskDesc" placeholder="شرح مختصر">
+      <button class="primary" id="addTask">إضافة مهمة اليوم</button>
+      <div id="adminTasks"></div>
+    </div>
+
+    <div class="panel section"><h2>طلبات الإيداع</h2><div id="rechargeRequests"></div></div>
+    <div class="panel section"><h2>طلبات السحب والإشعارات</h2><div id="withdrawRequests"></div></div>
+
+    <div class="panel section">
+      <h2>الحسابات المسجلة</h2>
+      <p class="sub">من هنا تقدر الإدارة إضافة المهام وتعديل أو تعيين أرصدة الحسابات المسجلة.</p>
+      <div class="adminrow">
+        <input class="field" id="targetPhone" placeholder="رقم الحساب">
+        <input class="field" id="newBalance" type="number" min="0" step="0.01" placeholder="المبلغ بالجنيه">
+        <button class="secondary" id="depositBalance">إيداع مبلغ</button>
+        <button class="secondary" id="saveBalance">تعيين الرصيد</button>
       </div>
+      <div id="usersList"></div>
+    </div>
+  </section>
+</section>
 
-      <div class="tabs">
-        <button class="active" data-filter="pending">طلبات معلّقة</button>
-        <button data-filter="all">كل الطلبات</button>
-      </div>
-
-      <div id="adminRequests" class="muted">جارٍ تحميل الطلبات...</div>
-    </section>
-  </main>
-
-  <div class="foot">Smart Wallet • لا تُرسل أموالًا قبل التأكد من هوية الجهة المستلمة وشروط الخدمة.</div>
+<div class="footer">FOX • منصة المهام اليومية</div>
 </div>
 
 <script>
-const SUPABASE_URL = "https://sjhjxbnhhwftwlkshpql.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_6880OlVMxWIDPJfqwFS5TA_m7FCMQZK";
+const $=id=>document.getElementById(id);
+const USERS_KEY='taskflow_users_v1',CURRENT_KEY='taskflow_current_v1',TASKS_KEY='taskflow_daily_tasks_v1',REQUESTS_KEY='taskflow_requests_v1',ADMIN_KEY='taskflow_admin_open_v1',ADMIN_PASSWORD_KEY='taskflow_admin_password_v1';
 
-let sb = null;
-let currentUser = null;
-let currentProfile = null;
-let adminFilter = "pending";
+function getAdminPassword(){return localStorage.getItem(ADMIN_PASSWORD_KEY)||'2468'}
+function readUsers(){try{return JSON.parse(localStorage.getItem(USERS_KEY)||'{}')}catch{return {}}}
+function saveUsers(u){localStorage.setItem(USERS_KEY,JSON.stringify(u))}
+function readRequests(){try{return JSON.parse(localStorage.getItem(REQUESTS_KEY)||'{"recharges":[],"withdrawals":[]}')}catch{return {recharges:[],withdrawals:[]}}}
+function saveRequests(r){localStorage.setItem(REQUESTS_KEY,JSON.stringify(r))}
+function normalizePhone(p){const a='٠١٢٣٤٥٦٧٨٩',f='۰۱۲۳۴۵۶۷۸۹';let n=String(p??'').replace(/[٠-٩]/g,d=>String(a.indexOf(d))).replace(/[۰-۹]/g,d=>String(f.indexOf(d))).replace(/[^0-9]/g,'');if(n.startsWith('0020'))n=n.slice(4);else if(n.startsWith('20')&&n.length>=12)n=n.slice(2);if(n.length===10&&n.startsWith('1'))n='0'+n;return n}
+function currentPhone(){return localStorage.getItem(CURRENT_KEY)}
+function todayKey(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function esc(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 
-const $ = id => document.getElementById(id);
-
-function showMessage(text, type = "notice") {
-  const el = $("message");
-  el.textContent = text;
-  el.className = "notice " + (type === "error" ? "error" : type === "success" ? "success" : "");
-  el.classList.remove("hidden");
+function showApp(phone){
+  const u=readUsers()[phone];
+  if(!u)return;
+  localStorage.setItem(CURRENT_KEY,phone);
+  $('loginView').classList.add('hidden');
+  $('appView').classList.remove('hidden');
+  $('topActions').classList.remove('hidden');
+  $('adminLoginPage').classList.add('hidden');
+  $('adminDashboard').classList.add('hidden');
+  $('hello').textContent='Welcome';
+  $('phoneLabel').textContent='الحساب: '+phone;
+  if($('accountPhone'))$('accountPhone').textContent=phone;
+  $('balance').textContent=Number(u.balance).toLocaleString('en-US');
+  $('progressText').textContent='آخر حفظ: '+(u.lastSeen||'تم إنشاء الحساب')+' — محفوظ على هذا الجهاز.';
+  showMainPage();
 }
 
-function hideMessage() {
-  $("message").classList.add("hidden");
+function showMainPage(){
+  ['tasksPage','withdrawPage','rechargePage','earningsPage','rewardsPage','accountPage','adminLoginPage','adminDashboard'].forEach(id=>$(id).classList.add('hidden'));
+  document.querySelectorAll('#appView > .grid, #appView > .section:not(#tasksPage):not(#withdrawPage):not(#rechargePage):not(#earningsPage):not(#rewardsPage):not(#accountPage):not(#adminLoginPage):not(#adminDashboard)').forEach(el=>el.classList.remove('hidden'));
 }
 
-function validConfig() {
-  return SUPABASE_URL.startsWith("https://") &&
-    SUPABASE_ANON_KEY.startsWith("sb_publishable_") &&
-    SUPABASE_ANON_KEY.length > 20;
+function showSubPage(id){
+  document.querySelectorAll('#appView > .grid, #appView > .section:not(#tasksPage):not(#withdrawPage):not(#rechargePage):not(#earningsPage):not(#rewardsPage):not(#accountPage):not(#adminLoginPage):not(#adminDashboard)').forEach(el=>el.classList.add('hidden'));
+  ['tasksPage','withdrawPage','rechargePage','earningsPage','rewardsPage','accountPage','adminLoginPage','adminDashboard'].forEach(x=>$(x).classList.add('hidden'));
+  $(id).classList.remove('hidden');
 }
 
-function phoneToEmail(phone) {
-  const digits = phone.replace(/\D/g, "");
-  return digits + "@phone.smartwallet.invalid";
+function renderEarnings(){
+  const u=readUsers()[currentPhone()]||{};
+  const total=Number(u.adminEarnings||0);
+  $('earningsAmount').textContent=total.toLocaleString('en-US');
+  const items=Array.isArray(u.adminEarningsHistory)?u.adminEarningsHistory:[];
+  $('earningsHistory').innerHTML=items.length?items.slice().reverse().map(x=>`<div class="taskrow"><div><strong>مبلغ مضاف من الإدارة</strong><p>${Number(x.amount).toLocaleString('en-US')} جنيه • ${esc(x.date||'')}</p></div></div>`).join(''):'<p class="sub">لا توجد مبالغ مضافة من الإدارة حتى الآن.</p>';
 }
 
-function normalizedPhone(v) {
-  return v.trim().replace(/[^\d+]/g, "");
+function renderRewards(){
+  const u=readUsers()[currentPhone()]||{};
+  $('rewardsAmount').textContent=Number(u.rewardsTotal||0).toLocaleString('en-US');
+  const items=Array.isArray(u.rewardsHistory)?u.rewardsHistory:[];
+  $('rewardsHistory').innerHTML=items.length?items.slice().reverse().map(x=>`<div class="taskrow"><div><strong>مكافأة شحن</strong><p>100 جنيه • ${esc(x.date||'')} • شحن ${Number(x.rechargeAmount||200)} جنيه</p></div></div>`).join(''):'<p class="sub">لسه مفيش مكافآت مستلمة.</p>';
 }
 
-function validPhone(v) {
-  return /^\+?\d{8,15}$/.test(v);
-}
+$('openEarnings').onclick=()=>{showSubPage('earningsPage');renderEarnings()};
+$('backFromEarnings').onclick=showMainPage;
+$('openRewards').onclick=()=>{showSubPage('rewardsPage');renderRewards()};
+$('backFromRewards').onclick=showMainPage;
+$('openAccount').onclick=()=>{const p=currentPhone()||'';$('accountPhone').textContent=p;showSubPage('accountPage')};
+$('backFromAccount').onclick=showMainPage;
 
-function money(n) {
-  return Number(n || 0).toLocaleString("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
-}
-
-function statusLabel(s) {
-  return s === "approved" ? "مقبول" : s === "rejected" ? "مرفوض" : "قيد المراجعة";
-}
-
-function statusClass(s) {
-  return s === "approved" ? "approved" : s === "rejected" ? "rejected" : "pending";
-}
-
-async function boot() {
-  if (!validConfig()) {
-    $("configNotice").textContent = "تأكد من المفتاح العام الصحيح في SUPABASE_ANON_KEY. لا تضع Secret أو service_role هنا.";
-    $("configNotice").classList.remove("hidden");
-    $("loginBtn").disabled = true;
-    $("signupBtn").disabled = true;
+$('loginForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const msg=$('loginMessage');
+  if(msg){msg.classList.add('hidden');msg.textContent=''}
+  const p=normalizePhone($('phone').value);
+  if(!/^0?1[0-9]{8,9}$/.test(p)&&!(p.length>=8&&p.length<=15)){
+    if(msg){msg.textContent='من فضلك اكتب رقم موبايل صحيحًا بالأرقام العربية أو الإنجليزية.';msg.classList.remove('hidden')}
     return;
   }
-
-  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  const { data: { session } } = await sb.auth.getSession();
-
-  if (session) {
-    currentUser = session.user;
-    await loadApp();
-  }
-
-  sb.auth.onAuthStateChange((_event, session) => {
-    setTimeout(async () => {
-      currentUser = session?.user || null;
-      if (currentUser) await loadApp();
-      else showAuth();
-    }, 0);
-  });
-}
-
-function showAuth() {
-  $("authCard").classList.remove("hidden");
-  $("app").classList.add("hidden");
-  $("adminPanel").classList.add("hidden");
-}
-
-async function signUp() {
-  hideMessage();
-
-  const phone = normalizedPhone($("phone").value);
-  const password = $("password").value;
-
-  if (!validPhone(phone)) {
-    return showMessage("اكتب رقم هاتف صحيحًا مع كود الدولة عند الحاجة.", "error");
-  }
-
-  if (password.length < 8) {
-    return showMessage("كلمة المرور يجب أن تكون 8 أحرف على الأقل.", "error");
-  }
-
-  const { data, error } = await sb.auth.signUp({
-    email: phoneToEmail(phone),
-    password,
-    options: { data: { phone } }
-  });
-
-  if (error) {
-    return showMessage("تعذر إنشاء الحساب: " + error.message, "error");
-  }
-
-  if (data.session) {
-    currentUser = data.user;
-    await loadApp();
-  } else {
-    showMessage(
-      "تم إرسال طلب التسجيل. إذا كان تأكيد البريد الإلكتروني مفعّلًا في Supabase فقد تحتاج إلى ضبط إعدادات المصادقة. هذا النموذج لا يرسل SMS.",
-      "success"
-    );
-  }
-}
-
-async function signIn() {
-  hideMessage();
-
-  const phone = normalizedPhone($("phone").value);
-  const password = $("password").value;
-
-  if (!validPhone(phone) || !password) {
-    return showMessage("اكتب رقم الهاتف وكلمة المرور.", "error");
-  }
-
-  const { data, error } = await sb.auth.signInWithPassword({
-    email: phoneToEmail(phone),
-    password
-  });
-
-  if (error) {
-    return showMessage("تعذر تسجيل الدخول: " + error.message, "error");
-  }
-
-  currentUser = data.user;
-  await loadApp();
-}
-
-async function loadApp() {
-  $("authCard").classList.add("hidden");
-  $("app").classList.remove("hidden");
-
-  const { data: profile, error } = await sb
-    .from("profiles")
-    .select("id,phone,balance,is_admin")
-    .eq("id", currentUser.id)
-    .maybeSingle();
-
-  if (error) {
-    showMessage("تعذر قراءة الملف الشخصي. تأكد من إعداد قاعدة البيانات: " + error.message, "error");
+  if(p.length<8||p.length>15){
+    if(msg){msg.textContent='رقم الموبايل يجب أن يكون بين 8 و15 رقمًا.';msg.classList.remove('hidden')}
     return;
   }
-
-  if (!profile) {
-    showMessage("ملف المستخدم غير موجود في جدول profiles. تحقق من إعداد إنشاء الملف الشخصي.", "error");
-    return;
-  }
-
-  currentProfile = profile;
-  $("balance").textContent = money(profile.balance);
-  $("userPhone").textContent = "الحساب: " + (profile.phone || "");
-  $("adminPanel").classList.toggle("hidden", !profile.is_admin);
-
-  await loadMyRequests();
-
-  if (profile.is_admin) {
-    await loadAdminRequests();
-  }
-}
-
-async function loadMyRequests() {
-  const { data, error } = await sb
-    .from("wallet_requests")
-    .select("id,request_type,amount,method,reference,status,created_at,admin_note")
-    .eq("user_id", currentUser.id)
-    .order("created_at", { ascending: false })
-    .limit(50);
-
-  if (error) {
-    $("myRequests").textContent = "تعذر تحميل الطلبات: " + error.message;
-    return;
-  }
-
-  if (!data.length) {
-    $("myRequests").textContent = "لا توجد طلبات حتى الآن.";
-    return;
-  }
-
-  $("myRequests").innerHTML = data.map(r => `
-    <div class="rowitem">
-      <div class="rowtop">
-        <strong>${r.request_type === "deposit" ? "إيداع" : "سحب"} • ${money(r.amount)} ج.م</strong>
-        <span class="pill ${statusClass(r.status)}">${statusLabel(r.status)}</span>
-      </div>
-      <div class="small">${esc(r.method || "")} • ${new Date(r.created_at).toLocaleString("ar-EG")}</div>
-      ${r.reference ? `<div class="small">المرجع/الوجهة: ${esc(r.reference)}</div>` : ""}
-      ${r.admin_note ? `<div class="small">ملاحظة الإدارة: ${esc(r.admin_note)}</div>` : ""}
-    </div>
-  `).join("");
-}
-
-function esc(s) {
-  return String(s ?? "").replace(/[&<>"']/g, c => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  }[c]));
-}
-
-async function createRequest(type) {
-  hideMessage();
-
-  const amount = Number($(type === "deposit" ? "depositAmount" : "withdrawAmount").value);
-  const method = $(type === "deposit" ? "depositMethod" : "withdrawMethod").value;
-  const reference = $(type === "deposit" ? "depositRef" : "withdrawDestination").value.trim();
-
-  if (!Number.isFinite(amount) || amount <= 0 || amount > 100000) {
-    return showMessage("اكتب مبلغًا صحيحًا بين 1 و100000 جنيه.", "error");
-  }
-
-  if (type === "withdraw" && !reference) {
-    return showMessage("اكتب رقم المحفظة أو معرّف الاستلام.", "error");
-  }
-
-  const { error } = await sb.from("wallet_requests").insert({
-    user_id: currentUser.id,
-    request_type: type,
-    amount,
-    method,
-    reference: reference || null,
-    status: "pending"
-  });
-
-  if (error) {
-    return showMessage("تعذر إرسال الطلب: " + error.message, "error");
-  }
-
-  $(type === "deposit" ? "depositAmount" : "withdrawAmount").value = "";
-  $(type === "deposit" ? "depositRef" : "withdrawDestination").value = "";
-
-  showMessage("تم إرسال الطلب للمراجعة. لم يتغير الرصيد تلقائيًا.", "success");
-  await loadMyRequests();
-}
-
-async function loadAdminRequests() {
-  if (!currentProfile?.is_admin) return;
-
-  let q = sb
-    .from("wallet_requests")
-    .select("id,user_id,request_type,amount,method,reference,status,created_at")
-    .order("created_at", { ascending: false })
-    .limit(100);
-
-  if (adminFilter === "pending") {
-    q = q.eq("status", "pending");
-  }
-
-  const { data, error } = await q;
-
-  if (error) {
-    $("adminRequests").textContent = "تعذر تحميل الطلبات: " + error.message;
-    return;
-  }
-
-  if (!data.length) {
-    $("adminRequests").textContent = "لا توجد طلبات في هذا العرض.";
-    return;
-  }
-
-  $("adminRequests").innerHTML =
-    '<div class="tablewrap"><table><thead><tr>' +
-    '<th>النوع</th><th>المبلغ</th><th>الطريقة</th><th>مرجع/وجهة</th>' +
-    '<th>الحالة</th><th>تاريخ</th><th>الإجراء</th></tr></thead><tbody>' +
-    data.map(r => `
-      <tr>
-        <td>${r.request_type === "deposit" ? "إيداع" : "سحب"}</td>
-        <td>${money(r.amount)} ج.م</td>
-        <td>${esc(r.method)}</td>
-        <td>${esc(r.reference || "—")}</td>
-        <td><span class="pill ${statusClass(r.status)}">${statusLabel(r.status)}</span></td>
-        <td>${new Date(r.created_at).toLocaleString("ar-EG")}</td>
-        <td>
-          ${r.status === "pending"
-            ? `<button data-action="approve" data-id="${r.id}">موافقة</button>
-               <button class="danger" data-action="reject" data-id="${r.id}">رفض</button>`
-            : "—"}
-        </td>
-      </tr>
-    `).join("") +
-    '</tbody></table></div>';
-}
-
-async function adminDecision(id, decision) {
-  if (!currentProfile?.is_admin) {
-    return showMessage("غير مسموح.", "error");
-  }
-
-  const note = prompt("ملاحظة اختيارية:") || null;
-
-  const { error } = await sb.rpc("admin_review_wallet_request", {
-    p_request_id: id,
-    p_decision: decision,
-    p_note: note
-  });
-
-  if (error) {
-    return showMessage("تعذر تنفيذ القرار. تحقق من إعدادات قاعدة البيانات وصلاحيات الإدارة: " + error.message, "error");
-  }
-
-  showMessage(
-    decision === "approve"
-      ? "تمت الموافقة على الطلب وتحديث الرصيد حسب قواعد قاعدة البيانات."
-      : "تم رفض الطلب.",
-    "success"
-  );
-
-  await loadAdminRequests();
-  await loadMyRequests();
-  await loadAppProfileOnly();
-}
-
-async function loadAppProfileOnly() {
-  const { data } = await sb
-    .from("profiles")
-    .select("id,phone,balance,is_admin")
-    .eq("id", currentUser.id)
-    .maybeSingle();
-
-  if (data) {
-    currentProfile = data;
-    $("balance").textContent = money(data.balance);
-  }
-}
-
-async function logout() {
-  await sb.auth.signOut();
-  currentUser = null;
-  currentProfile = null;
-  showAuth();
-}
-
-$("signupBtn").addEventListener("click", signUp);
-$("loginBtn").addEventListener("click", signIn);
-$("logoutBtn").addEventListener("click", logout);
-$("depositBtn").addEventListener("click", () => createRequest("deposit"));
-$("withdrawBtn").addEventListener("click", () => createRequest("withdraw"));
-$("refreshAdminBtn").addEventListener("click", loadAdminRequests);
-
-document.querySelectorAll("[data-filter]").forEach(b => {
-  b.addEventListener("click", () => {
-    adminFilter = b.dataset.filter;
-    document.querySelectorAll("[data-filter]").forEach(x => {
-      x.classList.toggle("active", x === b);
-    });
-    loadAdminRequests();
-  });
-});
-
-$("adminRequests").addEventListener("click", e => {
-  const b = e.target.closest("button[data-action]");
-  if (b) {
-    adminDecision(
-      b.dataset.id,
-      b.dataset.action === "approve" ? "approve" : "reject"
-    );
+  try{
+    const users=readUsers();
+    if(!users[p])users[p]={balance:300,createdAt:new Date().toLocaleString('ar-EG'),lastSeen:'',withdrawals:[]};
+    users[p].lastSeen=new Date().toLocaleString('ar-EG');
+    saveUsers(users);
+    showApp(p);
+  }catch(err){
+    if(msg){msg.textContent='تعذر حفظ الحساب في هذا المتصفح. جرّب فتح الموقع في متصفح عادي بدل الوضع الخاص.';msg.classList.remove('hidden')}
+    console.error(err);
   }
 });
 
-boot();
+$('logout').onclick=()=>{
+  const p=currentPhone(),u=readUsers();
+  if(p&&u[p]){u[p].lastSeen=new Date().toLocaleString('ar-EG');saveUsers(u)}
+  localStorage.removeItem(CURRENT_KEY);
+  $('appView').classList.add('hidden');
+  $('loginView').classList.remove('hidden');
+  $('topActions').classList.add('hidden');
+  $('phone').value='';
+  showMainPage();
+};
+
+$('markProgress').onclick=()=>{
+  const p=currentPhone(),u=readUsers();
+  if(p&&u[p]){
+    u[p].lastSeen=new Date().toLocaleString('ar-EG');
+    saveUsers(u);
+    $('progressText').textContent='تم حفظ مكان التوقف في '+u[p].lastSeen;
+  }
+};
+
+document.querySelectorAll('[data-static]').forEach(b=>b.addEventListener('click',()=>alert('هذا القسم غير مفعّل حاليًا.')));
+
+function getDailyTasks(){
+  const key=todayKey();
+  let data;
+  try{data=JSON.parse(localStorage.getItem(TASKS_KEY)||'null')}catch{}
+  if(!data||data.date!==key){
+    data={date:key,tasks:[
+      {id:'t1',title:'مراجعة المهام',desc:'افتح قائمة المهام وراجع تفاصيلها.'},
+      {id:'t2',title:'تحديث الحساب',desc:'تأكد من بيانات حسابك.'},
+      {id:'t3',title:'متابعة النشاط',desc:'راجع آخر نشاط في حسابك.'}
+    ]};
+    localStorage.setItem(TASKS_KEY,JSON.stringify(data));
+  }
+  return data;
+}
+
+function renderTasks(){
+  const data=getDailyTasks();
+  $('taskDate').textContent=data.date;
+  const u=readUsers()[currentPhone()]||{};
+  const done=u.completedTasksDate===data.date?(u.completedTasks||[]):[];
+  $('dailyTasks').innerHTML=data.tasks.map(t=>'<div class="taskrow"><div><strong>'+esc(t.title)+'</strong><p>'+esc(t.desc)+'</p></div><label><input type="checkbox" data-task="'+esc(t.id)+'" '+(done.includes(t.id)?'checked':'')+'> تم</label></div>').join('');
+  $('dailyTasks').querySelectorAll('[data-task]').forEach(cb=>cb.onchange=()=>{
+    const us=readUsers(),user=us[currentPhone()];
+    if(!user)return;
+    if(user.completedTasksDate!==data.date){user.completedTasksDate=data.date;user.completedTasks=[]}
+    const id=cb.dataset.task;
+    user.completedTasks=user.completedTasks||[];
+    user.completedTasks=cb.checked?[...new Set([...user.completedTasks,id])]:user.completedTasks.filter(x=>x!==id);
+    saveUsers(us);
+  });
+}
+
+$('openTasks').onclick=()=>{showSubPage('tasksPage');renderTasks()};
+$('backFromTasks').onclick=showMainPage;
+$('openRecharge').onclick=()=>{showSubPage('rechargePage');$('rechargeMessage').classList.add('hidden')};
+$('backFromRecharge').onclick=showMainPage;
+
+$('submitRecharge').onclick=()=>{
+  const amount=Number($('rechargeAmount').value),method=$('rechargeMethod').value.trim(),number=$('rechargeNumber').value.trim(),msg=$('rechargeMessage');
+  msg.classList.remove('hidden');
+  if(!Number.isFinite(amount)||amount<=0){msg.textContent='اكتب مبلغ إيداع صحيحًا أكبر من صفر.';return}
+  if(!method){msg.textContent='اختر طريقة الإيداع.';return}
+  if(!number){msg.textContent='اكتب الرقم.';return}
+  const r=readRequests();
+  r.recharges.unshift({id:Date.now(),phone:currentPhone(),amount,method,number,date:new Date().toLocaleString('ar-EG'),status:'pending'});
+  saveRequests(r);
+  msg.textContent='تم إرسال طلب الإيداع إلى لوحة الإدارة للمراجعة. لم تتم إضافة الرصيد بعد.';
+  $('rechargeAmount').value='';
+  $('rechargeMethod').value='';
+  $('rechargeNumber').value='';
+  renderAdmin();
+};
+
+$('openWithdraw').onclick=()=>{
+  showSubPage('withdrawPage');
+  $('withdrawBalance').textContent=Number((readUsers()[currentPhone()]||{}).balance||0).toLocaleString('en-US');
+  $('withdrawMessage').classList.add('hidden');
+  $('withdrawAmount').value='';
+  $('withdrawMethod').value='';
+  $('withdrawNumber').value='';
+};
+$('backFromWithdraw').onclick=showMainPage;
+
+$('confirmWithdraw').onclick=()=>{
+  const p=currentPhone(),users=readUsers(),u=users[p],amount=Number($('withdrawAmount').value),method=$('withdrawMethod').value.trim(),number=$('withdrawNumber').value.trim(),msg=$('withdrawMessage');
+  msg.classList.remove('hidden');
+  if(!u){msg.textContent='تعذر العثور على الحساب.';return}
+  if(!Number.isFinite(amount)||amount<=0){msg.textContent='اكتب مبلغ سحب صحيحًا أكبر من صفر.';return}
+  if(amount>Number(u.balance)){msg.textContent='رصيدك غير كافي.';return}
+  if(!method){msg.textContent='اختر طريقة السحب.';return}
+  if(!number){msg.textContent='اكتب الرقم.';return}
+  u.balance=Math.round((Number(u.balance)-amount)*100)/100;
+  saveUsers(users);
+  const r=readRequests();
+  r.withdrawals.unshift({id:Date.now(),phone:p,amount,method,number,date:new Date().toLocaleString('ar-EG'),status:'pending'});
+  saveRequests(r);
+  $('withdrawBalance').textContent=Number(u.balance).toLocaleString('en-US');
+  msg.textContent='تم خصم المبلغ من رصيد الموقع وتسجيل طلب السحب، وسيظهر في لوحة الإدارة. لا يتم تحويل أموال فعلية.';
+  $('withdrawAmount').value='';
+  $('withdrawMethod').value='';
+  $('withdrawNumber').value='';
+  renderAdmin();
+};
+
+$('openAdminLogin').onclick=()=>{
+  $('loginView').classList.add('hidden');
+  $('appView').classList.remove('hidden');
+  $('topActions').classList.add('hidden');
+  $('adminDashboard').classList.add('hidden');
+  document.querySelectorAll('#appView > .grid, #appView > .section:not(#tasksPage):not(#withdrawPage):not(#rechargePage):not(#earningsPage):not(#rewardsPage):not(#accountPage):not(#adminLoginPage):not(#adminDashboard)').forEach(el=>el.classList.add('hidden'));
+  $('adminLoginPage').classList.remove('hidden');
+  $('adminLoginMsg').classList.add('hidden');
+  $('adminPin').value='';
+};
+
+$('backFromAdminLogin').onclick=()=>{
+  $('adminLoginPage').classList.add('hidden');
+  if(currentPhone()&&readUsers()[currentPhone()])showApp(currentPhone());
+  else{$('appView').classList.add('hidden');$('loginView').classList.remove('hidden')}
+};
+
+$('adminLogin').onclick=e=>{
+  if(e)e.preventDefault();
+  if($('adminPin').value!==getAdminPassword()){
+    $('adminLoginMsg').classList.remove('hidden');
+    $('adminLoginMsg').textContent='رمز الإدارة غير صحيح.';
+    return;
+  }
+  $('loginView').classList.add('hidden');
+  $('appView').classList.remove('hidden');
+  $('topActions').classList.add('hidden');
+  $('adminLoginPage').classList.add('hidden');
+  document.querySelectorAll('#appView > .grid, #appView > .section:not(#tasksPage):not(#withdrawPage):not(#rechargePage):not(#earningsPage):not(#rewardsPage):not(#accountPage):not(#adminLoginPage):not(#adminDashboard)').forEach(el=>el.classList.add('hidden'));
+  $('adminDashboard').classList.remove('hidden');
+  renderAdmin();
+};
+
+$('adminLogout').onclick=()=>{
+  $('adminDashboard').classList.add('hidden');
+  $('adminPin').value='';
+  $('loginView').classList.remove('hidden');
+  $('appView').classList.add('hidden');
+};
+$('refreshAdmin').onclick=renderAdmin;
+
+$('addTask').onclick=()=>{
+  const title=$('taskTitle').value.trim(),desc=$('taskDesc').value.trim();
+  if(!title){alert('اكتب عنوان المهمة');return}
+  let d=getDailyTasks();
+  d.tasks.push({id:'t'+Date.now(),title,desc});
+  localStorage.setItem(TASKS_KEY,JSON.stringify(d));
+  $('taskTitle').value='';
+  $('taskDesc').value='';
+  renderAdmin();
+  alert('تمت إضافة المهمة لقائمة اليوم على هذا المتصفح.');
+};
+
+function renderAdmin(){
+  const users=readUsers(),rows=Object.entries(users),r=readRequests();
+  $('adminNotifCount').textContent=(r.recharges.filter(x=>x.status==='pending').length+r.withdrawals.filter(x=>x.status==='pending').length)+' إشعار جديد';
+
+  $('usersList').innerHTML=rows.length?`<table class="table"><thead><tr><th>رقم الحساب</th><th>الرصيد</th><th>تاريخ التسجيل</th><th>آخر نشاط</th></tr></thead><tbody>${rows.map(([phone,u])=>`<tr><td>${esc(phone)}</td><td>${Number(u.balance).toLocaleString('en-US')} ج.م</td><td>${esc(u.createdAt||'')}</td><td>${esc(u.lastSeen||'')}</td></tr>`).join('')}</tbody></table>`:'<p class="sub">لا توجد حسابات مسجلة حاليًا.</p>';
+
+  $('rechargeRequests').innerHTML=r.recharges.length?r.recharges.map(x=>`<div class="taskrow"><div><strong>طلب إيداع — ${esc(x.phone)}</strong><p>${x.amount} جنيه • ${esc(x.date)}<br>الطريقة: ${esc(x.method||'—')} • الرقم: ${esc(x.number||'—')} • الحالة: ${x.status==='pending'?'قيد المراجعة':x.status==='approved'?'تمت الموافقة':'مرفوض'}</p></div>${x.status==='pending'?`<div><button class="secondary" data-recharge-approve="${x.id}">موافقة وإضافة الرصيد</button> <button class="secondary" data-recharge-reject="${x.id}">رفض</button></div>`:''}</div>`).join(''):'<p class="sub">لا توجد طلبات إيداع.</p>';
+
+  $('withdrawRequests').innerHTML=r.withdrawals.length?r.withdrawals.map(x=>`<div class="taskrow"><div><strong>طلب سحب — ${esc(x.phone)}</strong><p>${x.amount} جنيه • ${esc(x.date)}<br>الطريقة: ${esc(x.method||'—')} • الرقم: ${esc(x.number||'—')} • الحالة: ${x.status==='pending'?'جديد':x.status==='approved'?'تمت المراجعة':'مرفوض'}</p></div>${x.status==='pending'?`<button class="secondary" data-withdraw-done="${x.id}">تحديد تمت المراجعة</button>`:''}</div>`).join(''):'<p class="sub">لا توجد طلبات سحب.</p>';
+
+  const tasks=getDailyTasks();
+  $('adminTasks').innerHTML=`<p class="sub">مهام يوم ${tasks.date}</p>`+tasks.tasks.map(t=>`<div class="taskrow"><div><strong>${esc(t.title)}</strong><p>${esc(t.desc)}</p></div><button class="secondary" data-delete-task="${esc(t.id)}">حذف</button></div>`).join('');
+
+  document.querySelectorAll('[data-recharge-approve]').forEach(b=>b.onclick=()=>{
+    const req=r.recharges.find(x=>x.id===Number(b.dataset.rechargeApprove));
+    if(!req||req.status!=='pending')return;
+    const us=readUsers();
+    if(!us[req.phone]){alert('الحساب غير موجود');return}
+    us[req.phone].balance=Math.round((Number(us[req.phone].balance)+Number(req.amount))*100)/100;
+
+    if(Number(req.amount)>=200&&!req.rewardApplied){
+      const u=us[req.phone];
+      u.balance=Math.round((Number(u.balance)+100)*100)/100;
+      u.rewardsTotal=Math.round((Number(u.rewardsTotal||0)+100)*100)/100;
+      u.rewardsHistory=Array.isArray(u.rewardsHistory)?u.rewardsHistory:[];
+      u.rewardsHistory.push({amount:100,rechargeAmount:Number(req.amount),date:new Date().toLocaleString('ar-EG')});
+      req.rewardApplied=true;
+    }
+    saveUsers(us);
+    req.status='approved';
+    saveRequests(r);
+    renderAdmin();
+  });
+
+  document.querySelectorAll('[data-recharge-reject]').forEach(b=>b.onclick=()=>{
+    const req=r.recharges.find(x=>x.id===Number(b.dataset.rechargeReject));
+    if(req){req.status='rejected';saveRequests(r);renderAdmin()}
+  });
+
+  document.querySelectorAll('[data-withdraw-done]').forEach(b=>b.onclick=()=>{
+    const req=r.withdrawals.find(x=>x.id===Number(b.dataset.withdrawDone));
+    if(req){req.status='approved';saveRequests(r);renderAdmin()}
+  });
+
+  document.querySelectorAll('[data-delete-task]').forEach(b=>b.onclick=()=>{
+    const d=getDailyTasks();
+    d.tasks=d.tasks.filter(t=>t.id!==b.dataset.deleteTask);
+    localStorage.setItem(TASKS_KEY,JSON.stringify(d));
+    renderAdmin();
+  });
+}
+
+$('changeAdminPassword').onclick=()=>{
+  const msg=$('adminPasswordMessage'),current=$('currentAdminPassword').value,newPass=$('newAdminPassword').value,confirmPass=$('confirmAdminPassword').value;
+  msg.classList.remove('hidden');
+  if(current!==getAdminPassword()){msg.textContent='الرقم السري الحالي غير صحيح.';return}
+  if(newPass.length<4){msg.textContent='الرقم السري الجديد يجب ألا يقل عن 4 أحرف أو أرقام.';return}
+  if(newPass!==confirmPass){msg.textContent='تأكيد الرقم السري غير مطابق.';return}
+  localStorage.setItem(ADMIN_PASSWORD_KEY,newPass);
+  $('currentAdminPassword').value='';
+  $('newAdminPassword').value='';
+  $('confirmAdminPassword').value='';
+  msg.textContent='تم تغيير الرقم السري للإدارة بنجاح على هذا المتصفح.';
+};
+
+$('depositBalance').onclick=()=>{
+  const p=normalizePhone($('targetPhone').value),amount=Number($('newBalance').value),u=readUsers();
+  if(!u[p]||!Number.isFinite(amount)||amount<=0){alert('راجع رقم الحساب المسجل والمبلغ');return}
+  u[p].balance=Math.round((Number(u[p].balance)+amount)*100)/100;
+  u[p].adminEarnings=Math.round((Number(u[p].adminEarnings||0)+amount)*100)/100;
+  u[p].adminEarningsHistory=Array.isArray(u[p].adminEarningsHistory)?u[p].adminEarningsHistory:[];
+  u[p].adminEarningsHistory.push({amount,date:new Date().toLocaleString('ar-EG')});
+  saveUsers(u);
+  if(currentPhone()===p&&$('earningsPage')&&!$('earningsPage').classList.contains('hidden'))renderEarnings();
+  if(currentPhone()===p)$('balance').textContent=Number(u[p].balance).toLocaleString('en-US');
+  renderAdmin();
+  alert('تمت إضافة المبلغ إلى الرصيد والأرباح.');
+};
+
+$('saveBalance').onclick=()=>{
+  const p=normalizePhone($('targetPhone').value),n=Number($('newBalance').value),u=readUsers();
+  if(!u[p]||!Number.isFinite(n)||n<0){alert('راجع رقم الحساب والرصيد');return}
+  u[p].balance=Math.round(n*100)/100;
+  saveUsers(u);
+  renderAdmin();
+  alert('تم تحديث الرصيد محليًا');
+};
+
+const current=localStorage.getItem(CURRENT_KEY);
+if(current&&readUsers()[current])showApp(current);
 </script>
 </body>
 </html>
