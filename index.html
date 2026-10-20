@@ -635,3 +635,92 @@ if(current&&readUsers()[current])showApp(current);
   object-fit: contain;
 }
 </style>
+<!-- نافذة رسالة الربح -->
+<div id="foxRewardPopup" style="
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:999999;
+  background:rgba(0,0,0,.8);
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  direction:rtl;
+  font-family:Arial,sans-serif;
+">
+  <div style="
+    position:relative;
+    background:#171923;
+    color:#fff;
+    border:2px solid #f5a623;
+    border-radius:20px;
+    padding:28px 22px;
+    max-width:380px;
+    width:100%;
+    text-align:center;
+    box-shadow:0 10px 40px #0008;
+  ">
+    <button id="foxRewardClose" aria-label="إغلاق" style="
+      position:absolute;
+      top:7px;
+      left:12px;
+      background:none;
+      border:none;
+      color:#fff;
+      font-size:32px;
+      cursor:pointer;
+    ">×</button>
+
+    <div style="font-size:52px;">🦊🎁</div>
+
+    <h2 style="color:#ffc247;">
+      اربح من خلال المهام!
+    </h2>
+
+    <p style="color:#55e6a5;font-size:20px;font-weight:bold;">
+      اكسب حتى 1000 جنيه يوميًا
+    </p>
+
+    <p style="line-height:1.9;">
+      نفّذ المهام المتاحة داخل الموقع، وتعرّف على المكافآت
+      وشروط كل مهمة قبل البدء.
+    </p>
+
+    <p style="font-size:12px;color:#c6c6c6;line-height:1.7;">
+      مبلغ 1000 جنيه هدف إعلاني محتمل وليس ربحًا مضمونًا؛
+      الأرباح تعتمد على المهام والمكافآت الفعلية.
+    </p>
+
+    <button id="foxRewardOk" style="
+      width:100%;
+      padding:13px;
+      border:0;
+      border-radius:10px;
+      background:#f5a623;
+      color:#171923;
+      font-size:16px;
+      font-weight:bold;
+      cursor:pointer;
+    ">فهمت، إغلاق الرسالة</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  var popup = document.getElementById("foxRewardPopup");
+  var closeButton = document.getElementById("foxRewardClose");
+  var okButton = document.getElementById("foxRewardOk");
+
+  function closeReward() {
+    popup.style.display = "none";
+  }
+
+  closeButton.addEventListener("click", closeReward);
+  okButton.addEventListener("click", closeReward);
+
+  // إظهار الرسالة بعد تحميل الصفحة
+  window.addEventListener("load", function () {
+    popup.style.display = "flex";
+  });
+})();
+</script>
