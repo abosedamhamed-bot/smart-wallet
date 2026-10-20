@@ -1,248 +1,315 @@
-```html
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FOOX | لوحة الإدارة</title>
+<title>FOOX - لوحة الإدارة</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#100b20;color:#fff;font-family:Arial,sans-serif}
-header{background:#1b1232;padding:20px;border-bottom:1px solid #38264f}
+header{background:#1b1232;padding:18px;border-bottom:1px solid #38264f}
 .brand{font-size:25px;font-weight:bold;color:#42f5ee}
-header p{color:#b9accb;font-size:13px}
-main{max-width:1000px;margin:auto;padding:16px}
+header p,.muted{color:#b9accb;font-size:13px;line-height:1.8}
+main{max-width:1100px;margin:auto;padding:16px}
 .card{background:#1d1532;border:1px solid #38264f;border-radius:16px;padding:18px;margin-bottom:16px}
 h2{font-size:19px;margin-top:0}
 input,button,select{width:100%;padding:12px;margin:6px 0;border-radius:9px;border:1px solid #49365f;background:#120d22;color:#fff;font-size:15px}
 button{cursor:pointer;background:#32e8e0;color:#120d22;font-weight:bold;border:0}
 button.secondary{background:#342344;color:white;border:1px solid #58406b}
-button.danger{background:#ff5477;color:#fff}
+button.danger{background:#ff5477;color:white}
 button:disabled{opacity:.5;cursor:not-allowed}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
 .stat{font-size:26px;color:#42f5ee;font-weight:bold;margin-top:8px}
-.muted{color:#b9accb;font-size:13px;line-height:1.7}
 .hidden{display:none!important}
 .message{padding:12px;border-radius:9px;background:#30213f;margin:10px 0;white-space:pre-wrap;overflow-wrap:anywhere}
 .item{padding:15px 0;border-bottom:1px solid #38264f}
-.item:last-child{border-bottom:0}
 .row{display:flex;gap:8px;flex-wrap:wrap}
-.row button{flex:1;min-width:120px}
-.tag{display:inline-block;background:#342344;padding:5px 9px;border-radius:20px;font-size:12px}
-table{width:100%;border-collapse:collapse}
-td,th{text-align:right;padding:10px;border-bottom:1px solid #38264f;overflow-wrap:anywhere}
+.row button{flex:1;min-width:110px}
 .tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:500px}
+td,th{text-align:right;padding:10px;border-bottom:1px solid #38264f;overflow-wrap:anywhere}
+.small{font-size:12px;color:#b9accb;word-break:break-all}
+.nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:16px}
+.nav button{margin:0;background:#342344;color:#fff;border:1px solid #58406b}
+.nav button.active{background:#32e8e0;color:#120d22}
+.page{display:none}
+.page.active{display:block}
+@media(min-width:650px){.nav{grid-template-columns:repeat(4,minmax(0,1fr))}}
 </style>
 </head>
 <body>
 <header>
   <div class="brand">FOOX ADMIN</div>
-  <p>لوحة إدارة طلبات المحفظة والأرصدة</p>
+  <p>إدارة المحفظة والمستخدمين والطلبات</p>
 </header>
 
 <main>
-<section id="loginCard" class="card">
-  <h2>دخول الإدارة</h2>
-  <p class="muted">سجّل الدخول بحساب الإدارة المصرّح له في Supabase.</p>
-  <input id="phone" type="tel" placeholder="رقم الموبايل">
-  <input id="password" type="password" placeholder="كلمة المرور">
-  <button id="loginButton" onclick="login()">تسجيل الدخول</button>
-  <div id="loginMsg" class="message hidden"></div>
-</section>
+  <section id="loginCard" class="card">
+    <h2>دخول الإدارة</h2>
+    <p class="muted">سجّل الدخول بحساب الإدارة المصرح له.</p>
+    <input id="phone" type="tel" placeholder="رقم الموبايل">
+    <input id="password" type="password" placeholder="كلمة المرور">
+    <button id="loginButton" onclick="login()">تسجيل الدخول</button>
+    <div id="loginMsg" class="message hidden"></div>
+  </section>
 
-<section id="dashboard" class="hidden">
-  <div class="grid">
-    <div class="card">
-      <div class="muted">عدد المستخدمين</div>
-      <div class="stat" id="usersCount">—</div>
+  <section id="dashboard" class="hidden">
+    <div class="grid">
+      <div class="card"><div class="muted">عدد المستخدمين</div><div class="stat" id="usersCount">—</div></div>
+      <div class="card"><div class="muted">الطلبات المعلقة</div><div class="stat" id="pendingCount">—</div></div>
+      <div class="card"><div class="muted">إجمالي الأرصدة (ج.م)</div><div class="stat" id="totalBalance">—</div></div>
     </div>
-    <div class="card">
-      <div class="muted">طلبات قيد المراجعة</div>
-      <div class="stat" id="pendingCount">—</div>
-    </div>
-    <div class="card">
-      <div class="muted">إجمالي الأرصدة المسجلة (ج.م)</div>
-      <div class="stat" id="totalBalance">—</div>
-    </div>
-  </div>
 
-  <div class="card">
-    <h2>طلبات الإيداع والسحب</h2>
-    <div class="row">
-      <button onclick="loadRequests('pending')">الطلبات المعلقة</button>
-      <button class="secondary" onclick="loadRequests('all')">كل الطلبات</button>
-      <button class="secondary" onclick="refreshAll()">تحديث البيانات</button>
-    </div>
-    <div id="requestsList" class="muted">اضغط لتحديث الطلبات.</div>
-  </div>
+    <nav class="nav">
+      <button class="active" data-page="requestsPage" onclick="showPage('requestsPage',this)">الطلبات</button>
+      <button data-page="addPage" onclick="showPage('addPage',this)">إضافة طلبات</button>
+      <button data-page="usersPage" onclick="showPage('usersPage',this)">المستخدمون</button>
+      <button data-page="transactionsPage" onclick="showPage('transactionsPage',this)">سجل العمليات</button>
+    </nav>
 
-  <div class="card">
-    <h2>المستخدمون والأرصدة</h2>
-    <input id="userSearch" placeholder="بحث برقم الموبايل أو معرّف المستخدم">
-    <button class="secondary" onclick="loadUsers()">بحث / تحديث المستخدمين</button>
-    <div id="usersList" class="muted">اضغط بحث لعرض المستخدمين.</div>
-  </div>
+    <section id="requestsPage" class="page active">
+      <div class="card">
+        <h2>طلبات الإيداع والسحب</h2>
+        <div class="row">
+          <button onclick="loadRequests('pending')">المعلقة</button>
+          <button class="secondary" onclick="loadRequests('all')">كل الطلبات</button>
+          <button class="secondary" onclick="refreshAll()">تحديث</button>
+        </div>
+        <div id="requestsList" class="muted">جارٍ التحميل...</div>
+      </div>
+    </section>
 
-  <div class="card">
-    <h2>سجل العمليات</h2>
-    <button class="secondary" onclick="loadTransactions()">عرض أحدث العمليات</button>
-    <div id="transactionsList" class="muted">لم يتم تحميل العمليات بعد.</div>
-  </div>
+    <section id="addPage" class="page">
+      <div class="card">
+        <h2>إضافة طلب جديد</h2>
+        <p class="muted">أنشئ طلب إيداع أو سحب لمستخدم مسجل. الطلب سيظهر في قائمة الطلبات بحالة قيد المراجعة.</p>
 
-  <button class="secondary" onclick="logout()">تسجيل الخروج</button>
-  <div id="appMsg" class="message hidden"></div>
-</section>
+        <label for="manualPhone">رقم موبايل المستخدم</label>
+        <input id="manualPhone" type="tel" placeholder="01xxxxxxxxx">
+
+        <label for="manualType">نوع الطلب</label>
+        <select id="manualType">
+          <option value="deposit">إيداع</option>
+          <option value="withdraw">سحب</option>
+        </select>
+
+        <label for="manualAmount">المبلغ بالجنيه المصري</label>
+        <input id="manualAmount" type="number" min="0.01" step="0.01" placeholder="اكتب المبلغ">
+
+        <label for="manualMethod">طريقة الدفع</label>
+        <select id="manualMethod">
+          <option value="Vodafone Cash">فودافون كاش</option>
+          <option value="Orange Cash">أورنج كاش</option>
+          <option value="Etisalat Cash">اتصالات كاش</option>
+          <option value="InstaPay">إنستا باي</option>
+          <option value="Visa">فيزا</option>
+        </select>
+
+        <label for="manualReference">ملاحظات أو رقم مرجعي (اختياري)</label>
+        <input id="manualReference" placeholder="اكتب ملاحظات الطلب">
+
+        <button id="manualCreateButton" onclick="createManualRequest()">حفظ الطلب</button>
+        <div id="manualMsg" class="message hidden"></div>
+      </div>
+    </section>
+
+    <section id="usersPage" class="page">
+      <div class="card">
+        <h2>المستخدمون والأرصدة</h2>
+        <input id="userSearch" placeholder="بحث برقم الموبايل أو معرّف المستخدم">
+        <button class="secondary" onclick="loadUsers()">بحث / تحديث المستخدمين</button>
+        <div id="usersList" class="muted">جارٍ التحميل...</div>
+      </div>
+    </section>
+
+    <section id="transactionsPage" class="page">
+      <div class="card">
+        <h2>سجل العمليات</h2>
+        <button class="secondary" onclick="loadTransactions()">تحديث سجل العمليات</button>
+        <div id="transactionsList" class="muted">جارٍ التحميل...</div>
+      </div>
+    </section>
+
+    <button class="secondary" onclick="refreshAll()">تحديث كل البيانات</button>
+    <button class="secondary" onclick="logout()">تسجيل الخروج</button>
+    <div id="appMsg" class="message hidden"></div>
+  </section>
 </main>
 
 <script>
-const SUPABASE_URL = 'https://sjhjxbnhhwftwlkshpql.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_6880OlVMXwIDPJfqwFS5TA_m7FCMQZK';
-const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL='https://sjhjxbnhhwftwlkshpql.supabase.co';
+const SUPABASE_KEY='sb_publishable_6880OlVMxWIDPJfqwFS5TA_m7FCMQZK';
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-let currentUser = null;
-let requestMode = 'pending';
+let currentUser=null;
+let requestMode='pending';
 
-function normalizePhone(value) {
-  let p = value.trim().replace(/[\s()-]/g,'');
-  if (p.startsWith('00')) p = '+' + p.slice(2);
-  if (p.startsWith('01')) p = '+2' + p;
-  if (p.startsWith('20') && !p.startsWith('+')) p = '+' + p;
+function normalizePhone(value){
+  let p=String(value||'').trim().replace(/[\s()-]/g,'');
+  if(p.startsWith('00'))p='+'+p.slice(2);
+  if(p.startsWith('01'))p='+2'+p;
+  if(p.startsWith('20')&&!p.startsWith('+'))p='+'+p;
   return p;
 }
-function msg(id,text) {
-  const e=document.getElementById(id);
-  e.textContent=text;
-  e.classList.remove('hidden');
+function msg(id,text){
+  const el=document.getElementById(id);
+  el.textContent=text;
+  el.classList.remove('hidden');
 }
-function clearMsg(id) {
-  document.getElementById(id).classList.add('hidden');
-}
-function showLogin() {
+function clearMsg(id){document.getElementById(id).classList.add('hidden')}
+function showLogin(){
   document.getElementById('loginCard').classList.remove('hidden');
   document.getElementById('dashboard').classList.add('hidden');
 }
-function showDashboard() {
+function showDashboard(){
   document.getElementById('loginCard').classList.add('hidden');
   document.getElementById('dashboard').classList.remove('hidden');
 }
-function fmt(n) {
+function fmt(n){
   return Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
 }
-function addText(parent,tag,text,className='') {
-  const e=document.createElement(tag);
-  e.textContent=text;
-  if(className)e.className=className;
-  parent.appendChild(e);
-  return e;
+function addText(parent,tag,text,className=''){
+  const el=document.createElement(tag);
+  el.textContent=text==null?'':String(text);
+  if(className)el.className=className;
+  parent.appendChild(el);
+  return el;
 }
-function statusArabic(status) {
-  return ({pending:'قيد المراجعة',approved:'تمت الموافقة',rejected:'مرفوض'})[status]||status||'—';
+function statusArabic(s){
+  return ({pending:'قيد المراجعة',approved:'تمت الموافقة',rejected:'مرفوض'})[s]||s||'—';
 }
-function typeArabic(type) {
-  return ({deposit:'إيداع',withdraw:'سحب'})[type]||type||'—';
+function typeArabic(t){
+  return ({deposit:'إيداع',withdraw:'سحب'})[t]||t||'—';
+}
+function showPage(id,button){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  button.classList.add('active');
 }
 
-async function login() {
+async function login(){
   clearMsg('loginMsg');
   const phone=normalizePhone(document.getElementById('phone').value);
   const password=document.getElementById('password').value;
+  const button=document.getElementById('loginButton');
+
   if(!phone||!password)return msg('loginMsg','اكتب رقم الموبايل وكلمة المرور.');
-  const b=document.getElementById('loginButton');
-  b.disabled=true;
-  b.textContent='جارٍ التحقق...';
-  try {
+
+  button.disabled=true;
+  button.textContent='جارٍ التحقق...';
+
+  try{
     const {error}=await db.auth.signInWithPassword({phone,password});
-    if(error) {
-      msg('loginMsg','تعذّر تسجيل الدخول: '+error.message);
-      return;
-    }
+    if(error){msg('loginMsg','تعذّر تسجيل الدخول: '+error.message);return}
     await checkAdmin();
-  } finally {
-    b.disabled=false;
-    b.textContent='تسجيل الدخول';
+  }catch(e){
+    msg('loginMsg','حدث خطأ: '+e.message);
+  }finally{
+    button.disabled=false;
+    button.textContent='تسجيل الدخول';
   }
 }
 
-async function checkAdmin() {
-  const {data:{user},error:authError}=await db.auth.getUser();
-  if(authError||!user) {
+async function checkAdmin(){
+  const {data:authData,error:authError}=await db.auth.getUser();
+  const user=authData&&authData.user;
+
+  if(authError||!user){
+    await db.auth.signOut();
     showLogin();
-    return msg('loginMsg','تعذّر التحقق من الحساب. سجّل الدخول مرة أخرى.');
+    msg('loginMsg','تعذّر التحقق من الحساب. سجّل الدخول مرة أخرى.');
+    return;
   }
+
   currentUser=user;
   const {data,error}=await db.from('smart_wallet_profiles')
     .select('is_admin').eq('user_id',user.id).maybeSingle();
-  if(error) {
-    showLogin();
-    await db.auth.signOut();
-    return msg('loginMsg','تعذّر التحقق من صلاحيات الإدارة. تأكد من تشغيل SQL الخاص بالإدارة في Supabase. التفاصيل: '+error.message);
-  }
-  if(!data||data.is_admin!==true) {
+
+  if(error){
     await db.auth.signOut();
     currentUser=null;
     showLogin();
-    return msg('loginMsg','هذا الحساب ليس حساب إدارة. يجب تفعيل is_admin لحسابك من Supabase.');
+    msg('loginMsg','تعذّر التحقق من صلاحيات الإدارة: '+error.message);
+    return;
   }
+
+  if(!data||data.is_admin!==true){
+    await db.auth.signOut();
+    currentUser=null;
+    showLogin();
+    msg('loginMsg','هذا الحساب غير مصرح له بدخول لوحة الإدارة.');
+    return;
+  }
+
   showDashboard();
   await refreshAll();
 }
 
-async function refreshAll() {
+async function refreshAll(){
   clearMsg('appMsg');
-  await Promise.all([loadStats(),loadRequests(requestMode)]);
+  await Promise.all([
+    loadStats(),
+    loadRequests(requestMode),
+    loadUsers(),
+    loadTransactions()
+  ]);
 }
 
-async function loadStats() {
+async function loadStats(){
   const [users,requests,profiles]=await Promise.all([
     db.from('smart_wallet_profiles').select('user_id',{count:'exact',head:true}),
     db.from('smart_wallet_requests').select('id',{count:'exact',head:true}).eq('status','pending'),
     db.from('smart_wallet_profiles').select('balance')
   ]);
+
   const error=users.error||requests.error||profiles.error;
-  if(error)return msg('appMsg','تعذّر تحميل الإحصائيات: '+error.message);
+  if(error){msg('appMsg','تعذّر تحميل الإحصائيات: '+error.message);return}
+
   document.getElementById('usersCount').textContent=users.count??0;
   document.getElementById('pendingCount').textContent=requests.count??0;
+
   const total=(profiles.data||[]).reduce((sum,p)=>sum+Number(p.balance||0),0);
   document.getElementById('totalBalance').textContent=fmt(total);
 }
 
-async function loadRequests(mode='pending') {
+async function loadRequests(mode='pending'){
   requestMode=mode;
   const box=document.getElementById('requestsList');
   box.textContent='جارٍ تحميل الطلبات...';
+
   let query=db.from('smart_wallet_requests')
     .select('id,user_id,request_type,amount,payment_method,reference,status,created_at')
     .order('created_at',{ascending:false}).limit(100);
+
   if(mode==='pending')query=query.eq('status','pending');
+
   const {data,error}=await query;
-  if(error) {
-    box.textContent='تعذّر تحميل الطلبات: '+error.message;
-    return;
-  }
+  if(error){box.textContent='تعذّر تحميل الطلبات: '+error.message;return}
+
   box.replaceChildren();
-  if(!data?.length) {
-    box.textContent='لا توجد طلبات في هذا القسم.';
-    return;
-  }
-  for(const r of data) {
+  if(!data||!data.length){box.textContent='لا توجد طلبات في هذا القسم.';return}
+
+  for(const r of data){
     const item=document.createElement('div');
     item.className='item';
     addText(item,'strong',typeArabic(r.request_type)+' — '+fmt(r.amount)+' ج.م');
     addText(item,'div','الحالة: '+statusArabic(r.status),'muted');
     addText(item,'div','طريقة الدفع: '+(r.payment_method||'—'),'muted');
-    addText(item,'div','معرّف المستخدم: '+r.user_id,'muted');
-    if(r.reference)addText(item,'div','المرجع / بيانات التحويل: '+r.reference,'muted');
+    addText(item,'div','معرّف المستخدم: '+r.user_id,'small');
+    if(r.reference)addText(item,'div','الملاحظات: '+r.reference,'muted');
     addText(item,'div','التاريخ: '+new Date(r.created_at).toLocaleString('ar-EG'),'muted');
 
-    if(r.status==='pending') {
+    if(r.status==='pending'){
       const row=document.createElement('div');
       row.className='row';
       const approve=document.createElement('button');
-      approve.textContent='الموافقة على الطلب';
+      approve.textContent='موافقة';
       approve.onclick=()=>reviewRequest(r.id,'approve',approve);
       const reject=document.createElement('button');
-      reject.textContent='رفض الطلب';
+      reject.textContent='رفض';
       reject.className='danger';
       reject.onclick=()=>reviewRequest(r.id,'reject',reject);
       row.append(approve,reject);
@@ -252,105 +319,149 @@ async function loadRequests(mode='pending') {
   }
 }
 
-async function reviewRequest(id,action,button) {
-  const promptText=action==='approve'
-    ? 'هل تحققت من وصول الإيداع أو صحة طلب السحب وبيانات المستلم؟'
-    : 'هل تريد رفض هذا الطلب؟';
-  if(!confirm(promptText))return;
+async function reviewRequest(id,action,button){
+  const question=action==='approve'
+    ?'هل تحققت من وصول الإيداع أو صحة بيانات السحب؟'
+    :'هل تريد رفض هذا الطلب؟';
+
+  if(!confirm(question))return;
   button.disabled=true;
-  const fn=action==='approve'
-    ? 'smart_wallet_admin_approve'
-    : 'smart_wallet_admin_reject';
-  const {data,error}=await db.rpc(fn,{p_request_id:id});
-  button.disabled=false;
-  if(error) {
-    msg('appMsg','لم تتم مراجعة الطلب: '+error.message);
-    return;
+
+  try{
+    const fn=action==='approve'?'smart_wallet_admin_approve':'smart_wallet_admin_reject';
+    const {error}=await db.rpc(fn,{p_request_id:id});
+    if(error){msg('appMsg','لم تتم مراجعة الطلب: '+error.message);return}
+    msg('appMsg',action==='approve'?'تمت الموافقة على الطلب.':'تم رفض الطلب.');
+    await refreshAll();
+  }catch(e){
+    msg('appMsg','حدث خطأ: '+e.message);
+  }finally{
+    button.disabled=false;
   }
-  msg('appMsg',action==='approve'
-    ? 'تمت الموافقة على الطلب وتحديث الرصيد إذا نجحت العملية في قاعدة البيانات.'
-    : 'تم رفض الطلب.');
-  await refreshAll();
-  await loadUsers();
-  await loadTransactions();
 }
 
-async function loadUsers() {
+async function createManualRequest(){
+  clearMsg('manualMsg');
+
+  const phone=normalizePhone(document.getElementById('manualPhone').value);
+  const type=document.getElementById('manualType').value;
+  const amount=Number(document.getElementById('manualAmount').value);
+  const method=document.getElementById('manualMethod').value;
+  const reference=document.getElementById('manualReference').value.trim();
+  const button=document.getElementById('manualCreateButton');
+
+  if(!phone||!Number.isFinite(amount)||amount<=0){
+    msg('manualMsg','اكتب رقم الموبايل ومبلغًا أكبر من صفر.');
+    return;
+  }
+
+  button.disabled=true;
+
+  try{
+    const {data:profile,error:profileError}=await db.from('smart_wallet_profiles')
+      .select('user_id').eq('phone',phone).maybeSingle();
+
+    if(profileError){msg('manualMsg','خطأ في البحث عن المستخدم: '+profileError.message);return}
+    if(!profile){msg('manualMsg','المستخدم غير موجود. تأكد من رقم الموبايل المسجل.');return}
+
+    const {error}=await db.from('smart_wallet_requests').insert({
+      user_id:profile.user_id,
+      request_type:type,
+      amount:amount,
+      payment_method:method,
+      reference:reference||null,
+      status:'pending'
+    });
+
+    if(error){msg('manualMsg','تعذّرت إضافة الطلب: '+error.message);return}
+
+    msg('manualMsg','تم إنشاء الطلب بنجاح، وحالته قيد المراجعة.');
+    document.getElementById('manualPhone').value='';
+    document.getElementById('manualAmount').value='';
+    document.getElementById('manualReference').value='';
+    await refreshAll();
+  }catch(e){
+    msg('manualMsg','حدث خطأ: '+e.message);
+  }finally{
+    button.disabled=false;
+  }
+}
+
+async function loadUsers(){
   const box=document.getElementById('usersList');
   box.textContent='جارٍ تحميل المستخدمين...';
   const term=document.getElementById('userSearch').value.trim();
+
   let query=db.from('smart_wallet_profiles')
     .select('user_id,phone,balance,is_admin,created_at')
     .order('created_at',{ascending:false}).limit(100);
-  if(term) {
-    const safe=term.replace(/[,%()]/g,'');
-    query=query.or('phone.ilike.%'+safe+'%,user_id.eq.'+safe);
+
+  if(term){
+    const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(term);
+    query=uuid?query.eq('user_id',term):query.ilike('phone','%'+term.replace(/[%_,]/g,'')+'%');
   }
+
   const {data,error}=await query;
-  if(error) {
-    box.textContent='تعذّر تحميل المستخدمين: '+error.message;
-    return;
-  }
+  if(error){box.textContent='تعذّر تحميل المستخدمين: '+error.message;return}
+
   box.replaceChildren();
-  if(!data?.length) {
-    box.textContent='لا توجد نتائج.';
-    return;
-  }
+  if(!data||!data.length){box.textContent='لا توجد نتائج.';return}
+
   const wrap=document.createElement('div');
   wrap.className='tablewrap';
   const table=document.createElement('table');
-  const thead=document.createElement('thead');
-  const tr=document.createElement('tr');
-  ['رقم الموبايل','الرصيد (ج.م)','صلاحية الإدارة','معرّف المستخدم'].forEach(t=>addText(tr,'th',t));
-  thead.appendChild(tr);
-  table.appendChild(thead);
-  const tbody=document.createElement('tbody');
-  for(const u of data) {
+  const head=document.createElement('thead');
+  const header=document.createElement('tr');
+  ['رقم الموبايل','الرصيد (ج.م)','الصلاحية','معرّف المستخدم'].forEach(t=>addText(header,'th',t));
+  head.appendChild(header);
+  table.appendChild(head);
+
+  const body=document.createElement('tbody');
+  for(const u of data){
     const row=document.createElement('tr');
     addText(row,'td',u.phone||'—');
     addText(row,'td',fmt(u.balance));
     addText(row,'td',u.is_admin?'مدير':'مستخدم');
     addText(row,'td',u.user_id);
-    tbody.appendChild(row);
+    body.appendChild(row);
   }
-  table.appendChild(tbody);
+  table.appendChild(body);
   wrap.appendChild(table);
   box.appendChild(wrap);
 }
 
-async function loadTransactions() {
+async function loadTransactions(){
   const box=document.getElementById('transactionsList');
   box.textContent='جارٍ تحميل العمليات...';
+
   const {data,error}=await db.from('smart_wallet_transactions')
     .select('id,user_id,request_id,transaction_type,amount,created_at')
     .order('created_at',{ascending:false}).limit(100);
-  if(error) {
-    box.textContent='تعذّر تحميل العمليات: '+error.message;
-    return;
-  }
+
+  if(error){box.textContent='تعذّر تحميل العمليات: '+error.message;return}
+
   box.replaceChildren();
-  if(!data?.length) {
-    box.textContent='لا توجد عمليات مسجلة.';
-    return;
-  }
-  for(const t of data) {
+  if(!data||!data.length){box.textContent='لا توجد عمليات مسجلة.';return}
+
+  for(const t of data){
     const item=document.createElement('div');
     item.className='item';
     addText(item,'strong',typeArabic(t.transaction_type)+' — '+fmt(t.amount)+' ج.م');
-    addText(item,'div','معرّف المستخدم: '+t.user_id,'muted');
-    addText(item,'div','معرّف الطلب: '+(t.request_id||'—'),'muted');
+    addText(item,'div','معرّف المستخدم: '+t.user_id,'small');
+    addText(item,'div','معرّف الطلب: '+(t.request_id||'—'),'small');
     addText(item,'div',new Date(t.created_at).toLocaleString('ar-EG'),'muted');
     box.appendChild(item);
   }
 }
 
-async function logout() {
+async function logout(){
   await db.auth.signOut();
   currentUser=null;
   showLogin();
 }
+
 db.auth.onAuthStateChange((event,session)=>{
-  if(!session?.user) {
+  if(!session?.user){
     currentUser=null;
     showLogin();
   }
@@ -358,4 +469,3 @@ db.auth.onAuthStateChange((event,session)=>{
 </script>
 </body>
 </html>
-```
