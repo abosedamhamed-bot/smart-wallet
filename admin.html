@@ -4,124 +4,99 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FOOX - لوحة الإدارة</title>
+  <title>FOOX | لوحة الإدارة</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f3f5f9;
-      color: #182033;
+      background: #f1f5f9;
+      color: #172033;
     }
-
     header {
+      padding: 22px;
       background: #101827;
       color: white;
-      padding: 20px;
       text-align: center;
     }
-
-    main {
-      width: min(1100px, 94%);
-      margin: 20px auto;
-    }
-
+    main { width: min(1000px, 94%); margin: 20px auto; }
     .card {
       background: white;
       padding: 18px;
-      border-radius: 14px;
       margin-bottom: 16px;
-      box-shadow: 0 3px 15px #0000000a;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px #0000000a;
     }
-
-    h2 { margin-top: 0; font-size: 20px; }
-
+    h2 { font-size: 20px; margin-top: 0; }
     input, select, button {
       width: 100%;
       padding: 12px;
       margin: 6px 0;
+      border: 1px solid #d7deea;
       border-radius: 8px;
-      border: 1px solid #d7dce5;
       font-size: 15px;
     }
-
     button {
       background: #1769ff;
+      border: 0;
       color: white;
-      border: none;
       cursor: pointer;
       font-weight: bold;
     }
-
-    button:disabled { opacity: .6; cursor: wait; }
-
-    .secondary { background: #475569; }
-    .approve { background: #13864b; }
-    .reject { background: #c62828; }
-
+    button:disabled { opacity: .6; }
+    .dark { background: #475569; }
+    .green { background: #13864b; }
+    .red { background: #c62828; }
     .tabs {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 8px;
       margin-bottom: 16px;
     }
-
     .tabs button { margin: 0; }
-    .tabs button.active { background: #101827; }
-
+    .tabs .active { background: #101827; }
     .hidden { display: none !important; }
-
     .stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
       gap: 10px;
       margin-bottom: 16px;
     }
-
     .stat {
       background: white;
-      border-radius: 12px;
       padding: 16px;
       text-align: center;
+      border-radius: 12px;
     }
-
     .stat strong {
       display: block;
-      font-size: 22px;
       margin-top: 8px;
+      font-size: 21px;
       overflow-wrap: anywhere;
     }
-
     .item {
       border: 1px solid #e2e8f0;
-      border-radius: 10px;
       padding: 12px;
       margin: 10px 0;
+      border-radius: 10px;
       overflow-wrap: anywhere;
     }
-
     .actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
     }
-
-    .muted { color: #64748b; font-size: 13px; }
     .message { white-space: pre-wrap; overflow-wrap: anywhere; }
     .error { color: #b91c1c; }
     .success { color: #087443; }
-
+    .muted { color: #64748b; font-size: 13px; }
+    label { display: block; margin-top: 10px; }
     @media (min-width: 700px) {
       .tabs { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-      .form-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-      }
+      .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     }
   </style>
 </head>
@@ -133,78 +108,74 @@
 </header>
 
 <main>
-  <div id="loginBox" class="card">
+  <section id="loginBox" class="card">
     <h2>تسجيل دخول الإدارة</h2>
+
     <label for="phone">رقم الهاتف المسجّل في Supabase</label>
-    <input id="phone" type="tel" placeholder="مثال: 01012345678"
+    <input id="phone" type="tel" placeholder="01012345678"
            autocomplete="username">
 
     <label for="password">كلمة المرور</label>
-    <input id="password" type="password" placeholder="كلمة مرور الحساب"
+    <input id="password" type="password" placeholder="كلمة المرور"
            autocomplete="current-password">
 
-    <button id="loginBtn" onclick="login()">دخول</button>
+    <button id="loginButton" onclick="login()">تسجيل الدخول</button>
     <p id="loginMessage" class="message"></p>
-    <p class="muted">
-      يجب أن يكون الحساب مسجّلًا بالفعل في Supabase وأن تكون له صلاحية الإدارة.
-    </p>
-  </div>
+  </section>
 
   <section id="dashboard" class="hidden">
     <div class="card">
-      <div>تم تسجيل الدخول إلى لوحة الإدارة</div>
-      <button class="secondary" onclick="logout()">تسجيل الخروج</button>
-      <p id="statusMessage" class="message"></p>
+      <b>تم الدخول إلى لوحة الإدارة</b>
+      <button class="dark" onclick="logout()">تسجيل الخروج</button>
+      <p id="mainMessage" class="message"></p>
     </div>
 
     <div class="stats">
-      <div class="stat">عدد المستخدمين<strong id="usersCount">—</strong></div>
-      <div class="stat">طلبات معلّقة<strong id="pendingCount">—</strong></div>
-      <div class="stat">إجمالي الأرصدة (جنيه)<strong id="balanceTotal">—</strong></div>
+      <div class="stat">المستخدمون<strong id="usersCount">—</strong></div>
+      <div class="stat">الطلبات المعلقة<strong id="pendingCount">—</strong></div>
+      <div class="stat">إجمالي الأرصدة<strong id="totalBalance">—</strong></div>
     </div>
 
     <nav class="tabs">
-      <button class="active" data-tab="requests" onclick="showTab('requests', this)">الطلبات</button>
-      <button data-tab="create" onclick="showTab('create', this)">إضافة طلب</button>
-      <button data-tab="users" onclick="showTab('users', this)">المستخدمون</button>
-      <button data-tab="transactions" onclick="showTab('transactions', this)">سجل العمليات</button>
+      <button class="active" onclick="showTab('requests',this)">الطلبات</button>
+      <button onclick="showTab('create',this)">إضافة طلب</button>
+      <button onclick="showTab('users',this)">المستخدمون</button>
+      <button onclick="showTab('transactions',this)">سجل العمليات</button>
     </nav>
 
     <section id="tab-requests" class="card">
       <h2>طلبات الإيداع والسحب</h2>
-      <button class="secondary" onclick="loadRequests()">تحديث الطلبات</button>
-      <div id="requestsList">جارٍ التحميل...</div>
+      <button class="dark" onclick="loadRequests()">تحديث</button>
+      <div id="requestsList">لم يتم التحميل بعد.</div>
     </section>
 
     <section id="tab-create" class="card hidden">
-      <h2>إنشاء طلب يدوي لمستخدم</h2>
+      <h2>إنشاء طلب يدوي</h2>
       <p class="muted">
-        أدخل رقم مستخدم موجودًا في قاعدة البيانات. إنشاء الطلب لا يغيّر الرصيد
-        مباشرةً؛ تغيير الرصيد يتم عند اعتماد الطلب من خلال إجراء الإدارة المخصص.
+        إنشاء الطلب لا يغيّر الرصيد مباشرة. يتغير الرصيد فقط عند اعتماد الطلب
+        من خلال إجراء الإدارة الموجود في قاعدة البيانات.
       </p>
 
-      <form id="createRequestForm">
+      <form id="createForm">
         <label for="requestPhone">رقم هاتف المستخدم</label>
-        <input id="requestPhone" type="tel" required placeholder="رقم الهاتف المسجّل">
+        <input id="requestPhone" required placeholder="رقم مسجل في قاعدة البيانات">
 
         <div class="form-grid">
           <div>
             <label for="requestType">نوع الطلب</label>
-            <select id="requestType" required>
+            <select id="requestType">
               <option value="deposit">إيداع</option>
               <option value="withdraw">سحب</option>
             </select>
           </div>
-
           <div>
-            <label for="requestAmount">المبلغ بالجنيه</label>
-            <input id="requestAmount" type="number" min="0.01"
-                   step="0.01" required placeholder="مثال: 100">
+            <label for="amount">المبلغ بالجنيه</label>
+            <input id="amount" type="number" min="0.01" step="0.01" required>
           </div>
         </div>
 
-        <label for="paymentMethod">طريقة الدفع</label>
-        <select id="paymentMethod" required>
+        <label for="payment">طريقة الدفع</label>
+        <select id="payment">
           <option value="Vodafone Cash">فودافون كاش</option>
           <option value="Orange Cash">أورنج كاش</option>
           <option value="Etisalat Cash">اتصالات كاش</option>
@@ -213,75 +184,86 @@
         </select>
 
         <label for="reference">رقم العملية أو ملاحظة (اختياري)</label>
-        <input id="reference" type="text" maxlength="200"
-               placeholder="رقم العملية أو الملاحظة">
+        <input id="reference" maxlength="200">
 
-        <button id="createBtn" type="submit">إنشاء الطلب</button>
+        <button id="createButton" type="submit">إنشاء الطلب</button>
         <p id="createMessage" class="message"></p>
       </form>
     </section>
 
     <section id="tab-users" class="card hidden">
       <h2>المستخدمون والأرصدة</h2>
-      <button class="secondary" onclick="loadUsers()">تحديث المستخدمين</button>
-      <div id="usersList">جارٍ التحميل...</div>
+      <button class="dark" onclick="loadUsers()">تحديث المستخدمين</button>
+      <div id="usersList"></div>
     </section>
 
     <section id="tab-transactions" class="card hidden">
       <h2>سجل العمليات</h2>
-      <button class="secondary" onclick="loadTransactions()">تحديث السجل</button>
-      <div id="transactionsList">جارٍ التحميل...</div>
+      <button class="dark" onclick="loadTransactions()">تحديث السجل</button>
+      <div id="transactionsList"></div>
     </section>
   </section>
 </main>
 
 <script>
+  // بيانات مشروع Supabase
   const SUPABASE_URL = 'https://sjhjxbnhhwftwlkshpql.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_6880OlVMxWIDPJfqwFS5TA_m7FCMQZK';
+  const SUPABASE_KEY = 'sb_publishable_6880OlVMXwIDPJfqwFS5TA_m7FCMQZK';
 
-  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const loginBox = document.getElementById('loginBox');
+  const dashboard = document.getElementById('dashboard');
 
-  let currentUser = null;
-
-  function normalizePhone(value) {
-    let phone = String(value || '').trim().replace(/[\s()-]/g, '');
-
-    if (phone.startsWith('+')) return phone;
-    if (phone.startsWith('0020')) return '+' + phone.slice(2);
-    if (phone.startsWith('20')) return '+' + phone;
-    if (phone.startsWith('0')) return '+20' + phone.slice(1);
-
-    return phone;
-  }
-
-  function showMessage(id, message, type = '') {
-    const element = document.getElementById(id);
-    element.textContent = message;
-    element.className = 'message ' + type;
+  function showMessage(id, text, type = '') {
+    const el = document.getElementById(id);
+    el.textContent = text;
+    el.className = 'message ' + type;
   }
 
   function escapeHTML(value) {
-    return String(value ?? '').replace(/[&<>"']/g, ch => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    })[ch]);
+    return String(value ?? '').replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;',
+      '"': '&quot;', "'": '&#39;'
+    })[c]);
   }
 
-  function money(value) {
-    const number = Number(value || 0);
-    return number.toLocaleString('ar-EG', {
+  function normalizePhone(value) {
+    let p = String(value || '').trim().replace(/[\s()-]/g, '');
+    if (p.startsWith('+')) return p;
+    if (p.startsWith('0020')) return '+' + p.slice(2);
+    if (p.startsWith('20')) return '+' + p;
+    if (p.startsWith('0')) return '+20' + p.slice(1);
+    return p;
+  }
+
+  function formatMoney(value) {
+    return Number(value || 0).toLocaleString('ar-EG', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
     }) + ' ج.م';
   }
 
+  // نتحقق من تحميل مكتبة Supabase قبل محاولة تسجيل الدخول
+  let db = null;
+
+  if (window.supabase && typeof window.supabase.createClient === 'function') {
+    db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  } else {
+    showMessage(
+      'loginMessage',
+      'تعذّر تحميل مكتبة الاتصال. تأكد من الإنترنت ثم حدّث الصفحة.',
+      'error'
+    );
+  }
+
   async function login() {
+    if (!db) {
+      showMessage('loginMessage', 'مكتبة Supabase غير متاحة. حدّث الصفحة.');
+      return;
+    }
+
     const phone = normalizePhone(document.getElementById('phone').value);
     const password = document.getElementById('password').value;
-    const button = document.getElementById('loginBtn');
+    const button = document.getElementById('loginButton');
 
     if (!phone || !password) {
       showMessage('loginMessage', 'اكتب رقم الهاتف وكلمة المرور.');
@@ -293,67 +275,60 @@
 
     try {
       const { data, error } = await db.auth.signInWithPassword({
-        phone,
-        password
+        phone: phone,
+        password: password
       });
 
       if (error) throw error;
 
-      currentUser = data.user;
-
       const { data: profile, error: profileError } = await db
         .from('smart_wallet_profiles')
         .select('is_admin')
-        .eq('user_id', currentUser.id)
+        .eq('user_id', data.user.id)
         .maybeSingle();
 
       if (profileError) throw profileError;
 
       if (!profile || profile.is_admin !== true) {
         await db.auth.signOut();
-        currentUser = null;
-        throw new Error('هذا الحساب ليس لديه صلاحية الإدارة.');
+        throw new Error('الحساب ليس لديه صلاحية الإدارة.');
       }
 
-      document.getElementById('loginBox').classList.add('hidden');
-      document.getElementById('dashboard').classList.remove('hidden');
-      showMessage('statusMessage', 'تم تسجيل الدخول بنجاح.', 'success');
-
+      loginBox.classList.add('hidden');
+      dashboard.classList.remove('hidden');
+      showMessage('mainMessage', 'تم تسجيل الدخول بنجاح.', 'success');
       await refreshAll();
+
     } catch (error) {
-      showMessage('loginMessage', 'تعذّر تسجيل الدخول: ' + error.message, 'error');
+      showMessage(
+        'loginMessage',
+        'تعذّر تسجيل الدخول: ' + (error.message || 'خطأ غير معروف'),
+        'error'
+      );
     } finally {
       button.disabled = false;
     }
   }
 
   async function logout() {
-    await db.auth.signOut();
-    currentUser = null;
-    document.getElementById('dashboard').classList.add('hidden');
-    document.getElementById('loginBox').classList.remove('hidden');
+    if (db) await db.auth.signOut();
+    dashboard.classList.add('hidden');
+    loginBox.classList.remove('hidden');
     document.getElementById('password').value = '';
     showMessage('loginMessage', 'تم تسجيل الخروج.', 'success');
   }
 
   function showTab(name, button) {
     ['requests', 'create', 'users', 'transactions'].forEach(tab => {
-      document.getElementById('tab-' + tab).classList.toggle('hidden', tab !== name);
+      document.getElementById('tab-' + tab)
+        .classList.toggle('hidden', tab !== name);
     });
-
-    document.querySelectorAll('.tabs button').forEach(item => {
-      item.classList.remove('active');
-    });
-
+    document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
     button.classList.add('active');
   }
 
   async function refreshAll() {
-    await Promise.all([
-      loadRequests(),
-      loadUsers(),
-      loadTransactions()
-    ]);
+    await Promise.all([loadRequests(), loadUsers(), loadTransactions()]);
   }
 
   async function loadRequests() {
@@ -374,110 +349,97 @@
         requests.filter(r => r.status === 'pending').length;
 
       if (!requests.length) {
-        target.textContent = 'لا توجد طلبات حتى الآن.';
+        target.textContent = 'لا توجد طلبات.';
         return;
       }
 
       target.innerHTML = requests.map(r => `
         <article class="item">
           <b>${r.request_type === 'deposit' ? 'إيداع' : 'سحب'}</b>
-          <p>المبلغ: ${escapeHTML(money(r.amount))}</p>
-          <p>رقم المستخدم: <code>${escapeHTML(r.user_id)}</code></p>
-          <p>طريقة الدفع: ${escapeHTML(r.payment_method || 'غير محددة')}</p>
+          <p>المبلغ: ${escapeHTML(formatMoney(r.amount))}</p>
+          <p>معرّف المستخدم: <code>${escapeHTML(r.user_id)}</code></p>
+          <p>طريقة الدفع: ${escapeHTML(r.payment_method || '—')}</p>
           <p>المرجع: ${escapeHTML(r.reference || '—')}</p>
           <p>الحالة: ${escapeHTML(r.status)}</p>
           <p class="muted">${escapeHTML(r.created_at || '')}</p>
           ${r.status === 'pending' ? `
             <div class="actions">
-              <button class="approve" onclick="approveRequest('${r.id}')">اعتماد</button>
-              <button class="reject" onclick="rejectRequest('${r.id}')">رفض</button>
+              <button class="green" onclick="approveRequest('${r.id}')">اعتماد</button>
+              <button class="red" onclick="rejectRequest('${r.id}')">رفض</button>
             </div>` : ''}
         </article>
       `).join('');
     } catch (error) {
-      target.textContent = 'تعذّر تحميل الطلبات: ' + error.message;
+      target.textContent = 'خطأ في تحميل الطلبات: ' + error.message;
     }
   }
 
   async function approveRequest(id) {
-    if (!confirm('هل تريد اعتماد هذا الطلب؟ راجع المبلغ والبيانات أولًا.')) return;
-
+    if (!confirm('هل تريد اعتماد الطلب؟ تأكد من مراجعة بياناته أولًا.')) return;
     try {
       const { error } = await db.rpc('smart_wallet_admin_approve', {
         p_request_id: id
       });
-
       if (error) throw error;
-
-      alert('تم تنفيذ طلب الاعتماد.');
+      alert('تم تنفيذ الاعتماد.');
       await refreshAll();
     } catch (error) {
-      alert('تعذّر اعتماد الطلب: ' + error.message);
+      alert('تعذّر الاعتماد: ' + error.message);
     }
   }
 
   async function rejectRequest(id) {
-    if (!confirm('هل تريد رفض هذا الطلب؟')) return;
-
+    if (!confirm('هل تريد رفض الطلب؟')) return;
     try {
       const { error } = await db.rpc('smart_wallet_admin_reject', {
         p_request_id: id
       });
-
       if (error) throw error;
-
-      alert('تم تنفيذ طلب الرفض.');
+      alert('تم تنفيذ الرفض.');
       await refreshAll();
     } catch (error) {
-      alert('تعذّر رفض الطلب: ' + error.message);
+      alert('تعذّر الرفض: ' + error.message);
     }
   }
 
-  document.getElementById('createRequestForm').addEventListener('submit', async event => {
+  document.getElementById('createForm').addEventListener('submit', async event => {
     event.preventDefault();
-
-    const button = document.getElementById('createBtn');
+    const button = document.getElementById('createButton');
     button.disabled = true;
     showMessage('createMessage', 'جارٍ إنشاء الطلب...');
 
     try {
       const phone = normalizePhone(document.getElementById('requestPhone').value);
-      const amount = Number(document.getElementById('requestAmount').value);
-      const requestType = document.getElementById('requestType').value;
-      const paymentMethod = document.getElementById('paymentMethod').value;
-      const reference = document.getElementById('reference').value.trim();
+      const amount = Number(document.getElementById('amount').value);
 
       if (!Number.isFinite(amount) || amount <= 0) {
-        throw new Error('أدخل مبلغًا أكبر من صفر.');
+        throw new Error('أدخل مبلغًا صحيحًا أكبر من صفر.');
       }
 
-      const { data: profile, error: profileError } = await db
+      const { data: profile, error: findError } = await db
         .from('smart_wallet_profiles')
         .select('user_id, phone')
         .eq('phone', phone)
         .maybeSingle();
 
-      if (profileError) throw profileError;
-      if (!profile) {
-        throw new Error('لم يتم العثور على مستخدم بهذا الرقم. تأكد من صيغة الرقم المخزنة في قاعدة البيانات.');
-      }
+      if (findError) throw findError;
+      if (!profile) throw new Error('لم يتم العثور على المستخدم بهذا الرقم.');
 
-      const { error } = await db
-        .from('smart_wallet_requests')
-        .insert({
-          user_id: profile.user_id,
-          request_type: requestType,
-          amount,
-          payment_method: paymentMethod,
-          reference: reference || null,
-          status: 'pending'
-        });
+      const { error } = await db.from('smart_wallet_requests').insert({
+        user_id: profile.user_id,
+        request_type: document.getElementById('requestType').value,
+        amount: amount,
+        payment_method: document.getElementById('payment').value,
+        reference: document.getElementById('reference').value.trim() || null,
+        status: 'pending'
+      });
 
       if (error) throw error;
 
-      showMessage('createMessage', 'تم إنشاء الطلب. لم يتغير الرصيد؛ يلزم اعتماد الطلب.', 'success');
-      document.getElementById('createRequestForm').reset();
+      showMessage('createMessage', 'تم إنشاء الطلب، ولم يتغير الرصيد بعد.', 'success');
+      document.getElementById('createForm').reset();
       await loadRequests();
+
     } catch (error) {
       showMessage('createMessage', 'تعذّر إنشاء الطلب: ' + error.message, 'error');
     } finally {
@@ -501,24 +463,24 @@
       const users = data || [];
       document.getElementById('usersCount').textContent = users.length;
 
-      const total = users.reduce((sum, u) => sum + Number(u.balance || 0), 0);
-      document.getElementById('balanceTotal').textContent = money(total);
+      document.getElementById('totalBalance').textContent =
+        formatMoney(users.reduce((sum, user) => sum + Number(user.balance || 0), 0));
 
       if (!users.length) {
         target.textContent = 'لا يوجد مستخدمون.';
         return;
       }
 
-      target.innerHTML = users.map(u => `
+      target.innerHTML = users.map(user => `
         <article class="item">
-          <p>الهاتف: ${escapeHTML(u.phone || 'غير مسجل')}</p>
-          <p>الرصيد: <b>${escapeHTML(money(u.balance))}</b></p>
-          <p>الصلاحية: ${u.is_admin ? 'مدير' : 'مستخدم'}</p>
-          <p class="muted">معرّف المستخدم: ${escapeHTML(u.user_id)}</p>
+          <p>الهاتف: ${escapeHTML(user.phone || 'غير مسجل')}</p>
+          <p>الرصيد: <b>${escapeHTML(formatMoney(user.balance))}</b></p>
+          <p>الصلاحية: ${user.is_admin ? 'مدير' : 'مستخدم'}</p>
+          <p class="muted">معرّف المستخدم: ${escapeHTML(user.user_id)}</p>
         </article>
       `).join('');
     } catch (error) {
-      target.textContent = 'تعذّر تحميل المستخدمين: ' + error.message;
+      target.textContent = 'خطأ في تحميل المستخدمين: ' + error.message;
     }
   }
 
@@ -542,18 +504,18 @@
 
       target.innerHTML = data.map(t => `
         <article class="item">
-          <p>النوع: ${escapeHTML(t.transaction_type)}</p>
-          <p>المبلغ: ${escapeHTML(money(t.amount))}</p>
+          <p>نوع العملية: ${escapeHTML(t.transaction_type)}</p>
+          <p>المبلغ: ${escapeHTML(formatMoney(t.amount))}</p>
           <p>معرّف المستخدم: <code>${escapeHTML(t.user_id)}</code></p>
           <p>معرّف الطلب: ${escapeHTML(t.request_id || '—')}</p>
           <p class="muted">${escapeHTML(t.created_at || '')}</p>
         </article>
       `).join('');
     } catch (error) {
-      target.textContent = 'تعذّر تحميل سجل العمليات: ' + error.message;
+      target.textContent = 'خطأ في تحميل سجل العمليات: ' + error.message;
     }
   }
 </script>
 </body>
 </html>
-``
+```
